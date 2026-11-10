@@ -36,8 +36,8 @@ The four toggles and Movement Speed can be used together. Starting the game, loa
 ## Installation
 
 1. Download `Hyrule-Cheat-Menu-v1.0.0-rc1.zip` from the repository’s **Releases** tab.
-2. Close the game. In Lichii, right-click the game and select **Open Mod Data Location**.
-3. Extract the ZIP there so the mod folder contains `Hyrule-Cheat-Menu/exefs/subsdk8` and the matching `.ips` file.
+2. Close the game. In Lichii/Fritchii, right-click the game and select **Open Mod Data Location**.
+3. Import the ZIP into the Addon Tab in Litchii/Fritchii.
 4. Launch the game, load a save, and click the right stick (**R3**) during gameplay.
 
 To **uninstall**, close the game and remove the `Hyrule-Cheat-Menu` folder from the mod location. To back up a save, close the game, open its save data location from Lichii, and copy that directory. Refills can carry over into subsequent game saves.
