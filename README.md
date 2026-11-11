@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <kbd>v1.0.0 RC1</kbd> · <kbd>Windows</kbd> · <kbd>Lichii Build 130</kbd> · <kbd>Game 1.1.1</kbd>
+  <kbd>v1.0.0 RC1</kbd>
 </p>
 
 <p align="center">
