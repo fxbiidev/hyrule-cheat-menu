@@ -1,0 +1,517 @@
+{
+  "schema": 1,
+  "date": "2026-11-15",
+  "release": "v1.1.0",
+  "status": "Local native, host, install/source archive and clean-source reproduction checks passed; CI/publication delivery verification follows the release commit",
+  "method": {
+    "emulator": "Windows Lichii Build 177",
+    "title_id": "0400486024DEC000",
+    "main_build_id": "E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348",
+    "isolation": "Separate portable profile with copied saves; owner save files are not included",
+    "actions": "Native logical controller/game inputs; read-only guest inspection records mod results",
+    "running_identity": "Root QA client verified all running RX bytes against the retained module model before native scenario input",
+    "sanitization": "Explicit field allowlist; actor/heap addresses, runtime bases, private filesystem paths and serialized save files omitted"
+  },
+  "current_module": {
+    "module_sha256": "ab2a5a1e6a44b90ebb5698cbbb64c667bcf620addc40709dc9e7e930abe230d5",
+    "running_text_sha256": "8d9592d6c54982efb573cb331000a7a8b33553a6fa10678d7eb2cd5f0b133922",
+    "running_text_bytes": 82728,
+    "running_text_matches": true,
+    "artifact_text_hash_matches_nso_header_and_retained_model": true,
+    "combat": {
+      "1.5x_melee": {
+        "result": "pass",
+        "attack": "Master Sword",
+        "target_enemy": "Enemy_Tektite_Red",
+        "selected_multiplier": 1.5,
+        "one_hit_kill": false,
+        "native_damage_type": 2,
+        "native_damage": 2,
+        "applied_damage": 3,
+        "enemy_health_at_queue": 2,
+        "previous_queued_damage": 0,
+        "source_was_identified_current_link": true,
+        "god_mode": true
+      },
+      "2x_projectile": {
+        "result": "pass",
+        "attack": "Fairy Bow normal arrow",
+        "target_enemy": "Enemy_Tektite_Red",
+        "selected_multiplier": 2,
+        "one_hit_kill": false,
+        "native_damage_type": 2,
+        "native_damage": 2,
+        "applied_damage": 4,
+        "enemy_health_at_queue": 2,
+        "previous_queued_damage": 0,
+        "source_was_identified_current_link": true,
+        "god_mode": true
+      },
+      "one_hit_kill_priority": {
+        "result": "pass",
+        "attack": "Fairy Bow normal arrow",
+        "target_enemy": "Enemy_Tektite_Blue",
+        "selected_multiplier": 3,
+        "one_hit_kill": true,
+        "native_damage_type": 2,
+        "native_damage": 2,
+        "applied_damage": 3,
+        "enemy_health_at_queue": 3,
+        "previous_queued_damage": 0,
+        "source_was_identified_current_link": true,
+        "god_mode": true
+      },
+      "stored_3x_resumes_after_ohk_off": {
+        "result": "pass",
+        "attack": "Fairy Bow normal arrow",
+        "target_enemy": "Enemy_Tektite_Blue",
+        "selected_multiplier": 3,
+        "one_hit_kill": false,
+        "native_damage_type": 2,
+        "native_damage": 2,
+        "applied_damage": 6,
+        "enemy_health_at_queue": 3,
+        "previous_queued_damage": 0,
+        "source_was_identified_current_link": true,
+        "god_mode": true
+      },
+      "1x_native_passthrough": {
+        "result": "pass",
+        "attack": "Fairy Bow normal arrow",
+        "target_enemy": "Enemy_Tektite_Blue",
+        "selected_multiplier": 1,
+        "one_hit_kill": false,
+        "attempted_shots": 2,
+        "verified_damaging_shots": 1,
+        "enemy_health_before": 3,
+        "enemy_health_after": 1,
+        "observed_damage": 2,
+        "modified_counter_before": 4,
+        "modified_counter_after": 4
+      },
+      "received_damage_not_multiplied": {
+        "result": "pass",
+        "selected_multiplier": 3,
+        "god_mode": false,
+        "link_health_before": 40,
+        "link_health_after": 38,
+        "native_damage": 2,
+        "applied_damage": 2,
+        "hook_disposition": "COMBAT_UNSUPPORTED_TARGET"
+      }
+    },
+    "normal_save_persistence_and_reset": {
+      "result": "pass",
+      "load_method": "Normal native save load, not a savestate",
+      "arrows_saved": 7,
+      "arrows_changed_without_saving": 3,
+      "arrows_after_load": 7,
+      "save_epoch_before": 4,
+      "save_epoch_after": 6,
+      "active_cheats_before_load": [
+        "God Mode",
+        "Fly Mode",
+        "One Hit Kill"
+      ],
+      "active_cheat_mask_after_load": 0,
+      "effective_movement_speed_after_load": 1,
+      "effective_damage_multiplier_after_load": 1,
+      "stored_damage_multiplier_preference": 3,
+      "flight_speed_index_before": 3,
+      "flight_speed_index_after": 3,
+      "favorite_count_before": 4,
+      "favorite_count_after": 4,
+      "scope_note": "This record verifies favorite count, not a separate native comparison of every Favorite ID."
+    },
+    "free_camera": {
+      "result": "pass within listed native cases",
+      "menu_unpause_remained_on": true,
+      "forward_camera_distance": 28.968002545324996,
+      "right_stick_rotation_recorded": true,
+      "ZR_rise": 7.936006850838481,
+      "ZL_descent": 7.736006871385229,
+      "link_coordinates_exactly_unchanged_for_translation_rotation_and_triggers": true,
+      "emergency_exit_native_eye_error": 3.55181915413973e-05,
+      "menu_reopened_after_exit": true,
+      "fly_noclip_camera_link_displacement": 0.0,
+      "continuous_held_stick_after_emergency_link_displacement": 0.0,
+      "menu_toggle_off_native_eye_error": 1.8124855200212504e-05,
+      "fast_travel_auto_deactivation": {
+        "destination_scene": "KakarikoVillage_Adult",
+        "seconds": 6.360000000000582,
+        "active_cheat_mask_after": 0,
+        "notice": "Travel completed. Return location stored."
+      },
+      "exit_combo_center_and_reapply_stick": {
+        "result": "pass",
+        "one_continuous_input_sequence": [
+          {
+            "label": "exit_with_stick",
+            "buttons": [
+              "StickR",
+              "B"
+            ],
+            "left_stick": [
+              0,
+              1
+            ],
+            "frames": 8
+          },
+          {
+            "label": "centre_but_keep_exit_held",
+            "buttons": [
+              "StickR",
+              "B"
+            ],
+            "left_stick": [
+              0,
+              0
+            ],
+            "frames": 12
+          },
+          {
+            "label": "move_stick_again_before_exit_release",
+            "buttons": [
+              "StickR",
+              "B"
+            ],
+            "left_stick": [
+              0,
+              1
+            ],
+            "frames": 30
+          }
+        ],
+        "total_held_frames": 50,
+        "link_displacement": 0.0,
+        "stationary_tolerance": 0,
+        "drain_after_explicit_neutral": false,
+        "exit_latch_after_explicit_neutral": false,
+        "fly_resume_rise": 6.101066589355469,
+        "free_camera_after_exit": false,
+        "god_mode": false
+      }
+    },
+    "fly_landing_after_camera_handoff": {
+      "result": "pass within measured descent",
+      "god_mode": false,
+      "height_above_start_ground": 24.935348510742188,
+      "measured_vertical_descent": 24.939109802246094,
+      "horizontal_displacement_during_descent": 0.04049578265043675,
+      "health_on_ground_before": 40,
+      "health_while_high": 40,
+      "health_after_landing": 40,
+      "active_cheat_mask_after_landing": 0,
+      "recovery_or_return_notice_after_landing": false,
+      "scope_note": "One native God-OFF Fly-OFF landing after camera handoff; not all terrain/heights."
+    },
+    "safe_item_manager": {
+      "result": "pass within listed cases",
+      "adult_probe_item": "Arrows",
+      "cancelled_confirmation_quantity": 5,
+      "decrement_acknowledged_quantity": 4,
+      "increment_acknowledged_quantity": 5,
+      "empty_owned_stack_quantity": 0,
+      "refill_from_zero_quantity": 30,
+      "additional_decrement_then_refill": {
+        "Deku Nuts": {
+          "count": 20,
+          "capacity": 20,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true,
+          "can_set": true,
+          "can_refill": false,
+          "can_remove": true
+        },
+        "Bombs": {
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true,
+          "can_set": true,
+          "can_refill": false,
+          "can_remove": true
+        },
+        "Bombchus": {
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true,
+          "can_set": true,
+          "can_refill": false,
+          "can_remove": true
+        }
+      },
+      "gear_edit_refusal": "Read-only gear. Acquire equipment in the game.",
+      "other_age_refusal": "This item is restricted to the other age.",
+      "infinite_items_conflict_refusal": "Disable Infinite Items before editing.",
+      "young_deku_seed_probe": {
+        "child_age": true,
+        "before": 40,
+        "after_decrement": 39,
+        "after_refill": 40,
+        "capacity_before": 40,
+        "capacity_after": 40,
+        "notice": "Inventory change verified."
+      }
+    },
+    "travel_age_and_return": {
+      "result": "pass after native arrival/snapshot settling",
+      "adult_to_young": {
+        "scene": "DeathMountainTrail_Child",
+        "seconds": 63.17199999999866,
+        "verified_child_age": true,
+        "return_available": true
+      },
+      "return_to_adult": {
+        "scene": "HyruleField_Adult",
+        "initial_completion_seconds": 65.46899999999732,
+        "additional_settling_frames": 120,
+        "settled_child_age": false,
+        "young_destination_list_selection_preserved": true,
+        "scope_note": "Early inventory UI snapshot was stale; actual Adult age was verified after settling. Selected travel-list age is independent."
+      },
+      "adult_followup_travel": {
+        "scene": "KakarikoVillage_Adult",
+        "seconds": 14.625,
+        "verified_child_age": false
+      }
+    },
+    "runtime_gate_status": "pass for the listed targeted native runtime and UI/favorites cases; coverage limits remain explicit",
+    "ui_and_favorites": {
+      "result": "pass",
+      "favorites": {
+        "original_count": 4,
+        "after_toggle_count": 5,
+        "restored_count": 4,
+        "original_ids_restored_exactly": true
+      },
+      "tab_navigation": {
+        "starting_tab": "ITEM MANAGER",
+        "right_sequence": [
+          "CHEATS",
+          "FAST TRAVEL",
+          "ITEM MANAGER"
+        ],
+        "left_sequence": [
+          "FAST TRAVEL",
+          "CHEATS",
+          "ITEM MANAGER"
+        ],
+        "item_cursor_restored": 14,
+        "item_viewport_preserved": true
+      },
+      "captures": [
+        {
+          "view": "cheats",
+          "path": "docs/screenshots/v110-release-cheats.png",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "view": "combat",
+          "path": "docs/screenshots/v110-release-combat.png",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "view": "travel",
+          "path": "docs/screenshots/v110-release-travel.png",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "view": "items",
+          "path": "docs/screenshots/v110-release-items.png",
+          "width": 1920,
+          "height": 1080
+        }
+      ]
+    }
+  },
+  "earlier_checkpoints": {
+    "camera_exit_latch_edge": {
+      "module_sha256": "7ec57f4d212db1dac58de80b7dacd9492a5928db51d7540fd1774a8df28d32a2",
+      "running_text_sha256": "1011d3d0639737155446b1312634c6c6868f7e075cb7bb1b7bcdeef92693a120",
+      "running_text_bytes": 82728,
+      "running_text_matches": true,
+      "scope": "Earlier native checkpoint; not final ab2 coverage",
+      "camera_exit_combo_center_and_reapply_stick": {
+        "result": "pass",
+        "initial_cheats": [
+          "God Mode",
+          "Fly Mode",
+          "Free Camera"
+        ],
+        "one_continuous_input_sequence": [
+          {
+            "label": "exit_with_stick",
+            "buttons": [
+              "StickR",
+              "B"
+            ],
+            "left_stick": [
+              0,
+              1
+            ],
+            "frames": 8
+          },
+          {
+            "label": "centre_but_keep_exit_held",
+            "buttons": [
+              "StickR",
+              "B"
+            ],
+            "left_stick": [
+              0,
+              0
+            ],
+            "frames": 12
+          },
+          {
+            "label": "move_stick_again_before_exit_release",
+            "buttons": [
+              "StickR",
+              "B"
+            ],
+            "left_stick": [
+              0,
+              1
+            ],
+            "frames": 30
+          }
+        ],
+        "total_held_frames": 50,
+        "link_displacement": 0.0,
+        "stationary_tolerance": 0,
+        "drain_after_explicit_neutral": false,
+        "exit_latch_after_explicit_neutral": false,
+        "fly_resume_rise": 3.0928573608398438,
+        "free_camera_after_exit": false
+      }
+    },
+    "camera_and_inventory_557": {
+      "module_sha256": "557ef38bc4fa26cc8094a6b2e4c8ca8b379f00a31b6d27bd5290dee38490ffe9",
+      "scope": "Earlier native checkpoint; these cases are not relabelled as final ab2 tests",
+      "camera": {
+        "result": "pass",
+        "menu_unpause_remained_on": true,
+        "forward_camera_distance": 15.65599851951517,
+        "right_stick_rotation_recorded": true,
+        "ZR_rise": 5.311997066597996,
+        "ZL_descent": 5.671998316256349,
+        "link_coordinates_exactly_unchanged_for_translation_rotation_and_triggers": true,
+        "emergency_exit_native_eye_error": 1.1214649443803763e-05,
+        "menu_reopened_after_exit": true,
+        "fly_noclip_camera_link_displacement": 0.0,
+        "continuous_held_stick_after_emergency_link_displacement": 0.0,
+        "menu_toggle_off_native_eye_error": 1.7087516498421307e-05,
+        "fast_travel_auto_deactivation": {
+          "destination_scene": "KakarikoVillage_Adult",
+          "seconds": 16.67199999999866,
+          "active_cheat_mask_after": 0,
+          "notice": "Travel completed. Return location stored."
+        }
+      },
+      "safe_item_manager": {
+        "result": "pass",
+        "age": "Adult",
+        "editable_probe_item": "Arrows",
+        "cancelled_confirmation_quantity": 30,
+        "decrement_acknowledged_quantity": 29,
+        "increment_acknowledged_quantity": 30,
+        "empty_owned_stack_quantity": 0,
+        "refill_from_zero_quantity": 30,
+        "additional_decrement_then_refill": {
+          "Deku Nuts": {
+            "count": 20,
+            "capacity": 20,
+            "valid": true,
+            "owned": true,
+            "age_allowed": true,
+            "can_set": true,
+            "can_refill": false,
+            "can_remove": true
+          },
+          "Bombs": {
+            "count": 30,
+            "capacity": 30,
+            "valid": true,
+            "owned": true,
+            "age_allowed": true,
+            "can_set": true,
+            "can_refill": false,
+            "can_remove": true
+          },
+          "Bombchus": {
+            "count": 30,
+            "capacity": 30,
+            "valid": true,
+            "owned": true,
+            "age_allowed": true,
+            "can_set": true,
+            "can_refill": false,
+            "can_remove": true
+          }
+        },
+        "gear_edit_refusal": "Read-only gear. Acquire equipment in the game.",
+        "other_age_refusal": "This item is restricted to the other age.",
+        "infinite_items_conflict_refusal": "Disable Infinite Items before editing."
+      }
+    }
+  },
+  "remaining_current_module_validation": [],
+  "coverage_limits": [
+    "Combat native coverage here is Master Sword/Fairy Bow versus Red/Blue Tektites, plus an ordinary received-damage case",
+    "Bosses and unsupported actors retain native damage; this record is not native boss-phase or NPC coverage",
+    "Item Manager gear is deliberately read-only; native unrestricted gear grants/removals are not claimed",
+    "Physical controllers, all maps/cutscenes, other executable builds and exhaustive progression states are not verified by these records",
+    "The normal-save reset record activated God/Fly/One Hit Kill; active-camera save-epoch interruption is additionally covered by production host fixtures, not a separately recorded native load with camera ON."
+  ],
+  "source_record_sha256": {
+    "combat-final-15x": "58ce23b1d02e8cd96c12a2f9fa4ced70efbe1527c22156c663f95b9eed5babfc",
+    "combat-final-2x": "2957594d41a6998df306b8526dde64cdf136fdbc675f10aec3bb567a9b2c9a73",
+    "combat-final-ohk": "eccff47972ff08a6f2779de2bad35a44dbf9073be605d743d587e7e8d0efeee0",
+    "combat-final-3x-resume": "6f12181a690ff3c5c8ebe9853406b0452e5d7ef3f552a58fc78f225f80a50714",
+    "combat-final-1x-pass": "18b43e0b28f8459e557a4fb1100adacccb044b58ed75341e19421c1747d9eec0",
+    "combat-final-received": "1f0dcd9f8666bab3c3b4d2aad0325fb91f9796493e098950db24d6d8e32338ca",
+    "persistence-final": "afa14f0863bac7bae4e622c09b645e2a10355ed4bc5e99ede143fbad3a6eb7d7",
+    "camera-edge-7ec5": "b978b9630145031a16d907574dd5ac7bd46c6933a982a8ab1cdd83d292ac54a4",
+    "camera-fixed-tests": "8a0f10930779be44edd206ad839ad32fb58641cdd9140bcb0f703236ce5134f7",
+    "camera-combination-final": "b8271e373b752e76a4414e2131b4693bfaf6240c898ef2c07a7fc299450017f5",
+    "inventory-fixed-tests": "4f11c2094dba39c5be767c4d95c4992c98b9de59ed0dd9a126ff5f6d56d8733a",
+    "ab2-camera-fixed-tests": "1dd0e5520d2d9dc75ac6f521a4789793d8515e87b165885df07a9f1bb6d7df97",
+    "ab2-camera-combination-final": "38231a06c20315427e829d6078bd18385402924bd8ddde4ef4991e74df8e88ca",
+    "ab2-camera-edge-final": "622dff0e859b0bf89aa73bb31de144a7324911f08b78aae666f38e418b8fd761",
+    "ab2-landing-final": "f43d5f0eca062e345dd455c1eec8b22208f76923394e9e5e24012df7702aca24",
+    "ab2-inventory-final-child": "1fabee97fbaf3709bedb5f1058832ae24c4ba899654aa0fbefd603cf7316719c",
+    "ab2-inventory-final-tests": "791ebfe46365ac37fa4495ec83bbfc89b7166eca519c9a4de73435b618439d50",
+    "ab2-travel-final-young": "1d3483cef0d19a272f42fcb4dc2d00c36becc33c944b7cde5506c17be6212621",
+    "ab2-travel-final-return": "d5ceab39e0b3a718d335ebcccff3a171ac7175328abc0e217f9a69d80c1df7b0",
+    "ab2-travel-final-kakariko": "d4eb9e435630c449fbc3311766bb7151078f02a1d53f22dff461220db5b6756e",
+    "ab2-ui-final": "38e2298e83871b5775fa3f2bcac6eb6e63dbc66086b6cf5e254a4f5b9e115b0c"
+  },
+  "remaining_delivery_verification": [
+    "GitHub CI, tag/commit and release assets",
+    "Published install/source ZIP download checksums"
+  ],
+  "local_artifact_verification": {
+    "result": "pass",
+    "portable_c_fixtures": 21,
+    "renderer_cases": 744,
+    "full_release_runner_passed": true,
+    "install_and_source_archive_membership_and_checksums_passed": true,
+    "packaged_module_equals_native_tested_module": true,
+    "clean_source_build_all_four_zip_and_sha_artifacts_byte_identical": true,
+    "module_sha256": "ab2a5a1e6a44b90ebb5698cbbb64c667bcf620addc40709dc9e7e930abe230d5"
+  },
+  "isolated_test_cleanup": {
+    "emulator_stopped": true,
+    "copied_save_files_restored_and_hash_verified": 15,
+    "isolated_preferences_and_baseline_exefs_restored": true,
+    "owner_installation_or_saves_modified": false
+  }
+}

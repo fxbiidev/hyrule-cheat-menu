@@ -37,32 +37,37 @@ bool preferences_toggle_favorite(Preferences *preferences, uint32_t id) {
 
 size_t preferences_encode(const Preferences *preferences, uint8_t *bytes) {
     if (preferences->favorite_count > DESTINATION_COUNT || preferences->movement_speed > 3 ||
-        preferences->flight_speed > 5) return 0;
-    size_t length = 28 + preferences->favorite_count * 4;
+        preferences->flight_speed > 5 || preferences->damage > 3) return 0;
+    size_t length = 32 + preferences->favorite_count * 4;
     write_word(bytes, 0x504d4348u); // HCMP
-    write_word(bytes + 4, 1);
+    write_word(bytes + 4, 2);
     write_word(bytes + 8, preferences->generation);
     write_word(bytes + 12, preferences->movement_speed);
     write_word(bytes + 16, preferences->flight_speed);
     write_word(bytes + 20, preferences->favorite_count);
+    write_word(bytes + 24, preferences->damage);
     for (unsigned i = 0; i < preferences->favorite_count; ++i)
-        write_word(bytes + 24 + i * 4, preferences->favorites[i]);
+        write_word(bytes + 28 + i * 4, preferences->favorites[i]);
     write_word(bytes + length - 4, checksum(bytes, length - 4));
     return length;
 }
 
 bool preferences_decode(Preferences *preferences, const uint8_t *bytes, size_t length) {
     if (length < 28 || length > PREFERENCES_BYTES || read_word(bytes) != 0x504d4348u ||
-        read_word(bytes + 4) != 1 || checksum(bytes, length - 4) != read_word(bytes + length - 4))
+        (read_word(bytes + 4) != 1 && read_word(bytes + 4) != 2) || checksum(bytes, length - 4) != read_word(bytes + length - 4))
         return false;
+    unsigned version = read_word(bytes + 4);
+    unsigned header = version == 1 ? 24 : 28;
+    if (length < header + 4) return false;
     unsigned count = read_word(bytes + 20);
     unsigned movement = read_word(bytes + 12), flight = read_word(bytes + 16);
-    if (count > DESTINATION_COUNT || length != 28 + count * 4 || movement > 3 || flight > 5)
+    unsigned damage = version == 2 ? read_word(bytes + 24) : 0;
+    if (count > DESTINATION_COUNT || length != header + 4 + count * 4 || movement > 3 || flight > 5 || damage > 3)
         return false;
     Preferences decoded = { .generation = read_word(bytes + 8),
-                            .movement_speed = movement, .flight_speed = flight };
+                            .movement_speed = movement, .flight_speed = flight, .damage = damage };
     for (unsigned i = 0; i < count; ++i) {
-        uint32_t id = read_word(bytes + 24 + i * 4);
+        uint32_t id = read_word(bytes + header + i * 4);
         if (destination_index(id) >= 0 && !preferences_favorite(&decoded, id))
             decoded.favorites[decoded.favorite_count++] = id;
     }

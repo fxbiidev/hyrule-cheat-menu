@@ -41,10 +41,10 @@ static uint32_t write_file(uintptr_t handle, int64_t offset, const void *bytes, 
         Preferences different = {0};
         assert(preferences_decode(&different, files[handle - 1].bytes, size));
         if (valid_write_mismatch == 1) different.movement_speed = (different.movement_speed + 1) % 4;
-        else {
+        else if (valid_write_mismatch == 2) {
             assert(different.favorite_count > 0);
             different.favorites[0] = destinations[2].id;
-        }
+        } else different.damage = (different.damage + 1) % 4;
         assert(preferences_encode(&different, files[handle - 1].bytes) == size);
     }
     return fail_write;
@@ -70,7 +70,7 @@ void debug_log(const char *message) { (void)message; }
 
 int main(int argc, char **argv) {
     (void)argv;
-    Preferences preferences = {0}, restored = {0};
+    Preferences preferences = {.damage = 2}, restored = {0};
     if (argc > 1) {
         fail_mount = true;
         assert(!storage_load(&preferences));
@@ -96,13 +96,13 @@ int main(int argc, char **argv) {
     fail_create = false;
     // A valid checksum and matching generation alone do not prove that the
     // requested settings or Favorites reached storage. Reject and invalidate
-    // both kinds of mismatch so a later load still chooses the previous slot.
-    for (valid_write_mismatch = 1; valid_write_mismatch <= 2; ++valid_write_mismatch) {
+    // all three kinds of mismatch so a later load still chooses the previous slot.
+    for (valid_write_mismatch = 1; valid_write_mismatch <= 3; ++valid_write_mismatch) {
         assert(!storage_save(&restored) && restored.generation == 1);
         Preferences recovered = {0};
         assert(storage_load(&recovered) && recovered.generation == 1);
         assert(recovered.favorite_count == 1 && recovered.favorites[0] == destinations[0].id);
-        assert(recovered.movement_speed == restored.movement_speed);
+        assert(recovered.movement_speed == restored.movement_speed && recovered.damage == restored.damage);
     }
     valid_write_mismatch = 0;
     for (unsigned i = 1; i < DESTINATION_COUNT; ++i)

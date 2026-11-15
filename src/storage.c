@@ -66,7 +66,8 @@ static bool read_slot(unsigned slot, Preferences *preferences) {
 
 static bool same_preferences(const Preferences *left, const Preferences *right) {
     if (left->generation != right->generation || left->movement_speed != right->movement_speed ||
-        left->flight_speed != right->flight_speed || left->favorite_count != right->favorite_count)
+        left->flight_speed != right->flight_speed || left->damage != right->damage ||
+        left->favorite_count != right->favorite_count)
         return false;
     for (unsigned i = 0; i < left->favorite_count; ++i)
         if (left->favorites[i] != right->favorites[i]) return false;

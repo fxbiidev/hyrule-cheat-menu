@@ -15,7 +15,7 @@ from profile import BUILD_ID, make_patch
 
 
 ROOT = Path(__file__).resolve().parent
-RELEASE = "Hyrule-Cheat-Menu-v1.0.0.zip"
+RELEASE = "Hyrule-Cheat-Menu-v1.1.0.zip"
 DISTRIBUTION_FILES = (
     "README.md", "CHANGELOG.md", "RELEASE_NOTES.md", "TEST_REPORT.md", "RELEASE_READINESS.md",
     "PROGRESS.md", "third_party/Fast-Travel-LICENSE.txt", "docs/destination-coverage.csv",
@@ -29,6 +29,14 @@ DISTRIBUTION_FILES = (
     "docs/screenshots/build177-noclip.png", "docs/screenshots/build177-grounded-noclip.png",
     "docs/screenshots/release-cheats.png", "docs/screenshots/release-travel.png",
     "docs/screenshots/release-landing.png",
+    "docs/combat-verification.md", "docs/free-camera-verification.md", "docs/inventory-verification.md",
+    "docs/v1.1.0-design-review.md", "docs/v110-preview-verification.json",
+    "docs/screenshots/v110-preview-cheats.png", "docs/screenshots/v110-preview-combat.png",
+    "docs/screenshots/v110-preview-travel.png", "docs/screenshots/v110-preview-items.png",
+    "docs/screenshots/v110-preview-travel-confirm.png",
+    "docs/v1.1.0-native-results.json",
+    "docs/screenshots/v110-release-cheats.png", "docs/screenshots/v110-release-combat.png",
+    "docs/screenshots/v110-release-travel.png", "docs/screenshots/v110-release-items.png",
 )
 
 
@@ -106,8 +114,9 @@ def build_module(zig, output, header):
         elf = Path(temporary) / "hyrule.elf"
         (Path(temporary) / "profile.h").write_text(header, encoding="utf-8")
         objects = []
-        for source in ("start.S", "geometry_call.S", "guest.c", "menu.c", "overlay.c", "travel.c", "travel_runtime.c",
-                       "preferences.c", "storage.c", "memory.c", "flight.c", "landing.c", "noclip.c", "items.c", "ammo_guard.c", "wallet.c", "geometry.c", "recovery.c", "movement_safety.c", "travel_access.c", "save_guard.c"):
+        for source in ("start.S", "geometry_call.S", "combat_hook.S", "free_camera_hook.S", "guest.c", "menu.c", "overlay.c", "travel.c", "travel_runtime.c",
+                       "preferences.c", "storage.c", "memory.c", "flight.c", "landing.c", "noclip.c", "items.c", "ammo_guard.c", "wallet.c", "geometry.c", "recovery.c", "movement_safety.c", "travel_access.c", "save_guard.c",
+                       "combat.c", "free_camera.c", "inventory.c", "inventory_catalog.c"):
             obj = Path(temporary) / (source + ".o")
             subprocess.run([
                 zig, "cc", "-target", "aarch64-linux-none", "-O2", "-fPIC", "-fvisibility=hidden",

@@ -10,6 +10,7 @@ static bool readable = true;
 bool travel_holds_saves(void) { return holds & 1; }
 bool flight_holds_saves(void) { return holds & 2; }
 bool noclip_holds_saves(void) { return holds & 4; }
+bool inventory_busy(void) { return holds & 8; }
 static unsigned mock_ui_type(uintptr_t data, uint32_t *out, uint32_t key) {
     assert(data == 123 && key == 0x578d41e1);
     ++native_calls;
@@ -21,7 +22,7 @@ static unsigned mock_ui_type(uintptr_t data, uint32_t *out, uint32_t key) {
 int main(void) {
     const uint32_t types[] = {0xb6eede09, 0x42814d01, 0x3b849e33, 0x76e3453e};
     const uint64_t unrelated = (1ull << 40) | UP | R3;
-    for (holds = 0; holds < 8; ++holds) {
+    for (holds = 0; holds < 16; ++holds) {
         for (unsigned i = 0; i < sizeof types / sizeof *types; ++i) {
             ui_type = types[i];
             uint64_t before = unrelated | CONFIRM;
@@ -32,7 +33,7 @@ int main(void) {
             assert(save_guard_filter(0, before) == before && native_calls == calls);
         }
     }
-    holds = 7;
+    holds = 15;
     ui_type = 0x42814d01;
     readable = false;
     assert(save_guard_filter(123, CONFIRM | unrelated) == (CONFIRM | unrelated));

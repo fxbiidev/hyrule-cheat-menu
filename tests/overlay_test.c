@@ -20,7 +20,138 @@ static void guards(const uint32_t *allocation, size_t count) {
                 "Panel renderer wrote outside its pixel buffer");
 }
 
+static unsigned find_row(Menu *menu, enum RowKind kind, unsigned value) {
+    MenuRow rows[MENU_ROWS];
+    unsigned count = menu_rows(menu, rows);
+    for (unsigned i = 0; i < count; ++i)
+        if (rows[i].kind == kind && rows[i].value == value) return i;
+    require(false, "Required renderer state row is missing");
+    return 0;
+}
+
+enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, FIXTURE_STATES = 31 };
+
+static Menu fixture_menu(unsigned state) {
+    Menu menu = {.consent = true, .enabled = 175, .speed = 3, .flight_speed = 5,
+                 .alpha = 175, .open = true};
+    menu_initialize(&menu);
+    menu.cheat_sections = (1u << CHEAT_SECTION_COUNT) - 1;
+    menu.inventory = (InventorySnapshot){.valid = true, .epoch = 7, .pouch = 1, .actor = 2, .child = true};
+    for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
+        InventoryEntry *entry = &menu.inventory.entries[i];
+        bool quantity = inventory_catalog[i].quantity_editable;
+        entry->valid = true; entry->owned = i != INV_MIRROR_SHIELD;
+        entry->age_allowed = (inventory_catalog[i].ages & INV_CHILD) != 0;
+        entry->count = entry->owned ? quantity ? 3 : 1 : 0;
+        entry->capacity = quantity ? 30 : 1;
+        entry->can_set = entry->can_refill = entry->can_remove = quantity && entry->age_allowed;
+    }
+    if (state == 0) menu.cursor = 1;
+    else if (state == 1) menu.cursor = find_row(&menu, CHEAT_ROW, NOCLIP);
+    else if (state == 2) { menu.cheat_sections = 0; menu.cursor = CHEAT_SECTION_COUNT - 1; }
+    else if (state >= 3 && state <= 7) {
+        if (state & 1) menu.enabled |= 1u << ONE_HIT;
+        menu.damage = state >= 4 ? state - 4 : 0;
+        menu.cursor = find_row(&menu, CHEAT_ROW, state == 3 ? ONE_HIT : DAMAGE);
+    } else if (state == 8) {
+        menu.enabled |= 1u << FREE_CAMERA;
+        menu.cursor = find_row(&menu, CHEAT_ROW, FREE_CAMERA);
+    } else if ((state >= 9 && state <= 12) || state >= 22) {
+        menu.tab = MENU_ITEMS;
+        menu.enabled = 0;
+        menu.item_sections = state == 11 ? 0 : (1u << ITEM_CATEGORY_COUNT) - 1;
+        menu.cursor = state == 11 ? ITEM_CATEGORY_COUNT - 1 :
+            find_row(&menu, ITEM_ROW, state == 9 ? INV_KOKIRI_SWORD : INV_BOMBCHUS);
+        if (state == 12) menu.notice = "Native change failed. No automatic retry.";
+        if (state == 22) menu.notice = "AReallyLongUnbrokenNoticeThatMustWrapAndNeverWriteOutsideThePanelBoundaryEvenAtTheLargestScale";
+        if (state == 23 || state == 24) {
+            menu.item_edit_index = INV_BOMBCHUS; menu.item_quantity = 15;
+            if (state == 24) {
+                menu.item_prompt = true; menu.item_prompt_index = INV_BOMBCHUS;
+                menu.item_prompt_quantity = 15; menu.item_action = INVENTORY_SET;
+            }
+        } else if (state == 25) {
+            menu.cursor = find_row(&menu, ITEM_ROW, INV_ARROWS);
+        } else if (state == 26) menu.inventory.valid = false;
+        else if (state == 27) menu.enabled = 1u << ITEMS;
+        else if (state == 28) {
+            menu.inventory.entries[INV_BOMBCHUS].owned = false;
+            menu.inventory.entries[INV_BOMBCHUS].count = 0;
+            menu.inventory.entries[INV_BOMBCHUS].can_set = false;
+            menu.inventory.entries[INV_BOMBCHUS].can_refill = false;
+            menu.inventory.entries[INV_BOMBCHUS].can_remove = false;
+        } else if (state == 29) {
+            menu.inventory.entries[INV_BOMBCHUS].capacity = 999;
+            menu.inventory.entries[INV_BOMBCHUS].count = 999;
+        } else if (state == 30) {
+            menu.inventory.entries[INV_BOMBCHUS].valid = false;
+            menu.inventory.entries[INV_BOMBCHUS].count = -1;
+        }
+    } else if (state >= 13 && state <= 17) {
+        menu.tab = MENU_TRAVEL;
+        menu.age = state & 1;
+        menu.travel_sections[menu.age] = UINT64_MAX;
+        preferences_toggle_favorite(&menu.preferences, destinations[114].id);
+        MenuRow rows[MENU_ROWS];
+        unsigned count = menu_rows(&menu, rows);
+        menu.cursor = state == 14 ? count - 1 : 12;
+        menu.travel_prompt = state >= 16;
+        menu.travel_target = state == 17 ? UINT32_MAX : destinations[114].id;
+        menu.return_age = !menu.age;
+        menu.can_return = true;
+    } else if (state == 18) {
+        menu.prompt = true;
+        menu.cursor = find_row(&menu, CHEAT_ROW, GOD);
+    } else if (state == 19) {
+        menu.notice = "A long status remains clipped inside the panel's text boundary, with no buffer overrun. This text exercises all context lines.";
+    } else if (state == 20) {
+        menu.cursor = find_row(&menu, CHEAT_ROW, MAGIC);
+    } else if (state == 21) {
+        menu.tab = MENU_TRAVEL;
+        menu.cursor = find_row(&menu, TRAVEL_SECTION, GROUP_FAVORITES);
+    }
+    menu.scroll = menu.cursor >= VISIBLE_ROWS ? menu.cursor - VISIBLE_ROWS + 1 : 0;
+    return menu;
+}
+
+static void cache_revision_checks(void) {
+    Menu menu = fixture_menu(0);
+    overlay_publish(&menu, ALL_AVAILABLE, 0);
+    uint32_t baseline = published;
+    overlay_publish(&menu, ALL_AVAILABLE, 0);
+    require(published == baseline, "Unchanged menu invalidated its cached panel");
+    #define CHECK_CHANGE(member, value) do { \
+        Menu before = menu; menu.member = (value); \
+        overlay_publish(&menu, ALL_AVAILABLE, 0); \
+        require(published != baseline, "Visible state change failed to invalidate cached frames: " #member); \
+        menu = before; overlay_publish(&menu, ALL_AVAILABLE, 0); \
+        require(published == baseline, "Restored state failed to restore cache identity: " #member); \
+    } while (0)
+    CHECK_CHANGE(damage, 1);
+    CHECK_CHANGE(enabled, menu.enabled ^ (1u << ONE_HIT));
+    CHECK_CHANGE(tab, MENU_ITEMS);
+    CHECK_CHANGE(item_sections, menu.item_sections ^ 1);
+    CHECK_CHANGE(inventory.valid, false);
+    CHECK_CHANGE(item_edit_index, INV_BOMBCHUS);
+    CHECK_CHANGE(item_quantity, 1);
+    CHECK_CHANGE(item_prompt, true);
+    CHECK_CHANGE(item_prompt_index, INV_BOMBCHUS);
+    CHECK_CHANGE(item_prompt_quantity, 1);
+    for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
+        CHECK_CHANGE(inventory.entries[i].count, menu.inventory.entries[i].count + 1);
+        CHECK_CHANGE(inventory.entries[i].capacity, menu.inventory.entries[i].capacity + 1);
+        CHECK_CHANGE(inventory.entries[i].valid, !menu.inventory.entries[i].valid);
+        CHECK_CHANGE(inventory.entries[i].owned, !menu.inventory.entries[i].owned);
+        CHECK_CHANGE(inventory.entries[i].age_allowed, !menu.inventory.entries[i].age_allowed);
+        CHECK_CHANGE(inventory.entries[i].can_set, !menu.inventory.entries[i].can_set);
+        CHECK_CHANGE(inventory.entries[i].can_refill, !menu.inventory.entries[i].can_refill);
+        CHECK_CHANGE(inventory.entries[i].can_remove, !menu.inventory.entries[i].can_remove);
+    }
+    #undef CHECK_CHANGE
+}
+
 int main(void) {
+    cache_revision_checks();
     for (unsigned scale = 1; scale <= MAX_SCALE; ++scale) {
         size_t count = WIDTH * HEIGHT * scale * scale;
         uint32_t *allocation = malloc((count + 32) * sizeof(uint32_t));
@@ -31,37 +162,34 @@ int main(void) {
         const int formats[] = {RGBA8, RGBX8_SRGB, RGBA8_SRGB, RGB10A2};
         for (unsigned f = 0; f < sizeof formats / sizeof *formats; ++f) {
             Canvas canvas = {allocation + 16, (int)scale, formats[f]};
-            Menu menu = {.consent = true, .enabled = 175, .speed = 3, .flight_speed = 5};
-            menu_initialize(&menu);
-            for (unsigned state = 0; state < 4; ++state) {
-                menu.tab = state != 0;
-                menu.age = state & 1;
-                menu.travel_sections[menu.age] = UINT64_MAX;
-                menu.cursor = state ? 12 : 9;
-                menu.scroll = state ? 8 : 1;
-                menu.prompt = state == 2;
-                menu.travel_prompt = state == 3;
-                menu.travel_target = destinations[114].id;
-                menu.notice = state == 1 ? "A long status remains clipped inside the panel's text boundary, with no buffer overrun." : 0;
-                overlay_publish(&menu, 511, 511);
+            for (unsigned state = 0; state < FIXTURE_STATES; ++state) {
+                Menu menu = fixture_menu(state);
+                overlay_publish(&menu, state == 20 ? 0 : ALL_AVAILABLE, state == 18 ? ALL_AVAILABLE : 0);
                 draw_panel(&canvas, 175);
                 guards(allocation, count);
                 blend_panel(&canvas, scene, 0);
                 for (size_t i = 0; i < count; i += 127)
                     require(canvas.pixels[i] == scene[i], "Fade zero did not preserve the background");
                 draw_panel(&canvas, 175);
-                blend_panel(&canvas, scene, 175);
-                // An empty background pixel should be ~85% dark green over white.
+                // The empty gradient pixel retains 217/255 (~85%) software coverage.
                 size_t sample = 2 * scale * (WIDTH * scale) + 2 * scale;
-                unsigned max = formats[f] == RGB10A2 ? 1023 : 255;
-                unsigned red = (canvas.pixels[sample] & max) * 255 / max;
-                if (red < 48 || red > 51) {
-                    fprintf(stderr, "Panel opacity: format %x scale %u red=%u; expected about 50\n", formats[f], scale, red);
-                    return 1;
+                uint32_t ink = canvas.pixels[sample];
+                unsigned alpha = ink >> 24;
+                require(alpha == 217, "Panel background no longer retains 85% software coverage");
+                blend_panel(&canvas, scene, 175);
+                unsigned bits = formats[f] == RGB10A2 ? 10 : 8;
+                unsigned maximum = (1u << bits) - 1;
+                for (unsigned channel = 0; channel < 3; ++channel) {
+                    unsigned source = ((ink >> (channel * 8)) & 255) * maximum / 255;
+                    unsigned background_channel = (scene[sample] >> (channel * bits)) & maximum;
+                    unsigned expected = (source * alpha + background_channel * (255 - alpha) + 127) / 255;
+                    unsigned actual = (canvas.pixels[sample] >> (channel * bits)) & maximum;
+                    require(actual == expected, "Panel opacity did not match native-format alpha/background arithmetic");
+                    require(actual != source, "Background contribution was lost during transparency conversion");
                 }
                 guards(allocation, count);
                 draw_panel(&canvas, 175);
-                uint32_t ink = canvas.pixels[0];
+                ink = canvas.pixels[0];
                 encode_panel(&canvas);
                 uint32_t encoded = canvas.pixels[0];
                 if (formats[f] == RGB10A2) {
@@ -76,5 +204,5 @@ int main(void) {
         }
         free(scene); free(allocation);
     }
-    puts("Production software panel: all six scales, four formats, menu states, buffer guards and 85% background blending passed (not a display test).");
+    puts("Production software panel: six scales, four formats, 31 states, inventory/draft/confirmation cache invalidation, buffer guards and exact 85% blending passed (not a display test).");
 }

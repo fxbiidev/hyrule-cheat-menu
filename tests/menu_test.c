@@ -8,12 +8,34 @@ static const enum Support support[CHEAT_COUNT] = {
     EXPERIMENTAL, EXPERIMENTAL, EXPERIMENTAL, EXPERIMENTAL, EXPERIMENTAL,
     UNSUPPORTED, UNSUPPORTED, UNSUPPORTED
 };
+static const enum Support supported[CHEAT_COUNT] = {
+    VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED,
+    VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED
+};
+enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1 };
 static unsigned tick;
 static void input(Menu *menu, uint32_t buttons) {
     tick += 20;
     menu_input(menu, tick, true, buttons, true, ((1u << FLY) - 1) | (1u << TRAVEL), support);
 }
 static void press(Menu *menu, uint32_t buttons) { input(menu, 0); input(menu, buttons); }
+static void input_all(Menu *menu, uint32_t buttons) {
+    tick += 20;
+    menu_input(menu, tick, true, buttons, true, ALL_AVAILABLE, supported);
+}
+static void press_all(Menu *menu, uint32_t buttons) { input_all(menu, 0); input_all(menu, buttons); }
+static InventorySnapshot inventory_fixture(void) {
+    InventorySnapshot snapshot = {.valid = true, .epoch = 7, .pouch = 1, .actor = 2, .child = true};
+    for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
+        InventoryEntry *entry = &snapshot.entries[i];
+        bool editable = inventory_catalog[i].quantity_editable;
+        entry->valid = entry->owned = entry->age_allowed = true;
+        entry->count = editable ? 3 : 1;
+        entry->capacity = editable ? 30 : 1;
+        entry->can_set = entry->can_refill = entry->can_remove = editable;
+    }
+    return snapshot;
+}
 static unsigned row_index(Menu *menu, enum RowKind kind, unsigned value) {
     MenuRow rows[MENU_ROWS];
     unsigned count = menu_rows(menu, rows);
@@ -228,7 +250,7 @@ int main(void) {
     size_t migration_length = preferences_encode(&migrated, bytes);
     assert(preferences_decode(&migrated, bytes, migration_length));
     assert(migrated.favorite_count == 1 && migrated.favorites[0] == destinations[0].id);
-    bytes[4] = 2;
+    bytes[4] = 3;
     uint32_t checksum = 2166136261u;
     for (size_t i = 0; i < migration_length - 4; ++i) checksum = (checksum ^ bytes[i]) * 16777619u;
     for (unsigned i = 0; i < 4; ++i) bytes[migration_length - 4 + i] = (uint8_t)(checksum >> (8 * i));
@@ -299,6 +321,149 @@ int main(void) {
     menu_rows(&regions, rows);
     assert(rows[regions.cursor].kind == TRAVEL_SECTION && rows[regions.cursor].value == GROUP_DUNGEONS);
 
-    puts("Menu, 214 destinations, all favorites, transitions, and corrupt preferences passed.");
+    Menu integrated = {.open = true, .consent = true};
+    input_all(&integrated, 0);
+    integrated.cheat_sections = (1u << CHEAT_SECTION_COUNT) - 1;
+    count = menu_rows(&integrated, rows);
+    assert(count == CHEAT_SECTION_COUNT + CHEAT_COUNT - 1);
+    unsigned combat = row_index(&integrated, CHEAT_SECTION, COMBAT_CHEATS);
+    assert(rows[combat + 1].kind == CHEAT_ROW && rows[combat + 1].value == ONE_HIT);
+    assert(rows[combat + 2].kind == CHEAT_ROW && rows[combat + 2].value == DAMAGE);
+    integrated.cursor = combat + 1;
+    press_all(&integrated, CONFIRM);
+    assert(integrated.enabled == (1u << ONE_HIT));
+    integrated.cursor = combat + 2;
+    for (unsigned i = 0; i < 5; ++i) press_all(&integrated, RIGHT);
+    assert(integrated.damage == 3 && integrated.preferences.damage == 3 && integrated.preferences_dirty);
+    input_all(&integrated, RIGHT);
+    assert(integrated.damage == 3);
+    integrated.cursor = combat + 1;
+    press_all(&integrated, CONFIRM);
+    assert(!integrated.enabled && integrated.damage == 3 && integrated.preferences.damage == 3);
+    integrated.cursor = row_index(&integrated, CHEAT_ROW, FREE_CAMERA);
+    press_all(&integrated, CONFIRM);
+    assert(integrated.enabled == (1u << FREE_CAMERA));
+    unsigned cheat_cursor = integrated.cursor;
+    integrated.preferences_dirty = false;
+    Preferences untouched = integrated.preferences;
+    unsigned old_age = integrated.age;
+    unsigned old_age_cursor = integrated.age_cursor[old_age];
+    integrated.inventory = inventory_fixture();
+    InventorySnapshot unchanged_inventory = integrated.inventory;
+    // LB and RB cycle in opposite directions, including both tab-strip ends.
+    press_all(&integrated, TAB_LEFT);
+    assert(integrated.tab == MENU_ITEMS && !integrated.cursor);
+    input_all(&integrated, TAB_LEFT);
+    assert(integrated.tab == MENU_ITEMS);
+    count = menu_rows(&integrated, rows);
+    assert(count == ITEM_CATEGORY_COUNT + 7 && rows[0].kind == ITEM_SECTION);
+    integrated.cursor = row_index(&integrated, ITEM_ROW, INV_KOKIRI_SWORD);
+    press_all(&integrated, CONFIRM);
+    assert(integrated.notice && !integrated.item_prompt && !integrated.item_request);
+    press_all(&integrated, AGE);
+    press_all(&integrated, FAVORITE);
+    assert(integrated.age == old_age && integrated.age_cursor[old_age] == old_age_cursor);
+    assert(!integrated.travel_prompt && !integrated.travel_target && !integrated.travel_request);
+    assert(!memcmp(&untouched, &integrated.preferences, sizeof untouched) && !integrated.preferences_dirty);
+    press_all(&integrated, BACK);
+    assert(!integrated.cursor && !(integrated.item_sections & 1) && integrated.open);
+    press_all(&integrated, RIGHT);
+    assert(integrated.item_sections & 1);
+    integrated.cursor = row_index(&integrated, ITEM_SECTION, INV_AMMUNITION);
+    press_all(&integrated, CONFIRM);
+    count = menu_rows(&integrated, rows);
+    assert(rows[count - 1].kind == ITEM_ROW && rows[count - 1].value == INV_BOMBCHUS);
+    integrated.cursor = row_index(&integrated, ITEM_ROW, INV_BOMBS);
+    input_all(&integrated, 0);
+    assert(integrated.item_quantity == 3);
+    press_all(&integrated, RIGHT);
+    assert(integrated.item_quantity == 4 && !integrated.item_prompt && !integrated.item_request);
+    press_all(&integrated, CONFIRM);
+    assert(integrated.item_prompt && !integrated.item_request && integrated.item_action == INVENTORY_SET);
+    assert(integrated.item_prompt_quantity == 4 && integrated.item_prompt_index == INV_BOMBS);
+    input_all(&integrated, CONFIRM);
+    assert(integrated.item_prompt && !integrated.item_request);
+    press_all(&integrated, BACK);
+    assert(!integrated.item_prompt && !integrated.item_request && integrated.open);
+    press_all(&integrated, CONFIRM);
+    press_all(&integrated, CONFIRM);
+    assert(!integrated.item_prompt && integrated.item_request);
+    assert(!memcmp(&integrated.inventory, &unchanged_inventory, sizeof unchanged_inventory));
+    integrated.item_request = false; // Native guest dispatch acknowledges requests outside menu_input.
+    press_all(&integrated, AGE);
+    assert(integrated.item_prompt && integrated.item_action == INVENTORY_REFILL && integrated.item_prompt_quantity == 30);
+    assert(integrated.age == old_age && !integrated.travel_request && !integrated.preferences_dirty);
+    press_all(&integrated, BACK);
+    press_all(&integrated, FAVORITE);
+    assert(integrated.item_prompt && integrated.item_action == INVENTORY_REMOVE && !integrated.item_prompt_quantity);
+    press_all(&integrated, BACK);
+    integrated.enabled |= 1u << ITEMS;
+    press_all(&integrated, AGE);
+    assert(!integrated.item_prompt && !integrated.item_request && integrated.notice);
+    integrated.enabled &= ~(1u << ITEMS);
+    integrated.inventory.entries[INV_BOMBS].age_allowed = false;
+    press_all(&integrated, CONFIRM);
+    assert(!integrated.item_prompt && integrated.notice);
+    integrated.inventory.entries[INV_BOMBS].age_allowed = true;
+    press_all(&integrated, AGE);
+    assert(integrated.item_prompt);
+    menu_input(&integrated, tick += 20, true, 0, true, ALL_AVAILABLE & ~(1u << INVENTORY), supported);
+    assert(!integrated.item_prompt && !integrated.item_request);
+    integrated.inventory.entries[INV_BOMBS].can_refill = integrated.inventory.entries[INV_BOMBS].can_remove = false;
+    press_all(&integrated, AGE); press_all(&integrated, FAVORITE);
+    assert(!integrated.item_prompt && !integrated.item_request);
+    integrated.inventory.entries[INV_BOMBS].can_refill = integrated.inventory.entries[INV_BOMBS].can_remove = true;
+    integrated.item_quantity = integrated.inventory.entries[INV_BOMBS].capacity;
+    press_all(&integrated, RIGHT);
+    assert(integrated.item_quantity == 30);
+    integrated.item_quantity = 0;
+    press_all(&integrated, LEFT);
+    assert(!integrated.item_quantity);
+    unsigned item_cursor = integrated.cursor, item_scroll = integrated.scroll;
+    press_all(&integrated, TAB_RIGHT);
+    assert(integrated.tab == MENU_CHEATS && integrated.cursor == cheat_cursor);
+    press_all(&integrated, TAB_RIGHT);
+    assert(integrated.tab == MENU_TRAVEL);
+    integrated.travel_sections[old_age] = UINT64_MAX;
+    integrated.cursor = row_index(&integrated, DESTINATION_ROW, 26);
+    input_all(&integrated, 0);
+    unsigned travel_cursor = integrated.cursor, travel_scroll = integrated.scroll;
+    press_all(&integrated, TAB_RIGHT);
+    assert(integrated.tab == MENU_ITEMS && integrated.cursor == item_cursor && integrated.scroll == item_scroll);
+    assert(integrated.age_cursor[old_age] == travel_cursor && integrated.age_scroll[old_age] == travel_scroll);
+    press_all(&integrated, TAB_LEFT);
+    assert(integrated.tab == MENU_TRAVEL && integrated.cursor == travel_cursor && integrated.scroll == travel_scroll);
+    press_all(&integrated, TAB_LEFT);
+    assert(integrated.tab == MENU_CHEATS && integrated.cursor == cheat_cursor);
+    press_all(&integrated, TAB_LEFT);
+    assert(integrated.tab == MENU_ITEMS && integrated.cursor == item_cursor && integrated.scroll == item_scroll);
+    press_all(&integrated, R3);
+    assert(!integrated.open && integrated.tab == MENU_ITEMS);
+    press_all(&integrated, R3);
+    assert(integrated.open && integrated.tab == MENU_ITEMS && integrated.cursor == item_cursor);
+    press_all(&integrated, AGE);
+    assert(integrated.item_prompt);
+    press_all(&integrated, R3);
+    assert(!integrated.open && !integrated.item_prompt && !integrated.item_request);
+    press_all(&integrated, R3);
+    press_all(&integrated, BACK);
+    menu_rows(&integrated, rows);
+    assert(integrated.open && rows[integrated.cursor].kind == ITEM_SECTION &&
+           rows[integrated.cursor].value == INV_AMMUNITION);
+    assert(!(integrated.item_sections & (1u << INV_AMMUNITION)));
+    press_all(&integrated, BACK);
+    assert(!integrated.open && integrated.tab == MENU_ITEMS);
+    press_all(&integrated, R3);
+    assert(integrated.open && integrated.tab == MENU_ITEMS);
+    integrated.cursor = row_index(&integrated, ITEM_SECTION, INV_WEAPONS);
+    press_all(&integrated, BACK);
+    assert(integrated.open && !integrated.cursor && !(integrated.item_sections & 1));
+    menu_reset(&integrated);
+    assert(integrated.tab == MENU_ITEMS && !integrated.open && !integrated.enabled && !integrated.damage);
+    assert(!integrated.inventory.valid && !integrated.item_request && !integrated.item_prompt);
+    assert(!integrated.preferences_dirty && integrated.preferences.damage == 3);
+    assert(!memcmp(&untouched, &integrated.preferences, sizeof untouched));
+
+    puts("Menu, 214 destinations, all favorites, transitions, corrupt preferences three tabs, combat settings and confirmed inventory requests passed.");
     return 0;
 }

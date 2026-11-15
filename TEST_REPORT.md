@@ -1,3 +1,86 @@
+# Test report — Hyrule Cheat Menu v1.1.0
+
+15 November 2026. **Local release decision: GO for v1.1.0 on the supported target.** Runtime, host, package and source-reproduction acceptance have passed. CI, publication and downloaded-asset verification are separate delivery checks after commit. The owner approved the three-tab design and authorized publication after successful release tests. This report separates final-module evidence, preceding native checkpoints and portable fixtures.
+
+## Target and current module
+
+- Windows Lichii **Build 177**, displayed game update **2.0.0**, title `0400486024DEC000`.
+- Main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`; compressed main SHA-256 `7db9ddfda088c22d219ef13496decd7077c68cd67d4b37f53f4ac46a082768f2`. Compatibility follows these bytes and guarded interfaces, not every container sharing the version label.
+- Current module SHA-256: **`ab2a5a1e6a44b90ebb5698cbbb64c667bcf620addc40709dc9e7e930abe230d5`**.
+- Running RX identity: **82,728 bytes**, SHA-256 **`8d9592d6c54982efb573cb331000a7a8b33553a6fa10678d7eb2cd5f0b133922`**.
+- Native QA uses the isolated emulator profile and copied test saves. The isolated emulator has been stopped; all 15 copied save hashes, isolated preferences and baseline ExeFS module were restored to their pretest state. The owner installation/saves were untouched. Game binaries/assets, keys, private debugger clients and owner save data are excluded from the distribution.
+- Public sanitized evidence: [v1.1.0 native results](docs/v1.1.0-native-results.json). It omits actor/heap addresses, private paths and serialized saves and retains exact module identities and source-record checksums.
+
+## Completed native checks on the current module
+
+The private measurements retain their exact module hash. They are not promoted from an earlier executable.
+
+| Check | Observed result on `ab2a5a1e…` |
+|---|---|
+| 1× / One Hit Kill OFF | A fresh Blue Tektite took ordinary Fairy Bow damage **3 → 1 HP**. Effective damage setting was 1× and the mod modification counter stayed **4 → 4**. Native assertion passed. |
+| 1.5× melee | Master Sword accepted native damage **2 → 3** against an allowlisted Red Tektite with current life 2; checked attacker resolved to Link. Native assertion passed. |
+| 2× projectile | Fairy Bow accepted native damage **2 → 4** against an allowlisted Red Tektite; checked attacker resolved to Link. Native assertion passed. |
+| One Hit Kill priority | Fairy Bow's native **2** became **3** against a fresh Blue Tektite with life 3 while the stored multiplier remained 3×. The result used lethal current life, rather than the stored multiplier's 6. Native assertion passed. |
+| Immediate multiplier resumption | Disabling One Hit Kill retained the selected 3× setting; the next accepted Fairy Bow hit against a fresh Blue Tektite changed **2 → 6**. Native assertion passed. |
+| Received damage at 3× | With God Mode OFF and 3× outgoing damage selected, Link lost **40 → 38 HP**. Native damage **2** remained **2**, the exact Link target was refused as unsupported, and the modification counter stayed 4. |
+| Inventory disk persistence | Stock Save recorded **7 arrows**; a later unsaved edit left 3; normal Load restored **7**. This verifies an actual native save/load roundtrip, not only a mocked count. |
+| Save reset and preferences | The persistence flow advanced save epoch **4 → 6**. Active controls became **0**, effective normal speed and damage became **1×**, stored Flight Speed stayed 3×, stored damage selection stayed 3× and **four Favorites** remained. |
+| Free Camera motion and restoration | Camera translated **28.968 units**, rotated and rose **7.936** / descended **7.736** units with all Link coordinates exactly unchanged. R3+B exit restored native matrix-derived eye within **3.55e-5**; menu-toggle OFF within **1.81e-5**; the main menu reopened. |
+| Fly/Noclip/camera input handoff | Combined Fly+Noclip+Free Camera and continuously held-stick exit produced **zero Link displacement**. A continuous 50-frame exit/center/reapply-stick sequence while R3+B remained held also produced **exactly zero** displacement. After explicit neutral release, Fly resumed with **6.101067 units** of rise. |
+| Camera Fast Travel shutdown | Camera deactivated and Adult Kakariko arrival completed in **6.360 seconds**, with controls OFF and Return stored. |
+| Safe Fly OFF regression | God OFF: from **24.935349 units** above the starting ground, native descent measured **24.939110**, horizontal drift **0.040496**, health **40 → 40**, all active controls OFF and no recovery/Return notice. This is one measured natural landing, not all terrain/heights. |
+| Inventory acknowledgement and refusals | Cancel retained **5 arrows**; confirmed removal reached **4**, addition **5**, emptying **0**, refill **30**, with verified acknowledgements. Nuts/bombs/Bombchus passed decrement/refill to their capacities **20/30/30**. Gear edits, Adult child-only ammunition and Infinite Items conflicts were refused. |
+| Young inventory | In verified Young state, Deku Seeds changed **40 → 39 → 40**, respecting capacity 40, with the verified-success notice. |
+| Cross-age travel and Return | Adult→Young Death Mountain Trail completed in **63.172 seconds** with actual child age and Return available. Return reached Adult Hyrule Field in **65.469 seconds**; after 120 settling frames the native inventory age was Adult. The independently selected Young destination list remained selected. Adult Kakariko follow-up completed in **14.625 seconds**. |
+| Favorites and tab navigation | Favorites changed **4 → 5 → 4** and original IDs were restored exactly. From Item Manager, right tabs wrapped **Cheats→Travel→Items**, left **Travel→Cheats→Items**, preserving item cursor 14 and viewport. |
+
+
+These results are recorded privately as `combat-final-15x.json`, `combat-final-2x.json`, `combat-final-ohk.json`, `combat-final-3x-resume.json`, `combat-final-1x-pass.json`, `combat-final-received.json` and `persistence-final.json`. Their sanitized results and final-module camera, inventory, travel, landing and UI records are included in the linked public evidence. Four genuine current-module 1920×1080 captures show [Cheats](docs/screenshots/v110-release-cheats.png), [Combat](docs/screenshots/v110-release-combat.png), [Fast Travel](docs/screenshots/v110-release-travel.png) and the real [Item Manager](docs/screenshots/v110-release-items.png).
+
+The current native combat checks establish the tested melee/projectile path and accepted operands. They do not claim every allowlisted enemy, weapon, boss, reward or progression state was exercised. Bosses, minibosses, Link, friendly NPCs and unknown targets are excluded by the production allowlist and checked-source policy; negative host tests verify that policy. Their exclusion preserves native phases and caps rather than rewriting them. See [combat verification](docs/combat-verification.md).
+
+## Reproduced defects and fixes
+
+- **Combat cause mismatch:** native gameplay identified accepted player attacks using the checked cause path. The implementation and policy fixtures were corrected against the observed native dispatch; the current 1.5× melee, 2× projectile, One Hit Kill priority and 3× resumption results above pass. The final 1× control and God-OFF received-damage exclusion also pass.
+- **Deferred inventory acknowledgement:** module `7e81bc00…` dispatched real quantity changes but incorrectly interpreted an unchanged immediate getter as failure. The fixed backend publishes a hold, dispatches once and polls for the actual target. Pending requests cannot stack; timeout/ambiguous results make that save epoch read only until normal reload. No retry or speculative rollback occurs.
+- **Camera ownership after pause/idle:** earlier native checks exposed sleeping Link life jobs and native observation gaps. Active camera ownership now revalidates the same Link, save, scene and view without broadening resource/inventory ownership.
+- **Camera-to-Fly input leakage:** an earlier combined Fly/Noclip/camera checkpoint moved Link about 3.439 units when a stick stayed held after emergency exit. The corrected integration drains native, Fly and normal-speed inputs through neutral release, including the R3+B combination.
+
+## Preceding native checkpoint evidence
+
+| Module scope | Completed native result |
+|---|---|
+| `98ae67c95dacb1244dcfdbd50c2ab0ec548359dbcdbbbccd97826de6c742e989` | Cancel left the original quantity untouched; verified delayed removal **30 → 29**, addition **29 → 30**, emptying to **0** and refill to **30**. Nuts, bombs and Bombchus were inspected/refilled; gear stayed read only, Adult Link's child-only ammunition was refused, and Infinite Items conflicts were refused. |
+| `557ef38bc4fa26cc8094a6b2e4c8ca8b379f00a31b6d27bd5290dee38490ffe9` | Camera translation about **15.656 units**, rotation and both altitude triggers left all Link coordinates exactly unchanged. R3+B and menu-toggle OFF restored native view; combined Fly/Noclip/camera kept zero Link displacement. Held-stick exit leakage was absent. Fast Travel deactivated camera and reached Adult Kakariko in about **16.672 seconds** with Return stored. |
+| `7ec57f4d212db1dac58de80b7dacd9492a5928db51d7540fd1774a8df28d32a2` | Explicit exit edge: hold R3+B with stick input, center the stick while continuing to hold the combination, then move the stick again before releasing. Link displacement was **exactly zero** through the held sequence. After neutral release, ordinary Fly control resumed and rose **3.092857 units**. |
+
+Those results retain their own binary scope. Current-module retests are listed separately above; historical passes are not relabelled as new measurements. [Free Camera verification](docs/free-camera-verification.md) and [inventory verification](docs/inventory-verification.md) explain exact boundaries and failure handling.
+
+## Automated and build checks
+
+- Current warnings-as-errors ARM64 compilation passes against the pinned profile.
+- **All 21 portable C fixtures pass**, including combat policy, Free Camera, inventory acknowledgement/uncertainty, preference migration, original movement/recovery/resource/Save guards and storage failure handling.
+- The renderer passes **744 cases**: six scales, four native formats and 31 menu/inventory states, with buffer guards, exact 85% software coverage and cache invalidation for real item counts/capacities/status, drafts and confirmations.
+- Executed ARM64 bridge fixtures verified preserved registers, complete vectors, stack/status state, the replayed camera instruction and the combat LSE atomic-add behavior. These are ABI checks, not gameplay tests.
+- Preference fixtures use frozen schema-1/schema-2 bytes, all 214 legacy Favorites, all four stored damage settings, malformed/checksum-valid invalid payloads and rejection atomicity. Storage readback compares the damage selection as well as speeds, generation and Favorites.
+- **The complete release build and `tests/run_tests.py --source-package` passed with exit 0**, including all host fixtures and install/source archive checks. Checks cover exact membership, duplicate/stale path rejection, canonical metadata, checksums and maintained source/document bytes.
+- The independent archive verifier confirmed that packaged `subsdk8` is byte-identical to the native-tested `ab2a5a1e…` module. A clean extraction of the source archive rebuilt both ZIPs and both SHA-256 sidecars **byte-for-byte identically**. Final document-only refreshes are revalidated before publication; archive checksums live in their sidecars, avoiding a self-referential checksum inside an archive.
+
+## Local release GO and delivery verification
+
+All required local runtime, host, install/source package and clean-source reproduction gates have passed in the stated scope. No unresolved release-blocking failure is known in that scope. The approved design, genuine current-module captures and sanitized native evidence are included in the distribution.
+
+The final document-only archive refresh is checked against this same native-tested module. After commit/push, verify successful CI, exact v1.1.0 tag/commit target, public release assets and downloaded SHA-256 sidecars. This source report does not invent those later external outcomes or a release URL.
+
+Crashes, save corruption, serious camera/controller faults, mandatory-feature failures or major v1.0.0 regressions block publication. Native boss-phase/NPC testing, a separately recorded save load with Free Camera already ON, additional maps/cutscenes, physical controllers, displays, progression/equipment states and long-session combinations remain disclosed follow-up unless an actual serious defect is found. Normal-save reload is required after a savestate because reliable savestate notifications are unsupported. Safe Fly OFF/recovery limitations remain documented in [README.md](README.md).
+
+## Historical v1.0.0 evidence
+
+The collapsed material below preserves previous checks and release decisions exclusively for their named v1.0.0 binaries. It is not a v1.1.0 GO decision or new test coverage.
+
+<details>
+<summary>Preserved v1.0.0 reports and earlier RC evidence</summary>
+
 # Test report — v1.0.0 Full Release
 
 15 November 2026. **Release decision: GO for practical v1.0.0 publication.** Supported target: Windows Lichii Build 177, displayed update 2.0.0. The UI displays **V1.0.0**, without EXP labels or experimental consent for the supported features. Runtime signature and availability checks remain active. The owner reports extended play without observed bugs; no duration or exhaustive scenario list is inferred.
@@ -449,3 +532,6 @@ Use a copied save, then record the exact build, scene, age, other mods, and resu
 6. Compare a mod-free run in the same scene/configuration. Test clean removal and reinstall without deleting SD preferences. Savestate restore notification is unsupported; reload a normal save to establish reset state.
 
 A passing host build does not satisfy these runtime acceptance gates.
+
+
+</details>

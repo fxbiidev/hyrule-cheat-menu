@@ -245,7 +245,7 @@ void travel_update(Menu *menu, uintptr_t actor, bool safe, bool paused, bool sup
             prepared_request = 0;
             prepared_source.valid = false;
             __atomic_store_n(&save_hold, false, __ATOMIC_RELEASE);
-            if (menu->tab) menu->notice = "Travel signatures differ. Activation disabled.";
+            if (menu->tab == MENU_TRAVEL) menu->notice = "Travel signatures differ. Activation disabled.";
         }
         return;
     }

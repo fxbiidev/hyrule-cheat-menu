@@ -8,6 +8,9 @@
 #include "wallet.h"
 #include "save_guard.h"
 #include "travel_access.h"
+#include "combat.h"
+#include "free_camera.h"
+#include "inventory.h"
 
 struct Signature { uintptr_t address; unsigned count, features; uint32_t words[11]; };
 #define HCM_PROFILE_CHECKS
@@ -21,8 +24,10 @@ uintptr_t main_base;
 static Menu menu;
 static const enum Support support[CHEAT_COUNT] = {
     VERIFIED, VERIFIED, VERIFIED, VERIFIED,
+    VERIFIED, VERIFIED, VERIFIED, VERIFIED,
     VERIFIED, VERIFIED, VERIFIED, VERIFIED
 };
+uintptr_t combat_hook_resume;
 static unsigned experimental = (1u << (TRAVEL + 1)) - 1;
 static uintptr_t last_life, held_pause;
 static uint64_t opening_deadline;
@@ -31,7 +36,9 @@ static unsigned save_generation, active_save_generation;
 static bool drained_buttons;
 static unsigned observed_ammo[2];
 static uint64_t next_ammo_check;
-static uint64_t next_travel_access_check;
+static uint64_t next_travel_access_check, next_inventory_check;
+static bool camera_exit_latched, camera_input_draining;
+static TravelAnchor camera_scene, combat_scene;
 
 typedef struct {
     uintptr_t address, size;
@@ -236,6 +243,9 @@ static void reset_for_save(void) {
     // Invalidate in-flight native getters/jobs before clearing their publications.
     unsigned generation = __atomic_add_fetch(&save_generation, 1, __ATOMIC_ACQ_REL);
     wallet_reset();
+    combat_reset();
+    free_camera_reset();
+    inventory_reset();
     ammo_set_owner(0, generation);
     clear_life_guard();
     __atomic_store_n(&magic_owner, 0, __ATOMIC_RELEASE);
@@ -257,6 +267,18 @@ static void save_ready(uintptr_t command) {
 static void save_from_game_over(uintptr_t command) {
     reset_for_save();
     ((void (*)(uintptr_t))game(ORIGINAL_save_from_game_over))(command);
+}
+
+static bool capture_feature_scene(TravelAnchor *anchor, uintptr_t data, unsigned generation) {
+    anchor->valid = false;
+    const char *name = 0;
+    if (!data || !((unsigned (*)(uintptr_t, const char **, uint32_t))game(GAME_read_text))(
+            data, &name, 0x1d6189da) || !mapped((uintptr_t)name, sizeof anchor->scene, READ)) return false;
+    unsigned i = 0;
+    while (name[i] && i + 1 < sizeof anchor->scene) { anchor->scene[i] = name[i]; ++i; }
+    anchor->scene[i] = 0;
+    anchor->valid = i && !name[i] && generation == save_epoch();
+    return anchor->valid;
 }
 
 typedef struct {
@@ -287,7 +309,9 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
         noclip_reset();
         observed_ammo[0] = observed_ammo[1] = 0;
         next_ammo_check = 0;
-        next_travel_access_check = 0;
+        next_travel_access_check = next_inventory_check = 0;
+        camera_exit_latched = camera_input_draining = false;
+        camera_scene.valid = combat_scene.valid = false;
         active_save_generation = generation;
     }
     uint64_t last_seen = __atomic_load_n(&last_link_ms, __ATOMIC_ACQUIRE);
@@ -302,11 +326,18 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
     bool safe = world_ready && !travel_busy();
     bool gameplay_paused = manager && pause_active(manager);
     bool recent_link = last_seen && now - last_seen < 450;
-    bool can_open = recent_link && safe && !noclip_busy() && manager &&
-                    !gameplay_paused && overlay_ready();
     uintptr_t live = __atomic_load_n(&last_life, __ATOMIC_RELAXED);
     bool identified = (recent_link || held_pause) && mapped(live, 0x1c20, READ) && is_link_life(live);
     uintptr_t actor = identified ? pointer(live + 0x18) : 0;
+    // Link's life job can sleep while camera controls leave Link idle. A camera
+    // already owned by this save/scene keeps its independently checked Link;
+    // resource and inventory identification retain the original heartbeat gate.
+    bool camera_context = free_camera_active() && safe && travel_same_scene(&camera_scene);
+    uintptr_t camera_actor = actor;
+    if (!camera_actor && camera_context && mapped(live, 0x1c20, READ) && is_link_life(live))
+        camera_actor = pointer(live + 0x18);
+    bool can_open = (recent_link || (camera_context && camera_actor)) && safe && !noclip_busy() &&
+                    manager && !gameplay_paused && overlay_ready();
     if (actor && world_ready && !menu.preferences_loaded) {
         menu_initialize(&menu);
         storage_load(&menu.preferences);
@@ -337,10 +368,39 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
     if (!flight_ready) available &= ~((1u << FLY) | (1u << FLIGHT_SPEED));
     if (!(experimental & (1u << NOCLIP)) || !noclip_available(&menu, actor, safe))
         available &= ~(1u << NOCLIP);
+    if (!(experimental & (1u << FREE_CAMERA)) || !safe || !camera_actor ||
+        !free_camera_available(generation, gameplay_paused || menu.open || held_pause))
+        available &= ~(1u << FREE_CAMERA);
+    if (inventory_busy()) {
+        enum InventoryResult acknowledged = inventory_poll(pouch, actor, generation);
+        if (acknowledged != INV_PENDING) {
+            menu.notice = inventory_result_text(acknowledged);
+            menu.item_edit_index = INVENTORY_COUNT;
+            next_inventory_check = 0;
+        }
+    }
+    if ((experimental & (1u << INVENTORY)) && safe && identified && pouch &&
+        !menu.item_prompt && !menu.item_request && now >= next_inventory_check) {
+        inventory_read(pouch, actor, generation, &menu.inventory);
+        next_inventory_check = now + 80;
+    }
+    if (!safe || !identified || !menu.inventory.valid) available &= ~(1u << INVENTORY);
+    if (inventory_busy()) available &= ~((1u << INVENTORY) | (1u << TRAVEL) | (1u << ITEMS));
     // Native availability getters may have entered a save load. The following
     // menu and movement operations must keep the original invocation's epoch.
     if (generation != save_epoch()) return result;
     uint32_t buttons = connected ? (uint32_t)states[0].buttons : 0;
+    // Emergency exit is handled before menu routing, including when the menu is closed.
+    if ((menu.enabled & (1u << FREE_CAMERA)) && (buttons & (R3 | BACK)) == (R3 | BACK)) {
+        menu.enabled &= ~(1u << FREE_CAMERA);
+        free_camera_reset();
+        camera_exit_latched = true;
+        menu.notice = "Free Camera OFF. Native camera restored.";
+    }
+    if (camera_exit_latched) {
+        if (!(buttons & (R3 | BACK))) camera_exit_latched = false;
+        else buttons &= ~(R3 | BACK);
+    }
     if ((buttons & R3) && !(menu.previous & R3) && !can_open && !held_pause) {
         if (!recent_link) debug_log("[hyrule] R3 blocked: Link life unavailable\n");
         if (!safe) debug_log("[hyrule] R3 blocked: world unsafe\n");
@@ -348,6 +408,17 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
         if (!overlay_ready()) debug_log("[hyrule] R3 blocked: UI target unavailable\n");
     }
     menu_input(&menu, now, connected, buttons, can_open || held_pause, available, support);
+    if (menu.item_request) {
+        menu.item_request = false;
+        enum InventoryResult changed = inventory_apply(pouch, actor, generation, &menu.inventory,
+            menu.item_prompt_index, menu.item_action, menu.item_prompt_quantity, true,
+            (menu.enabled & (1u << ITEMS)) != 0);
+        menu.notice = inventory_result_text(changed);
+        menu.item_edit_index = INVENTORY_COUNT;
+        inventory_read(pouch, actor, generation, &menu.inventory);
+        next_inventory_check = now + 80;
+        if (inventory_busy()) available &= ~((1u << INVENTORY) | (1u << TRAVEL) | (1u << ITEMS));
+    }
     // Safety recovery may reopen the menu after the previous input poll's
     // capture branch. Capture every unpaused opening, including that path.
     if (menu.open && !held_pause && !opening_deadline) {
@@ -368,10 +439,38 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
     // the very first resumed frame, while stock paused menus keep their inputs.
     gameplay_paused = manager && pause_active(manager);
     if (generation != save_epoch()) return result;
+    FreeCameraInput camera_input = {0};
+    if (connected) camera_input = (FreeCameraInput){states[0].lx, states[0].ly,
+        states[0].rx, states[0].ry, buttons};
+    bool camera_requested = (menu.enabled & (1u << FREE_CAMERA)) != 0;
+    if (camera_requested && !free_camera_active() && !capture_feature_scene(&camera_scene, data, generation))
+        available &= ~(1u << FREE_CAMERA);
+    bool camera_allowed = (available & (1u << FREE_CAMERA)) && safe &&
+        travel_same_scene(&camera_scene) && !menu.travel_request &&
+        !noclip_busy() && connected && !camera_exit_latched;
+    bool camera_active = free_camera_update(camera_requested, camera_actor, generation, camera_allowed,
+        gameplay_paused || menu.open || menu.alpha || held_pause, &camera_input);
+    if (camera_requested && !camera_active) {
+        menu.enabled &= ~(1u << FREE_CAMERA);
+        menu.notice = "Free Camera stopped for a safe native transition.";
+    }
+    if (camera_active || camera_requested) camera_input_draining = true;
+    bool combat_requested = (menu.enabled & (1u << ONE_HIT)) || menu.damage;
+    if (!combat_requested) combat_scene.valid = false;
+    else if (actor && safe && !travel_same_scene(&combat_scene))
+        capture_feature_scene(&combat_scene, data, generation);
+    uintptr_t combat_actor = actor;
+    if (!combat_actor && combat_requested && safe && travel_same_scene(&combat_scene) &&
+        mapped(live, 0x1c20, READ) && is_link_life(live)) combat_actor = pointer(live + 0x18);
+    combat_publish(combat_actor, generation, (available & menu.enabled & (1u << ONE_HIT)) != 0,
+        available & (1u << DAMAGE) ? menu.damage : 0,
+        safe && combat_actor && travel_same_scene(&combat_scene) &&
+        !menu.open && !gameplay_paused && !menu.travel_request);
     if (experimental & (1u << NOCLIP)) noclip_update(&menu, actor, safe, generation);
     if (experimental & (1u << FLY))
-        flight_update(&menu, actor, safe, gameplay_paused || noclip_busy(), connected ? states[0].lx : 0,
-                      connected ? states[0].ly : 0, buttons, generation);
+        flight_update(&menu, actor, safe, gameplay_paused || noclip_busy(), connected && !camera_active && !camera_input_draining ? states[0].lx : 0,
+                      connected && !camera_active && !camera_input_draining ? states[0].ly : 0,
+                      camera_active || camera_input_draining ? 0 : buttons, generation);
     // A movement getter can begin a load while queuing native recovery.
     if (generation != save_epoch()) return result;
     travel_update(&menu, actor, world_ready, held_pause != 0, experimental & (1u << TRAVEL));
@@ -381,7 +480,7 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
     }
     uint64_t native_buttons = connected ? states[0].buttons : 0;
     bool cancel_save = save_guard_filter(data, native_buttons) != native_buttons;
-    if (cancel_save) menu.notice = "Save cancelled during Fly, Noclip or travel.";
+    if (cancel_save) menu.notice = "Save held during movement, travel or item update.";
     overlay_publish(&menu, available, 0);
 
     bool wallet_enabled = (available & menu.enabled & (1u << RUPEES)) != 0;
@@ -391,6 +490,7 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
     if (generation == save_epoch() && safe && (recent_link || held_pause)) {
         uintptr_t life = __atomic_load_n(&last_life, __ATOMIC_RELAXED);
         bool apply_speed = menu.speed && (available & (1u << SPEED)) && !menu.open &&
+                           !camera_active && !camera_input_draining &&
                            !(menu.enabled & (1u << FLY)) &&
                            manager && !pause_active(manager);
         bool check_items = (available & (1u << ITEMS)) && now >= next_ammo_check;
@@ -420,7 +520,14 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
         __atomic_store_n(&speed_owner, 0, __ATOMIC_RELEASE);
     }
 
-    bool suppress = was_open || menu.open || menu.alpha || held_pause || noclip_busy();
+    if (camera_input_draining && !camera_active && !camera_exit_latched && !buttons &&
+        (!connected || (states[0].lx >= -4915 && states[0].lx <= 4915 &&
+                        states[0].ly >= -4915 && states[0].ly <= 4915 &&
+                        states[0].rx >= -4915 && states[0].rx <= 4915 &&
+                        states[0].ry >= -4915 && states[0].ry <= 4915)))
+        camera_input_draining = false;
+    bool suppress = was_open || menu.open || menu.alpha || held_pause || noclip_busy() ||
+                    camera_active || camera_exit_latched || camera_input_draining;
     if (suppress) drained_buttons = true;
     if (!suppress && drained_buttons && !buttons) drained_buttons = false;
     for (int i = 0; i < result && i < count && i < 16; ++i) {
@@ -445,7 +552,7 @@ static int pad_right(Pad *s, int n, const uint32_t *id) { return pad_read(0x83C6
 static int pad_handheld(Pad *s, int n, const uint32_t *id) { return pad_read(0x83C62830, s, n, id); }
 
 static unsigned autosave_gate(uintptr_t manager, unsigned reason, uintptr_t context) {
-    if (travel_holds_saves() || flight_holds_saves() || noclip_holds_saves()) return 0;
+    if (travel_holds_saves() || flight_holds_saves() || noclip_holds_saves() || inventory_busy()) return 0;
     return ((unsigned (*)(uintptr_t, unsigned, uintptr_t))game(ORIGINAL_autosave_gate))(
         manager, reason, context);
 }
@@ -485,7 +592,15 @@ void hyrule_init(void) {
     INSTALL(save_ready);
     INSTALL(save_from_game_over);
     INSTALL(life_update);
-    if (experimental & (1u << TRAVEL)) INSTALL(autosave_gate);
+    if (experimental & ((1u << ONE_HIT) | (1u << DAMAGE))) {
+        combat_hook_resume = game(ORIGINAL_combat_hook);
+        INSTALL(combat_hook);
+    }
+    if (experimental & (1u << FREE_CAMERA)) {
+        free_camera_init();
+        INSTALL(free_camera_hook);
+    }
+    if (experimental & ((1u << TRAVEL) | (1u << INVENTORY))) INSTALL(autosave_gate);
     if (experimental & (1u << FLY)) {
         INSTALL(flight_step); INSTALL(flight_job); INSTALL(flight_fall_damage);
     }

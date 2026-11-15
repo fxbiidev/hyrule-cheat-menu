@@ -2,11 +2,11 @@
 
 #include "travel.h"
 
-enum { PREFERENCES_BYTES = 28 + DESTINATION_COUNT * 4 };
+enum { PREFERENCES_BYTES = 32 + DESTINATION_COUNT * 4 };
 
 typedef struct {
     uint32_t generation;
-    unsigned movement_speed, flight_speed, favorite_count;
+    unsigned movement_speed, flight_speed, damage, favorite_count;
     uint32_t favorites[DESTINATION_COUNT];
 } Preferences;
 

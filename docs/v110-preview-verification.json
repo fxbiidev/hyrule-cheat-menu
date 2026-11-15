@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-15",
+  "revision": 2,
+  "phase": "requested design changes; renewed approval pending",
+  "module_sha256": "56bf20e30681b50dde3d79edd3bf7ad3637b335b061d201fa073269a7cdc2371",
+  "running_text_bytes": 64680,
+  "running_text_sha256": "3a878a2daa7cf0d73e7968ad07ae693d1fc1bea95a462ec2bce7a7e7ba50dba3",
+  "running_text_matches": true,
+  "status": {
+    "build": "Lichii build-177 ",
+    "program_id": "0400486024DEC000",
+    "renderer": "vulkan",
+    "scm_rev": "87d84d513c67275ad0d6ae50ba51cce76e7e3ded",
+    "switch2": true,
+    "title": "The Legend of Zelda: Ocarina of Time"
+  },
+  "baseline_commit": "2553f76",
+  "previous_revision": {
+    "commit": "4b3092a",
+    "module_sha256": "d52cd1c94c55b6c1b3367a3ffde9ca8f31eb5fb07478d0ee196f784a018fe5da",
+    "running_text_sha256": "194d23d439f2d5396bbd6b9d0362d1971ce6c4af6daf1352925809109b3b6eba",
+    "note": "Initial two-tab prototype; its original captures/evidence remain in Git history."
+  },
+  "branch": "feature/v1.1.0-emerald-prototype",
+  "requested_changes": [
+    "CHEATS | FAST TRAVEL | ITEM MANAGER as three main tabs",
+    "Subtitle: Standalone Cheat Menu for OOTR",
+    "Remove former Inventory Tools category/submenu entry",
+    "Retain established visual design"
+  ],
+  "host_validation": {
+    "c_fixtures": 17,
+    "renderer_cases": 552,
+    "warnings_as_errors": true,
+    "package_validation": "passed before final documentation refresh; final document/source archive checked separately"
+  },
+  "native_scope": [
+    "Normal copied save loaded",
+    "R3 opening and closing/reopening on Item Manager",
+    "Cheats category collapse/expand",
+    "One Hit Kill preview ON and Damage Multiplier 2x display; UI only",
+    "LB wraps CHEATS to ITEM MANAGER; RB wraps ITEM MANAGER to CHEATS",
+    "All three tabs exercised through logical controller input",
+    "Item Manager independent category expansion and selection restored after visiting the other tabs",
+    "Item Manager sample ownership/quantity display and B category collapse",
+    "Two existing Favorites and stored Flight Speed loaded from v1.0 preferences",
+    "Travel confirmation opened and cancelled without travelling",
+    "New subtitle and three-tab strip visually inspected at 1920x1080"
+  ],
+  "not_claimed": [
+    "New combat/camera/item gameplay backends",
+    "Boss safety",
+    "New item save persistence or save-safety acceptance",
+    "Physical controller testing",
+    "Other resolutions or aspect ratios",
+    "Final v1.1.0 release readiness"
+  ],
+  "captures": {
+    "docs/screenshots/v110-preview-cheats.png": {
+      "sha256": "eff5335e4c516377ceaac8c8ffc3f4986aa8947adf6e23a2e2287924e73229e5",
+      "width": 1920,
+      "height": 1080,
+      "provenance": "Direct emulator screenshot API, unchanged PNG; no composite or mockup",
+      "revision": 2
+    },
+    "docs/screenshots/v110-preview-combat.png": {
+      "sha256": "c441316f1db357273a0422bff4187fd7fb35b7de4a3c8f861b9ce6824fd3ca59",
+      "width": 1920,
+      "height": 1080,
+      "provenance": "Direct emulator screenshot API, unchanged PNG; no composite or mockup",
+      "revision": 2
+    },
+    "docs/screenshots/v110-preview-items.png": {
+      "sha256": "8ff9f779549467bffe2d68062bb1bfb6a7d7304291c9bfe6c27e35d7f12e75d1",
+      "width": 1920,
+      "height": 1080,
+      "provenance": "Direct emulator screenshot API, unchanged PNG; no composite or mockup",
+      "revision": 2
+    },
+    "docs/screenshots/v110-preview-travel-confirm.png": {
+      "sha256": "3f40912707a6d1af2441ae367a5d91ffb3dcf08bd2906f048d9ab50471d73bf0",
+      "width": 1920,
+      "height": 1080,
+      "provenance": "Direct emulator screenshot API, unchanged PNG; no composite or mockup",
+      "revision": 2
+    },
+    "docs/screenshots/v110-preview-travel.png": {
+      "sha256": "7df0ec854447a6c6bb6d44a27fd9f9f64c983084cfec8ecb2dc63519f4942923",
+      "width": 1920,
+      "height": 1080,
+      "provenance": "Direct emulator screenshot API, unchanged PNG; no composite or mockup",
+      "revision": 2
+    }
+  }
+}

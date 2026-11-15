@@ -1,7 +1,7 @@
 #include "guest.h"
 
 enum {
-    WIDTH = 300, HEIGHT = 238, MAX_SCALE = 6, FRAME_COUNT = 3,
+    WIDTH = 420, HEIGHT = 288, MAX_SCALE = 6, FRAME_COUNT = 3,
     BYTES_PER_FRAME = ((WIDTH * HEIGHT * MAX_SCALE * MAX_SCALE * 4 + 4095) / 4096) * 4096,
     COMMAND_BYTES = 4096, FRAME_STRIDE = BYTES_PER_FRAME + COMMAND_BYTES, MAX_TEXTURES = 8,
     MAX_WIDTH = 5120, MAX_HEIGHT = 2160, BACKGROUND_OFFSET = FRAME_COUNT * FRAME_STRIDE,
@@ -85,12 +85,22 @@ void overlay_publish(const Menu *menu, unsigned available, unsigned experimental
                         (uint32_t)menu->travel_sections[menu->age],
                         (uint32_t)(menu->travel_sections[menu->age] >> 32),
                         menu->prompt, menu->travel_prompt, menu->travel_target, menu->can_return,
-                        available, experimental, (uint32_t)(uintptr_t)menu->notice};
+                        available, experimental, (uint32_t)(uintptr_t)menu->notice,
+                        menu->damage, menu->item_sections, menu->inventory.valid,
+                        menu->item_edit_index, (uint32_t)menu->item_quantity, menu->item_prompt,
+                        menu->item_prompt_index, (uint32_t)menu->item_prompt_quantity};
     uint32_t revision = 2166136261u;
     for (unsigned i = 0; i < sizeof state / sizeof *state; ++i)
         revision = (revision ^ state[i]) * 16777619u;
     for (unsigned i = 0; i < menu->preferences.favorite_count; ++i)
         revision = (revision ^ menu->preferences.favorites[i]) * 16777619u;
+    for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
+        const InventoryEntry *entry = &menu->inventory.entries[i];
+        revision = (revision ^ (unsigned)entry->count) * 16777619u;
+        revision = (revision ^ (unsigned)entry->capacity) * 16777619u;
+        revision = (revision ^ (entry->valid | entry->owned << 1 | entry->age_allowed << 2 |
+                    entry->can_set << 3 | entry->can_refill << 4 | entry->can_remove << 5)) * 16777619u;
+    }
     unsigned packed = menu->alpha | revision << 8;
     __atomic_store_n(&panel_lock, 0, __ATOMIC_RELEASE);
     __atomic_store_n(&published, packed, __ATOMIC_RELEASE);
@@ -157,6 +167,7 @@ static const uint8_t question[7] = {14,17,1,2,4,0,4};
 static const uint8_t colon[7] = {0,4,4,0,4,4,0};
 static const uint8_t left_paren[7] = {2,4,8,8,8,4,2};
 static const uint8_t right_paren[7] = {8,4,2,2,2,4,8};
+static const uint8_t ampersand[7] = {12,18,20,8,21,18,13};
 
 typedef struct { uint32_t *pixels; int scale, format; } Canvas;
 
@@ -169,6 +180,11 @@ static uint32_t pixel(Canvas *c, unsigned rgb, unsigned alpha) {
 }
 
 static void rect(Canvas *c, int x, int y, int w, int h, uint32_t color) {
+    if (x < 0) { w += x; x = 0; }
+    if (y < 0) { h += y; y = 0; }
+    if (x + w > WIDTH) w = WIDTH - x;
+    if (y + h > HEIGHT) h = HEIGHT - y;
+    if (w <= 0 || h <= 0) return;
     int scale = c->scale;
     int stride = WIDTH * scale;
     for (int line = y * scale; line < (y + h) * scale; ++line) {
@@ -192,6 +208,7 @@ static void label(Canvas *c, int x, int y, const char *text, uint32_t color) {
         else if (ch == ':') glyph = colon;
         else if (ch == '(') glyph = left_paren;
         else if (ch == ')') glyph = right_paren;
+        else if (ch == '&') glyph = ampersand;
         if (!glyph) continue;
         for (unsigned row = 0; row < 7; ++row)
             for (unsigned col = 0; col < 5; ++col)
@@ -220,6 +237,53 @@ static void group_name(char *out, unsigned capacity, const Menu *menu, unsigned 
     append_text(out, used, capacity, ")");
 }
 
+static int paragraph(Canvas *c, int x, int y, const char *text, unsigned lines, uint32_t color) {
+    while (*text && lines--) {
+        while (*text == ' ') ++text;
+        unsigned length = 0, space = 0;
+        while (text[length] && length < 18) {
+            if (text[length] == ' ') space = length;
+            ++length;
+        }
+        if (text[length] && space) length = space;
+        char line[19];
+        for (unsigned i = 0; i < length; ++i) line[i] = text[i];
+        line[length] = 0;
+        label(c, x, y, line, color);
+        text += length;
+        y += 11;
+    }
+    return y;
+}
+
+static void title(Canvas *c, int x, int y, const char *text, uint32_t color) {
+    for (; *text; ++text, x += 12) {
+        if (*text < 'A' || *text > 'Z') continue;
+        const uint8_t *glyph = alphabet[*text - 'A'];
+        for (unsigned row = 0; row < 7; ++row)
+            for (unsigned col = 0; col < 5; ++col)
+                if (glyph[row] & (16u >> col)) rect(c, x + col * 2, y + row * 2, 2, 2, color);
+    }
+}
+
+static void number_text(char *out, unsigned value) {
+    char reverse[11];
+    unsigned length = 0;
+    do { reverse[length++] = '0' + value % 10; value /= 10; } while (value && length < sizeof reverse);
+    unsigned used = 0;
+    while (length) out[used++] = reverse[--length];
+    out[used] = 0;
+}
+
+static void quantity_text(char *out, unsigned capacity, int count, int maximum) {
+    char number[12];
+    number_text(number, count >= 0 ? (unsigned)count : 0);
+    unsigned used = append_text(out, 0, capacity, number);
+    used = append_text(out, used, capacity, "/");
+    number_text(number, maximum >= 0 ? (unsigned)maximum : 0);
+    append_text(out, used, capacity, number);
+}
+
 static void draw_panel(Canvas *c, uint32_t flags) {
     (void)flags;
     while (__atomic_exchange_n(&panel_lock, 1, __ATOMIC_ACQUIRE)) { }
@@ -228,161 +292,205 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     __atomic_store_n(&panel_lock, 0, __ATOMIC_RELEASE);
     static const char *const names[CHEAT_COUNT] = {
         "God Mode", "Infinite Rupees", "Infinite Items", "Infinite Magic", "Movement Speed",
-        "Fly Mode", "Flight Speed", "Noclip"
+        "Fly Mode", "Flight Speed", "Noclip", "One Hit Kill", "Damage Multiplier", "Free Camera", "Item Manager"
     };
-    static const char *const speeds[] = {"1X", "1.5X", "2X", "3X", "5X", "10X"};
+    static const char *const speeds[] = {"1x", "1.5x", "2x", "3x", "5x", "10x"};
     static const char *const detail[CHEAT_COUNT][2] = {
         {"Refills your existing hearts.", "Protects ordinary life damage."},
-        {"Fills the current wallet.", "Respects unlocked wallet capacity."},
+        {"Fills the current wallet.", "Respects unlocked capacity."},
         {"Refills eligible owned ammunition.", "Respects age and capacity upgrades."},
         {"Refills an unlocked magic meter.", "Requires the fairy magic upgrade."},
-        {"Scales ordinary travel movement.", "Walking, running, swimming, climbing."},
-        {"Left stick fly / RT ascend / LT descend.", "OFF lands naturally; protects one fall."},
-        {"Independent horizontal and vertical speed.", "1x, 1.5x, 2x, 3x, 5x and 10x."},
-        {"Grounded walls; add Fly for full clip.", "OFF recovers the last clear position."}
+        {"Scales ordinary movement.", "Walking, running, swimming and climbing."},
+        {"Left stick moves. RT up, LT down.", "OFF lands naturally and protects one fall."},
+        {"Independent flight movement speed.", "Six settings from 1x to 10x."},
+        {"Pass walls on foot. Add Fly for full clip.", "OFF restores checked collision."},
+        {"One valid hit defeats supported ordinary enemies.", "Bosses and scripted actors stay protected."},
+        {"Scales supported attacks from Link.", "One Hit Kill overrides; your multiplier stays selected."},
+        {"Left stick moves, right stick rotates. RT up, LT down.", "R3 and B together exit at any time."},
+        {"Safe inventory tools.", "Only verified owned ammunition is editable."}
     };
-    uint32_t gold = pixel(c, 0xddb760, 255), bright = pixel(c, 0xf8e7ba, 255);
-    uint32_t muted = pixel(c, 0x9caa92, 255), green = pixel(c, 0x92d8a5, 255);
-    uint32_t trim = pixel(c, 0x8d7849, 255);
-    rect(c, 0, 0, WIDTH, HEIGHT, pixel(c, 0x0e251b, 217));
-    rect(c, 0, 0, WIDTH, 1, gold);
-    rect(c, 0, HEIGHT - 1, WIDTH, 1, gold);
-    rect(c, 0, 1, 1, HEIGHT - 2, gold);
-    rect(c, WIDTH - 1, 1, 1, HEIGHT - 2, gold);
-    label(c, 12, 9, "HYRULE CHEAT MENU", gold);
-    rect(c, 12, 22, WIDTH - 24, 1, trim);
-    label(c, 12, 29, "CHEATS", menu.tab ? muted : gold);
-    label(c, 72, 29, "FAST TRAVEL", menu.tab ? gold : muted);
-    if (menu.tab && (experimental & (1u << TRAVEL))) label(c, 163, 29, "EXP", gold);
-    unsigned display_age = menu.travel_prompt && menu.travel_target == UINT32_MAX ? menu.return_age : menu.age;
-    if (menu.tab) label(c, 204, 29, display_age ? "ADULT LINK" : "YOUNG LINK", bright);
+    uint32_t gold = pixel(c, 0xd8ba78, 255), bright = pixel(c, 0xf0ebd8, 255);
+    uint32_t muted = pixel(c, 0x97b3a5, 255), green = pixel(c, 0x91dfb2, 255);
+    uint32_t trim = pixel(c, 0x466c58, 255);
+    for (int y = 0; y < HEIGHT; ++y) {
+        unsigned r = 10 - 3 * y / HEIGHT, g = 37 - 9 * y / HEIGHT, b = 30 - 5 * y / HEIGHT;
+        rect(c, 0, y, WIDTH, 1, pixel(c, r << 16 | g << 8 | b, 217));
+    }
+    rect(c, 0, 0, WIDTH, 1, gold); rect(c, 0, HEIGHT - 1, WIDTH, 1, gold);
+    rect(c, 0, 1, 1, HEIGHT - 2, trim); rect(c, WIDTH - 1, 1, 1, HEIGHT - 2, trim);
+    rect(c, 5, 5, WIDTH - 10, 1, trim); rect(c, 5, HEIGHT - 6, WIDTH - 10, 1, trim);
+    for (int i = 0; i < 7; ++i) {
+        rect(c, 26 - i, 13 + i, 1 + i * 2, 1, gold);
+        rect(c, 18 - i, 22 + i, 1 + i * 2, 1, gold);
+        rect(c, 34 - i, 22 + i, 1 + i * 2, 1, gold);
+    }
+    title(c, 52, 13, "HYRULE CHEAT MENU", bright);
+    label(c, 52, 35, "STANDALONE CHEAT MENU FOR OOTR", gold);
+    rect(c, 12, 50, WIDTH - 24, 1, trim);
+    unsigned active_tab = menu.tab < MENU_TAB_COUNT ? menu.tab : MENU_CHEATS;
+    rect(c, 12 + active_tab * 134, 54, 128, 20, pixel(c, 0x224e3a, 244));
+    rect(c, 12 + active_tab * 134, 72, 128, 2, gold);
+    label(c, 58, 60, "CHEATS", menu.tab == MENU_CHEATS ? bright : muted);
+    label(c, 177, 60, "FAST TRAVEL", menu.tab == MENU_TRAVEL ? bright : muted);
+    label(c, 308, 60, "ITEM MANAGER", menu.tab == MENU_ITEMS ? bright : muted);
+    unsigned age = menu.travel_prompt && menu.travel_target == UINT32_MAX ? menu.return_age : menu.age;
     MenuRow rows[MENU_ROWS];
     unsigned count = menu_rows(&menu, rows);
     unsigned cursor = menu.cursor < count ? menu.cursor : count - 1;
     unsigned start = menu.scroll <= cursor ? menu.scroll : cursor;
     MenuRow selected = rows[cursor];
+    rect(c, 280, 81, 128, 151, pixel(c, 0x09271f, 235)); rect(c, 280, 81, 128, 1, trim);
+    label(c, 290, 90, menu.tab == MENU_ITEMS ? "INVENTORY" :
+          menu.tab == MENU_TRAVEL ? (age ? "ADULT LINK" : "YOUNG LINK") : "CONTEXT", gold);
+    rect(c, 290, 103, 108, 1, trim);
     for (unsigned line = 0; line < VISIBLE_ROWS && start + line < count; ++line) {
         unsigned index = start + line;
         MenuRow row = rows[index];
-        int y = 46 + (int)line * 14;
+        int y = 86 + (int)line * 16;
         if (index == cursor) {
-            rect(c, 7, y - 3, WIDTH - 14, 13, pixel(c, 0x39412a, 232));
-            for (int i = 0; i < 4; ++i) rect(c, 12 + i, y + i, 1, 7 - 2 * i, gold);
+            rect(c, 12, y - 4, 252, 15, pixel(c, 0x28523b, 246)); rect(c, 12, y - 4, 2, 15, gold);
         }
         const char *name = "", *state = "";
-        char row_label[160];
-        int name_x = 23;
+        char row_label[160], state_label[24];
+        int name_x = 32;
         uint32_t color = bright;
-        if (row.kind == CHEAT_SECTION || row.kind == TRAVEL_SECTION) {
+        if (row.kind == CHEAT_SECTION || row.kind == TRAVEL_SECTION || row.kind == ITEM_SECTION) {
             bool expanded;
             if (row.kind == CHEAT_SECTION) {
-                name = row.value ? "Movement Cheats" : "Player Cheats";
-                expanded = menu.cheat_sections & (1u << row.value);
+                name = cheat_section_names[row.value]; expanded = menu.cheat_sections & (1u << row.value);
+            } else if (row.kind == ITEM_SECTION) {
+                name = item_category_names[row.value]; expanded = menu.item_sections & (1u << row.value);
             } else {
-                group_name(row_label, sizeof row_label, &menu, row.value);
-                name = row_label;
+                group_name(row_label, sizeof row_label, &menu, row.value); name = row_label;
                 expanded = menu.travel_sections[menu.age] & (1ull << row.value);
-                int indicator = row.parent == TRAVEL_ROOT ? 23 : 29;
-                name_x = indicator + 9;
-                for (int i = 0; i < 4; ++i) {
-                    if (expanded) rect(c, indicator + i, y + i, 7 - i * 2, 1, gold);
-                    else rect(c, indicator + i, y + i, 1, 7 - i * 2, gold);
-                }
+                if (row.parent != TRAVEL_ROOT) name_x += 6;
             }
-            state = expanded ? "OPEN" : "CLOSED";
+            for (int i = 0; i < 3; ++i) {
+                if (expanded) rect(c, name_x - 11 + i, y + 1 + i, 5 - i * 2, 1, gold);
+                else rect(c, name_x - 11 + i, y + 1 + i, 1, 5 - i * 2, gold);
+            }
             color = gold;
         } else if (row.kind == CHEAT_ROW) {
-            unsigned mask = 1u << row.value;
-            name = names[row.value];
-            bool active = available & mask;
-            color = active ? bright : muted;
-            if (experimental & mask) label(c, 215, y, "EXP", gold);
-            if (!active) state = "--";
-            else if (row.value == SPEED) state = speeds[menu.speed];
-            else if (row.value == FLIGHT_SPEED) state = speeds[menu.flight_speed];
+            unsigned mask = 1u << row.value; name = names[row.value];
+            color = available & mask ? bright : muted;
+            if (!(available & mask)) state = "--";
+            else if (row.value == SPEED) state = speeds[menu.speed < 4 ? menu.speed : 0];
+            else if (row.value == FLIGHT_SPEED) state = speeds[menu.flight_speed < 6 ? menu.flight_speed : 0];
+            else if (row.value == DAMAGE) state = speeds[menu.damage < 4 ? menu.damage : 0];
             else state = menu.enabled & mask ? "ON" : "OFF";
+        } else if (row.kind == ITEM_ROW) {
+            const InventoryItem *item = &inventory_catalog[row.value];
+            const InventoryEntry *entry = &menu.inventory.entries[row.value];
+            name = item->name;
+            bool valid = menu.inventory.valid && entry->valid && (available & (1u << INVENTORY));
+            if (!valid) { state = "--"; color = muted; }
+            else if (item->quantity_editable) {
+                int quantity = index == cursor && menu.item_edit_index == row.value ? menu.item_quantity : entry->count;
+                quantity_text(state_label, sizeof state_label, quantity, entry->capacity);
+                state = state_label;
+                if (!entry->age_allowed || !entry->owned) color = muted;
+            } else { state = entry->owned ? "OWNED" : "NONE"; if (!entry->owned) color = muted; }
         } else if (row.kind == DESTINATION_ROW) {
-            name_x = 38;
-            name = destination_label(row.value);
+            name_x = 38; name = destination_label(row.value);
             if (row.parent == GROUP_FAVORITES) {
-                unsigned used = append_text(row_label, 0, sizeof row_label,
-                                            travel_groups[destination_group(row.value)].name);
-                used = append_text(row_label, used, sizeof row_label, ": ");
-                append_text(row_label, used, sizeof row_label, name);
+                unsigned used = append_text(row_label, 0, sizeof row_label, travel_groups[destination_group(row.value)].name);
+                used = append_text(row_label, used, sizeof row_label, ": "); append_text(row_label, used, sizeof row_label, name);
                 name = row_label;
             } else if (travel_groups[row.parent].parent != TRAVEL_ROOT) name_x += 6;
             if (!(available & (1u << TRAVEL))) color = muted;
-            if (destination_restriction(row.value)) {
-                color = muted;
-                state = destination_locked(row.value) ? "LOCKED" : "UNSUP";
-            }
+            if (destination_restriction(row.value)) { color = muted; state = destination_locked(row.value) ? "LOCKED" : "UNSUP"; }
             else if (preferences_favorite(&menu.preferences, destinations[row.value].id)) state = "FAV";
         } else {
-            name = "Return to Previous Location";
+            name = "Return to Previous Location"; name_x = 22;
             if (!menu.can_return || !(available & (1u << TRAVEL))) color = muted;
         }
-        char clipped[39];
-        unsigned length = 0;
-        unsigned maximum = (246 - name_x) / 6;
-        while (name[length] && length < maximum && length < sizeof clipped - 1) {
-            clipped[length] = name[length];
-            ++length;
-        }
+        char clipped[48]; unsigned length = 0, maximum = ((state[0] ? 216 : 260) - name_x) / 6;
+        while (name[length] && length < maximum && length < sizeof clipped - 1) { clipped[length] = name[length]; ++length; }
         if (name[length] && length >= 3) clipped[length - 1] = clipped[length - 2] = clipped[length - 3] = '.';
-        clipped[length] = 0;
-        label(c, name_x, y, clipped, color);
-        label(c, 253, y, state, state[0] == 'O' && state[1] == 'N' ? green : color);
+        clipped[length] = 0; label(c, name_x, y, clipped, color);
+        if (state[0]) {
+            bool on = state[0] == 'O' && state[1] == 'N'; unsigned length_state = 0;
+            while (state[length_state]) ++length_state;
+            rect(c, 219, y - 2, 44, 11, pixel(c, on ? 0x2a5a3d : 0x122f26, 250));
+            label(c, 241 - (int)length_state * 3, y, state, on ? green : muted);
+        }
     }
     if (count > VISIBLE_ROWS) {
-        unsigned height = 124 * VISIBLE_ROWS / count;
-        if (height < 4) height = 4;
-        rect(c, 294, 46 + start * (124 - height) / (count - VISIBLE_ROWS), 2, height, trim);
+        unsigned h = 143 * VISIBLE_ROWS / count; if (h < 4) h = 4;
+        rect(c, 270, 82, 1, 143, trim); rect(c, 269, 82 + start * (143 - h) / (count - VISIBLE_ROWS), 3, h, gold);
     }
-    rect(c, 12, 174, WIDTH - 24, 1, trim);
-    if (menu.travel_prompt) {
+    const char *first = "Expand a category to browse its controls.", *second = "D-pad selects. A opens or collapses.";
+    const char *hint = "A Expand / LB-RB Tabs / B Close", *tag = "GAMEPLAY PAUSED";
+    char item_detail[128];
+    if (menu.item_prompt && menu.item_prompt_index < INVENTORY_COUNT) {
+        first = inventory_catalog[menu.item_prompt_index].name;
+        unsigned used = append_text(item_detail, 0, sizeof item_detail, "Set quantity to ");
+        char number[12];
+        number_text(number, (unsigned)menu.item_prompt_quantity);
+        used = append_text(item_detail, used, sizeof item_detail, number);
+        append_text(item_detail, used, sizeof item_detail, ". This changes the current inventory.");
+        second = item_detail;
+        tag = "CONFIRM ITEM CHANGE";
+        hint = "A Confirm Change / B Cancel / R3 Close";
+    } else if (menu.travel_prompt) {
         int index = destination_index(menu.travel_target);
-        label(c, 12, 182, index >= 0 ? travel_groups[destination_group(index)].name : "Return to Previous Location", gold);
-        label(c, 12, 193, index >= 0 ? destination_label(index) : "Restore the recorded safe position.", bright);
-        label(c, 12, 211, menu.consent ? "A Travel / B Cancel" : "A Accept EXP and Travel / B Cancel", gold);
+        first = index >= 0 ? travel_groups[destination_group(index)].name : "Return to Previous Location";
+        second = index >= 0 ? destination_label(index) : "Restore the recorded safe position.";
+        tag = "CONFIRM TRAVEL"; hint = "A Confirm Travel / B Cancel / R3 Close";
     } else if (menu.prompt) {
-        label(c, 12, 182, "Experimental functionality", gold);
-        label(c, 12, 193, "A accepts for this game session.", bright);
-        label(c, 12, 211, "A Accept / B Close", gold);
-    } else {
-        const char *first = "A expands or collapses this section.";
-        const char *second = menu.tab ? storage_status() : "Both sections start open on restart.";
-        const char *hint = "A Expand / L-R Tabs / B Close";
-        if (selected.kind == CHEAT_ROW) {
-            first = detail[selected.value][0]; second = detail[selected.value][1];
-            if (!(available & (1u << selected.value)) && selected.value != MAGIC) {
-                first = "Unavailable. Safe integration required.";
-                second = selected.value == FLY || selected.value == FLIGHT_SPEED || selected.value == NOCLIP ?
-                         "Requires supported travel and safe ground." : detail[selected.value][0];
-            }
-            hint = selected.value == SPEED || selected.value == FLIGHT_SPEED ?
-                   "Left-Right Adjust / LB-RB Tabs / B Close" : "A Toggle / LB-RB Tabs / B Close";
-        } else if (selected.kind == DESTINATION_ROW) {
-            first = destination_label(selected.value);
-            second = destination_restriction(selected.value);
-            if (!second) second = travel_groups[destination_group(selected.value)].name;
-            hint = "A Travel / Y Favorite / B Region / X Age";
-        } else if (selected.kind == RETURN_ROW) {
-            first = menu.can_return ? "Return to the last recorded safe position." : "No safe return location is stored.";
-            second = "Cleared when an actual save is loaded.";
-            hint = "A Select / X Age / LB-RB Tabs / B Close";
-        } else if (menu.tab) {
-            first = selected.value == GROUP_FAVORITES && !travel_group_count(menu.age, GROUP_FAVORITES,
-                    menu.preferences.favorites, menu.preferences.favorite_count) ?
-                    "No Favorites yet. Use Y on a destination." : "Open a region, then choose an entrance.";
-            hint = "A Open-Close / X Age / B Back / R3 Close";
+        first = "Experimental functionality."; second = "A accepts for this game session.";
+        tag = "CONFIRM ACTION"; hint = "A Accept / B Close";
+    } else if (selected.kind == CHEAT_ROW) {
+        first = detail[selected.value][0]; second = detail[selected.value][1];
+        if (!(available & (1u << selected.value))) {
+            first = "Currently unavailable.";
+            second = selected.value == MAGIC ? "Requires an unlocked magic meter." :
+                selected.value == FREE_CAMERA ? "Wait for a supported gameplay camera." :
+                selected.value == ONE_HIT || selected.value == DAMAGE ? "Unsupported attack integration." :
+                selected.value >= FLY && selected.value <= NOCLIP ? "Requires supported travel and safe ground." : "Safe integration required.";
         }
-        label(c, 12, 182, menu.notice ? menu.notice : first, bright);
-        label(c, 12, 193, second, muted);
-        label(c, 12, 211, hint, gold);
+        if (selected.value == DAMAGE && (menu.enabled & (1u << ONE_HIT)))
+            second = "One Hit Kill overrides. Your multiplier resumes when OFF.";
+        hint = selected.value == SPEED || selected.value == FLIGHT_SPEED || selected.value == DAMAGE ?
+            "Left-Right Adjust / LB-RB Tabs / B Close" : "A Toggle / LB-RB Tabs / B Close";
+    } else if (selected.kind == ITEM_ROW) {
+        const InventoryItem *item = &inventory_catalog[selected.value];
+        const InventoryEntry *entry = &menu.inventory.entries[selected.value];
+        first = item->name;
+        if (!menu.inventory.valid || !entry->valid) second = "Inventory unavailable. Wait for safe gameplay.";
+        else if (!entry->age_allowed) second = "This item is restricted to the other age.";
+        else if (!entry->owned && item->quantity_editable) second = "Acquire this item normally first.";
+        else if (!entry->can_set) second = "Read-only equipment. Acquire it through normal gameplay.";
+        else if (menu.enabled & (1u << ITEMS)) second = "Disable Infinite Items before editing quantities.";
+        else second = "Edit owned ammunition within its unlocked capacity. Every change asks for confirmation.";
+        tag = entry->can_set ? "CONFIRM BEFORE APPLY" : "VIEW EQUIPMENT";
+        if (menu.item_edit_index == selected.value && menu.item_quantity != entry->count) tag = "DRAFT / NOT APPLIED";
+        hint = entry->can_set ? "Left-Right Qty / A Apply / X Fill / Y Empty" : "LB-RB Tabs / B Category / R3 Close";
+    } else if (selected.kind == ITEM_SECTION) {
+        first = "Browse owned equipment and ammunition.";
+        second = "Equipment is read-only. Editable quantities respect age and capacity.";
+        tag = "SAFE ITEM MANAGER";
+        hint = "A Expand / LB-RB Tabs / B Back";
+    } else if (selected.kind == DESTINATION_ROW) {
+        first = destination_label(selected.value); second = destination_restriction(selected.value);
+        if (!second) second = travel_groups[destination_group(selected.value)].name;
+        hint = "A Travel / Y Favorite / X Age / B Region";
+    } else if (selected.kind == RETURN_ROW) {
+        first = menu.can_return ? "Return to the last safe position." : "No safe return location stored.";
+        second = "Cleared when a save is loaded."; hint = "A Select / X Age / LB-RB Tabs / B Close";
+    } else if (menu.tab == MENU_TRAVEL) {
+        first = selected.value == GROUP_FAVORITES && !travel_group_count(menu.age, GROUP_FAVORITES,
+            menu.preferences.favorites, menu.preferences.favorite_count) ? "No Favorites yet. Use Y on a destination." :
+            "Open a region, then choose an entrance.";
+        second = "Age lists and Favorites are remembered."; hint = "A Open-Close / X Age / B Back / R3 Close";
     }
-    rect(c, 12, 222, WIDTH - 24, 1, trim);
-    label(c, 12, 228, "Created by fxbii.dev", muted);
-    label(c, 220, 228, "V1.0.0", gold);
+    if (experimental && selected.kind == CHEAT_ROW && (experimental & (1u << selected.value))) tag = "EXPERIMENTAL";
+    int next = paragraph(c, 290, 112, menu.notice ? menu.notice : first, 4, bright);
+    paragraph(c, 290, next + 8, second, 5, muted);
+    rect(c, 12, 233, WIDTH - 24, 1, trim); label(c, 16, 242, hint, gold);
+    label(c, 16, 256, tag, muted); label(c, 294, 256, "R3 OPEN / CLOSE", muted);
+    rect(c, 12, 268, WIDTH - 24, 1, trim);
+    label(c, 16, 275, "Created by fxbii.dev", muted); label(c, 354, 275, "V1.1.0", gold);
 }
 
 static void blend_panel(Canvas *canvas, const uint32_t *scene, unsigned fade) {

@@ -2,12 +2,22 @@
 
 enum { FADE_MS = 175, REPEAT_DELAY_MS = 285, REPEAT_MS = 90 };
 
+const char *const cheat_section_names[CHEAT_SECTION_COUNT] = {
+    "Player Cheats", "Movement Cheats", "Combat Cheats", "Camera & World"
+};
+const char *const item_category_names[ITEM_CATEGORY_COUNT] = {
+    "Weapons", "Shields", "Equipment", "Consumables", "Ammunition"
+};
+
 void menu_initialize(Menu *menu) {
     if (menu->initialized) return;
     menu->initialized = true;
     menu->cheat_sections = 3;
-    menu->cursor = 1;
-    menu->tab_cursor[0] = menu->tab_cursor[1] = 1;
+    menu->item_sections = 1;
+    menu->item_edit_index = INVENTORY_COUNT;
+    menu->cursor = menu->tab == MENU_ITEMS ? 0 : 1;
+    menu->tab_cursor[MENU_CHEATS] = menu->tab_cursor[MENU_TRAVEL] = 1;
+    menu->tab_cursor[MENU_ITEMS] = 0;
     menu->age_cursor[0] = menu->age_cursor[1] = 1;
 }
 
@@ -21,6 +31,10 @@ void menu_reset(Menu *menu) {
     menu->speed = 0;
     menu->alpha = 0;
     menu->repeat = 0;
+    menu->damage = 0;
+    menu->item_prompt = menu->item_request = false;
+    menu->item_edit_index = INVENTORY_COUNT;
+    menu->inventory.valid = false;
 }
 
 static void group_rows(const Menu *menu, unsigned group, MenuRow *rows, unsigned *count) {
@@ -44,13 +58,30 @@ static void group_rows(const Menu *menu, unsigned group, MenuRow *rows, unsigned
 
 unsigned menu_rows(const Menu *menu, MenuRow *rows) {
     unsigned count = 0;
-    if (!menu->tab) {
-        for (unsigned section = 0; section < 2; ++section) {
+    if (menu->tab == MENU_ITEMS) {
+        for (unsigned category = 0; category < ITEM_CATEGORY_COUNT; ++category) {
+            rows[count++] = (MenuRow){ITEM_SECTION, category, TRAVEL_ROOT};
+            if (!(menu->item_sections & (1u << category))) continue;
+            for (unsigned item = 0; item < INVENTORY_COUNT; ++item)
+                if (inventory_catalog[item].category == category)
+                    rows[count++] = (MenuRow){ITEM_ROW, item, category};
+        }
+        return count;
+    }
+    if (menu->tab == MENU_CHEATS) {
+        for (unsigned section = 0; section < CHEAT_SECTION_COUNT; ++section) {
             rows[count++] = (MenuRow){CHEAT_SECTION, section, TRAVEL_ROOT};
             if (!(menu->cheat_sections & (1u << section))) continue;
-            unsigned first = section ? SPEED : GOD, end = section ? CHEAT_COUNT : SPEED;
-            for (unsigned cheat = first; cheat < end; ++cheat)
-                rows[count++] = (MenuRow){CHEAT_ROW, cheat, TRAVEL_ROOT};
+            if (section <= MOVEMENT_CHEATS) {
+                unsigned first = section ? SPEED : GOD, end = section ? NOCLIP + 1 : SPEED;
+                for (unsigned cheat = first; cheat < end; ++cheat)
+                    rows[count++] = (MenuRow){CHEAT_ROW, cheat, section};
+            } else if (section == COMBAT_CHEATS) {
+                rows[count++] = (MenuRow){CHEAT_ROW, ONE_HIT, section};
+                rows[count++] = (MenuRow){CHEAT_ROW, DAMAGE, section};
+            } else {
+                rows[count++] = (MenuRow){CHEAT_ROW, FREE_CAMERA, section};
+            }
         }
         return count;
     }
@@ -70,7 +101,7 @@ static void remember_position(Menu *menu) {
     if (menu->scroll > maximum) menu->scroll = maximum;
     menu->tab_cursor[menu->tab] = menu->cursor;
     menu->tab_scroll[menu->tab] = menu->scroll;
-    if (menu->tab) {
+    if (menu->tab == MENU_TRAVEL) {
         menu->age_cursor[menu->age] = menu->cursor;
         menu->age_scroll[menu->age] = menu->scroll;
     }
@@ -143,15 +174,24 @@ static void cheat_input(Menu *menu, unsigned available, const enum Support *supp
                         MenuRow selected, uint32_t pressed) {
     if (selected.kind == CHEAT_SECTION) {
         if (pressed & CONFIRM) menu->cheat_sections ^= 1u << selected.value;
+        else if (pressed & RIGHT) menu->cheat_sections |= 1u << selected.value;
+        else if (pressed & LEFT) menu->cheat_sections &= ~(1u << selected.value);
+        return;
+    }
+    if ((pressed & LEFT) && selected.kind == CHEAT_ROW &&
+            selected.value != SPEED && selected.value != FLIGHT_SPEED && selected.value != DAMAGE) {
+        menu->cheat_sections &= ~(1u << selected.parent);
+        focus_row(menu, CHEAT_SECTION, selected.parent, TRAVEL_ROOT);
         return;
     }
     menu->row = selected.value;
     unsigned mask = 1u << selected.value;
     if (!(available & mask) || support[selected.value] == UNSUPPORTED) return;
     int delta = (pressed & RIGHT ? 1 : 0) - (pressed & LEFT ? 1 : 0);
-    if (selected.value == SPEED || selected.value == FLIGHT_SPEED) {
-        unsigned *setting = selected.value == SPEED ? &menu->speed : &menu->flight_speed;
-        unsigned maximum = selected.value == SPEED ? 3 : 5;
+    if (selected.value == SPEED || selected.value == FLIGHT_SPEED || selected.value == DAMAGE) {
+        unsigned *setting = selected.value == SPEED ? &menu->speed :
+                            selected.value == DAMAGE ? &menu->damage : &menu->flight_speed;
+        unsigned maximum = selected.value == FLIGHT_SPEED ? 5 : 3;
         int next = (int)*setting + delta;
         if (!delta || next < 0 || (unsigned)next > maximum) return;
         if (support[selected.value] == EXPERIMENTAL && !menu->consent) {
@@ -162,7 +202,8 @@ static void cheat_input(Menu *menu, unsigned available, const enum Support *supp
         }
         *setting = (unsigned)next;
         if (selected.value == SPEED) menu->preferences.movement_speed = menu->speed;
-        else menu->preferences.flight_speed = menu->flight_speed;
+        else if (selected.value == FLIGHT_SPEED) menu->preferences.flight_speed = menu->flight_speed;
+        else menu->preferences.damage = menu->damage;
         menu->preferences_dirty = true;
         return;
     }
@@ -173,6 +214,61 @@ static void cheat_input(Menu *menu, unsigned available, const enum Support *supp
         return;
     }
     menu->enabled ^= mask;
+}
+
+static void item_input(Menu *menu, MenuRow selected, uint32_t pressed, unsigned available) {
+    if (selected.kind == ITEM_SECTION) {
+        if (pressed & CONFIRM) menu->item_sections ^= 1u << selected.value;
+        else if (pressed & RIGHT) menu->item_sections |= 1u << selected.value;
+        else if (pressed & LEFT) menu->item_sections &= ~(1u << selected.value);
+        return;
+    }
+    unsigned index = selected.value;
+    if (index >= INVENTORY_COUNT) return;
+    const InventoryEntry *entry = &menu->inventory.entries[index];
+    if (menu->item_edit_index != index) {
+        menu->item_edit_index = index;
+        menu->item_quantity = entry->valid ? entry->count : 0;
+    }
+    if (!(pressed & (LEFT | RIGHT | CONFIRM | AGE | FAVORITE))) return;
+    if (!(available & (1u << INVENTORY)) || !menu->inventory.valid || !entry->valid) {
+        menu->notice = "Inventory unavailable. Wait for safe gameplay.";
+        return;
+    }
+    if (!entry->age_allowed) { menu->notice = "This item is restricted to the other age."; return; }
+    if (!entry->owned && inventory_catalog[index].quantity_editable) { menu->notice = "Acquire this item normally first."; return; }
+    if (!entry->can_set) { menu->notice = "Read-only gear. Acquire equipment in the game."; return; }
+    if (menu->enabled & (1u << ITEMS)) { menu->notice = "Disable Infinite Items before editing."; return; }
+    int delta = (pressed & RIGHT ? 1 : 0) - (pressed & LEFT ? 1 : 0);
+    if (delta) {
+        int next = menu->item_quantity + delta;
+        if (next >= 0 && next <= entry->capacity) menu->item_quantity = next;
+        return;
+    }
+    enum InventoryAction action = INVENTORY_SET;
+    int quantity = menu->item_quantity;
+    if (pressed & AGE) {
+        if (!entry->can_refill) return;
+        action = INVENTORY_REFILL;
+        quantity = entry->capacity;
+    } else if (pressed & FAVORITE) {
+        if (!entry->can_remove) return;
+        action = INVENTORY_REMOVE;
+        quantity = 0;
+    } else if (!(pressed & CONFIRM)) return;
+    if (quantity == entry->count) { menu->notice = "Adjust with Left-Right, X refill or Y empty."; return; }
+    menu->item_prompt_index = index;
+    menu->item_prompt_quantity = quantity;
+    menu->item_action = action;
+    menu->item_prompt = true;
+}
+
+static bool collapse_item_category(Menu *menu, MenuRow selected) {
+    unsigned category = selected.kind == ITEM_SECTION ? selected.value : selected.parent;
+    if (category >= ITEM_CATEGORY_COUNT || !(menu->item_sections & (1u << category))) return false;
+    menu->item_sections &= ~(1u << category);
+    focus_row(menu, ITEM_SECTION, category, TRAVEL_ROOT);
+    return true;
 }
 
 void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
@@ -191,7 +287,8 @@ void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
     menu->previous = buttons;
     if ((pressed & R3) && (menu->open || can_open)) {
         menu->open = !menu->open;
-        menu->prompt = menu->travel_prompt = false;
+        menu->prompt = menu->travel_prompt = menu->item_prompt = false;
+        menu->item_request = false;
         menu->repeat = 0;
         remember_position(menu);
         return;
@@ -199,8 +296,13 @@ void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
     if (!menu->open) return;
     if (pressed & ~R3) menu->notice = 0;
     if (pressed & BACK) {
-        if (menu->travel_prompt) menu->travel_prompt = false;
-        else if (!menu->prompt && menu->tab) {
+        if (menu->item_prompt) menu->item_prompt = false;
+        else if (menu->travel_prompt) menu->travel_prompt = false;
+        else if (!menu->prompt && menu->tab == MENU_ITEMS) {
+            MenuRow rows[MENU_ROWS];
+            unsigned count = menu_rows(menu, rows);
+            if (!collapse_item_category(menu, rows[menu->cursor < count ? menu->cursor : count - 1])) menu->open = false;
+        } else if (!menu->prompt && menu->tab == MENU_TRAVEL) {
             MenuRow rows[MENU_ROWS];
             unsigned count = menu_rows(menu, rows);
             if (!collapse_group(menu, rows[menu->cursor < count ? menu->cursor : count - 1])) menu->open = false;
@@ -208,6 +310,12 @@ void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
         menu->prompt = false;
         menu->repeat = 0;
         remember_position(menu);
+        return;
+    }
+    if (menu->item_prompt) {
+        if (!(available & (1u << INVENTORY)) || !menu->inventory.valid ||
+            menu->item_prompt_index >= INVENTORY_COUNT) menu->item_prompt = false;
+        else if (pressed & CONFIRM) { menu->item_request = true; menu->item_prompt = false; }
         return;
     }
     if (menu->travel_prompt) {
@@ -227,9 +335,10 @@ void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
         } else if (pressed & CONFIRM) {
             menu->consent = true;
             menu->prompt = false;
-            if (cheat == SPEED || cheat == FLIGHT_SPEED) {
+            if (cheat == SPEED || cheat == FLIGHT_SPEED || cheat == DAMAGE) {
                 if (cheat == SPEED) menu->speed = menu->preferences.movement_speed = menu->prompt_value;
-                else menu->flight_speed = menu->preferences.flight_speed = menu->prompt_value;
+                else if (cheat == FLIGHT_SPEED) menu->flight_speed = menu->preferences.flight_speed = menu->prompt_value;
+                else menu->damage = menu->preferences.damage = menu->prompt_value;
                 menu->preferences_dirty = true;
             } else menu->enabled ^= 1u << cheat;
         }
@@ -237,7 +346,7 @@ void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
     }
     if (pressed & (TAB_LEFT | TAB_RIGHT)) {
         remember_position(menu);
-        menu->tab ^= 1;
+        menu->tab = (menu->tab + (pressed & TAB_RIGHT ? 1 : MENU_TAB_COUNT - 1)) % MENU_TAB_COUNT;
         menu->cursor = menu->tab_cursor[menu->tab];
         menu->scroll = menu->tab_scroll[menu->tab];
         menu->prompt = false;
@@ -256,7 +365,8 @@ void menu_input(Menu *menu, uint64_t now, bool connected, uint32_t buttons,
             menu->prompt = false;
         }
     } else menu->repeat = 0;
-    if (menu->tab) travel_input(menu, rows[menu->cursor], pressed, available & (1u << TRAVEL));
+    if (menu->tab == MENU_TRAVEL) travel_input(menu, rows[menu->cursor], pressed, available & (1u << TRAVEL));
+    else if (menu->tab == MENU_ITEMS) item_input(menu, rows[menu->cursor], pressed, available);
     else cheat_input(menu, available, support, rows[menu->cursor], pressed);
     remember_position(menu);
 }

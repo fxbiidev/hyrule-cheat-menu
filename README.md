@@ -1,10 +1,12 @@
+> **v1.1.0** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
+
 <div align="center">
 
 # HYRULE CHEAT MENU
 
-**A controller-operated cheat menu and integrated Fast Travel for Ocarina of Time remake.**
+**STANDALONE CHEAT MENU FOR OOTR**
 
-`v1.0.0` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
+`v1.1.0` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
 
 **Created by fxbii.dev**
 
@@ -12,11 +14,9 @@
 
 </div>
 
-**Hyrule Cheat Menu v1.0.0** provides eight cheat controls and integrated Fast Travel for the exact target below. The release UI shows **V1.0.0**, with runtime signature and availability checks. See [release readiness](RELEASE_READINESS.md) and the [test report](TEST_REPORT.md) for the practical release decision, exact binary evidence and disclosed limitations.
+Hyrule Cheat Menu runs inside the supported Ocarina of Time remake as an ExeFS add-on. Press **R3** during gameplay to open the menu. Its Emerald & Gold interface has three main tabs: **CHEATS | FAST TRAVEL | ITEM MANAGER**. The game uses its native gameplay pause while the menu is open. The mod adds no persistent HUD, telemetry, updater or external trainer.
 
-## What it is
-
-Hyrule Cheat Menu runs inside the game as an ExeFS add-on. Press **R3** to open a centered green-and-gold panel, change cheats, or select a travel destination. The game uses its native gameplay pause while the menu is open. The mod adds no persistent HUD, telemetry, updater, or external trainer.
+The approved design uses deep emerald backgrounds, gold accents, a contextual description card, clear selection and status indicators, comfortable scrolling and adaptive scaling. LB/RB cycles through the tabs in either direction, and each tab remembers its selection and viewport during the session. Cheats are grouped into **Player Cheats**, **Movement Cheats**, **Combat Cheats**, and **Camera & World**. Damage Multiplier sits directly below One Hit Kill. Item Manager has its own tab and five inventory categories.
 
 ## Features
 
@@ -24,54 +24,49 @@ Hyrule Cheat Menu runs inside the game as an ExeFS add-on. Press **R3** to open 
 |---|---|
 | God Mode | Restores unlocked hearts and guards the native health decrement while keeping hit reactions. |
 | Infinite Rupees | Fills the unlocked wallet and maintains its current capacity. |
-| Infinite Items | Refills eligible owned arrows, bombs, Bombchus, and Deku ammunition; guards standard single-ammo use with age and capacity checks. Excludes bottles, beans, keys, and quest items. |
+| Infinite Items | Refills eligible owned arrows, bombs, Bombchus and Deku ammunition; guards ordinary single-ammo use with age and capacity checks. Excludes bottles, beans, keys and quest items. |
 | Infinite Magic | Refills an existing meter. Unavailable before magic is unlocked. |
-| Movement Speed | 1× / 1.5× / 2× / 3× for ordinary walking, running, swimming, and climbing requests. |
-| Fly Mode | Camera-relative horizontal movement, vertical controls, and hovering through Link's native collision controller. |
+| Movement Speed | 1× / 1.5× / 2× / 3× for ordinary walking, running, swimming and climbing requests. |
+| Fly Mode | Camera-relative horizontal movement, vertical controls and hovering through Link's native collision controller. |
 | Flight Speed | Independent 1× / 1.5× / 2× / 3× / 5× / 10× setting. |
 | Noclip | Grounded wall bypass with native floor support; combine with Fly for walls, floors and ceilings. Conservative safe-position recovery. |
-| Fast Travel | All 214 reference destinations in 37 collapsible groups, including dungeon subgroups, concise entrance labels, age selection, confirmation, Favorites and Return. |
+| One Hit Kill | Conservative ordinary-enemy allowlist and checked player-originated damage. Verified Master Sword and Fairy Bow path; see the combat scope below. |
+| Damage Multiplier | 1× / 1.5× / 2× / 3× outgoing damage on the supported combat path. One Hit Kill takes priority while the selected multiplier stays stored. |
+| Free Camera | Detach the gameplay view, translate/rotate with both sticks and ascend/descend with the triggers. Includes direct emergency exit and native restoration. |
+| Item Manager | Real ownership views for 20 item IDs; confirmed quantity changes for six previously acquired consumable/ammunition stacks. Fourteen gear entries remain view only. |
+| Fast Travel | All 214 reference destinations in 37 collapsible groups, including dungeon subgroups, age selection, confirmation, Favorites and Return. |
 
-Supported features activate directly. Unavailable features remain readable but cannot be activated. Each cheat can be disabled independently. Grounded Noclip uses the same normal multiplier once, including A-held movement; flight keeps its separate speed.
-
-The historical arrival sweep records **211 smoke passes across RC3 builds**, **two blocked river exits**, and **a later membership-qualified trainer arrival on the earlier integrated build**. These checks do not verify the changed development module or every progression state. See the [per-destination evidence](docs/destination-coverage.csv).
+Unavailable controls remain readable with contextual explanations. Each toggle is independent; normal and flight speeds remain separate. Native gameplay results, host fixtures and older-version evidence retain their exact binary scope in [TEST_REPORT.md](TEST_REPORT.md).
 
 ## Screenshots
 
+These are genuine in-game captures of the final v1.1.0 module, with the approved three tabs and uppercase subtitle. Item Manager displays real owned inventory. The [native test evidence](docs/v1.1.0-native-results.json) records the exact binary and measured behavior; the [design review](docs/v1.1.0-design-review.md) retains the earlier approval captures.
+
 <p align="center">
-  <img src="docs/screenshots/release-cheats.png" width="49%" alt="v1.0.0 Cheats tab">
-  <img src="docs/screenshots/release-travel.png" width="49%" alt="v1.0.0 Fast Travel tab">
+  <img src="docs/screenshots/v110-release-cheats.png" width="49%" alt="Final native Cheats tab">
+  <img src="docs/screenshots/v110-release-combat.png" width="49%" alt="Final native Combat Cheats">
+  <img src="docs/screenshots/v110-release-travel.png" width="49%" alt="Final native Fast Travel tab">
+  <img src="docs/screenshots/v110-release-items.png" width="49%" alt="Final native Item Manager with real quantities">
 </p>
 
-Genuine release captures retain the green/gold style, English controls, golden pointer and exact credit. Current landing/recovery evidence is recorded in [TEST_REPORT.md](TEST_REPORT.md) and [landing results](docs/fly-landing-verification.json). Earlier six-speed, 100-cycle and destination measurements retain their original binary provenance.
-
 <details>
-<summary>Landing and earlier Build 177 Noclip captures</summary>
+<summary>Historical v1.0.0 landing, movement and pause captures</summary>
 
-![Release Fly OFF landing](docs/screenshots/release-landing.png)
+![v1.0.0 Fly OFF landing](docs/screenshots/release-landing.png)
 
-![Fly with Noclip below the tested Kakariko floor](docs/screenshots/build177-noclip.png)
+![Earlier Build 177 Noclip with Fly](docs/screenshots/build177-noclip.png)
 
-![Independent grounded Noclip inside the ranch fence, without Fly](docs/screenshots/build177-grounded-noclip.png)
+![Earlier grounded Noclip](docs/screenshots/build177-grounded-noclip.png)
+
+![Historical native timer pause](docs/screenshots/pause.png)
+
+![Historical Fly Mode](docs/screenshots/flight.png)
+
+![Historical underwater flight](docs/screenshots/underwater.png)
+
+These captures retain their original v1.0.0/RC binary provenance. They are not new v1.1.0 acceptance results. Screenshots demonstrate only the pictured state; the test report records exact coverage.
 
 </details>
-
-<details>
-<summary>Historical regions, flight, Noclip and pause captures</summary>
-
-![Compact region overview](docs/screenshots/regions.png)
-
-![Noclip active above a tested ceiling in the Deku Tree](docs/screenshots/noclip.png)
-
-![Active diving-game timer paused by the menu](docs/screenshots/pause.png)
-
-![Fly Mode hovering above Kakariko](docs/screenshots/flight.png)
-
-![Underwater flight in Zora's Fountain](docs/screenshots/underwater.png)
-
-</details>
-
-The captures inside the historical section retain their original provenance: regions, ceiling Noclip and diving pause show RC3 revisions; flight and underwater show RC2. Earlier RC5 Cheats and RC3 Fast Travel captures also remain in the source archive. They are not new Build 177 validation. Screenshots demonstrate only the pictured state; see the test report for exact coverage.
 
 ## Compatibility
 
@@ -91,7 +86,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 1. Close the game. Back up your saves using the procedure below.
 2. In Lichii, right-click the supported game and choose **Open Mod Data Location**.
-3. Extract `Hyrule-Cheat-Menu-v1.0.0.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
+3. Extract `Hyrule-Cheat-Menu-v1.1.0.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
 
 ```text
 <game's mod data location>/
@@ -109,7 +104,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 Avoid an extra nested `Hyrule-Cheat-Menu/Hyrule-Cheat-Menu` folder. Disable a separate Fast Travel overlay during integrated-travel testing so its controls cannot interfere.
 
-The optional `Hyrule-Cheat-Menu-v1.0.0-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
+The optional `Hyrule-Cheat-Menu-v1.1.0-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
 
 ### Updates and removal
 
@@ -121,20 +116,62 @@ Labels refer to logical game inputs after Lichii's configured controller mapping
 
 | Input | Action |
 |---|---|
-| R3 | Open / close; reverses the current transition |
+| R3 | Open / close; reverses the current menu transition |
 | D-pad Up / Down | Select; wraps and repeats when held |
-| A / confirm | Toggle, expand, select, or confirm |
-| B / back | Cancel confirmation; collapse the current region or its parent; close from a collapsed root header |
-| D-pad Left / Right | Adjust speed once per press; on Fast Travel, collapse / open a region |
-| LB / RB | Switch CHEATS / FAST TRAVEL |
-| X on Fast Travel | Select Young / Adult destinations |
-| Y on a destination | Add / remove Favorite |
+| A / confirm | Toggle, expand, select or confirm |
+| B / back | Cancel confirmation; collapse a travel/item category or its parent; close from a collapsed root header |
+| D-pad Left / Right | Adjust speed or damage once per press; open/collapse category headers; draft an editable item quantity |
+| LB / RB | Previous / next tab: CHEATS, FAST TRAVEL, ITEM MANAGER; wraps at either end |
+| X on Fast Travel | Select Young / Adult destination list |
+| Y on a travel destination | Add / remove Favorite |
+| A on an editable item | Open a confirmation for the drafted quantity; a separate A applies it |
+| X on an editable item | Open a refill-to-capacity confirmation |
+| Y on an editable item | Open an empty-stack confirmation |
 | Left stick while flying | Horizontal flight relative to the camera |
 | Right stick while flying | Normal camera controls |
-| RT / logical ZR | Ascend |
-| LT / logical ZL | Descend |
+| Left stick in Free Camera | Move the camera |
+| Right stick in Free Camera | Rotate the camera |
+| RT / logical ZR | Ascend in Fly Mode or Free Camera |
+| LT / logical ZL | Descend in Fly Mode or Free Camera |
+| R3 + B in Free Camera | Emergency camera exit, including with the main menu closed |
 
-The mod reads the game's Player 1 input, with handheld fallback. Navigation inputs are consumed while the menu is open. Flight consumes the left stick and altitude triggers; other gameplay inputs retain their native behavior. The earlier standalone Build 130 test retained the menu through a focus roundtrip and a logical Player 1 disconnect/reconnect. That result is historical. Physical Xbox, PlayStation and Nintendo controllers still need acceptance testing.
+The mod reads Player 1 with handheld fallback. Menu navigation inputs are consumed while it is open. Tabs and confirmation actions respond once per press; holding A does not submit a second confirmation. Physical Xbox, PlayStation and Nintendo controller acceptance is separate from logical-input tests.
+
+## Combat Cheats
+
+The implemented policy limits **One Hit Kill** and **Damage Multiplier** to these eight exact ordinary-enemy variants: Red/Blue Tektites; ordinary/Fire/Ice Keese; ordinary/large Stalchildren; and Octoroks. The native attacker must resolve to the current Link through a checked game handle. Link, friendly NPCs, unrelated sources, bosses, minibosses and every unlisted target retain native damage handling. Stalfos, Gold Skulltulas and invisible Keese are excluded.
+
+Damage settings are **1×, 1.5×, 2× and 3×**. Fractional half points round upward consistently, so 3 damage at 1.5× becomes 5. One Hit Kill has priority while enabled; the selected multiplier stays stored and resumes when One Hit Kill is disabled. With One Hit Kill OFF, 1× is ordinary damage. Native caps, invulnerability, scripted phases and death/reward handling remain in the game.
+
+Native Master Sword and Fairy Bow checks against Red/Blue Tektites pass for all four damage settings, One Hit Kill priority and immediate multiplier resumption. Received damage remains unchanged. Native tests cover those encounters; host fixtures cover every allowlisted name, unsafe target/source refusals, rounding and caps. See [combat verification](docs/combat-verification.md), [TEST_REPORT.md](TEST_REPORT.md) and [release readiness](RELEASE_READINESS.md) for exact scope. Broader enemy support requires new evidence.
+
+## Free Camera
+
+Enable **Free Camera** under **Camera & World**, then close the menu. The left stick moves the camera; the right stick rotates it; RT rises and LT descends. Opening the main menu freezes camera movement. Disable the toggle to restore the native view, or press **R3 + B** for direct emergency exit while the menu is closed.
+
+**The world continues to run.** Free Camera does not move Link or grant damage immunity. Gravity, enemies and platforms remain active; God Mode, Fly and Noclip keep their own policies. With Fly selected, camera controls do not become flight inputs. After camera exit, held controls stay drained until the exit combination and movement controls are released to neutral; normal control then resumes.
+
+Unsafe world/scene changes, Fast Travel, normal save loading, incompatible cutscenes, a missing controller or invalid camera ownership stop the camera. It requires explicit reactivation after an interruption. Native restoration and controller handoffs are checked independently of the menu's appearance. See [Free Camera verification](docs/free-camera-verification.md) for exact completed native and fixture coverage.
+
+## Item Manager
+
+Open **ITEM MANAGER** with LB/RB. It reads a closed catalog of **20 real native item IDs** and displays ownership or quantity. The five categories are:
+
+| Category | Items | Operations |
+|---|---|---|
+| Weapons | Kokiri Sword, Fairy Bow, Fairy Slingshot, Boomerang, Hookshot, Longshot, Megaton Hammer | View ownership |
+| Shields | Deku Shield, Hylian Shield, Mirror Shield | View ownership |
+| Equipment | Goron Tunic, Zora Tunic, Iron Boots, Hover Boots | View ownership |
+| Consumables | Deku Sticks, Deku Nuts | Edit previously acquired quantities |
+| Ammunition | Arrows, Bombs, Deku Seeds, Bombchus | Edit previously acquired quantities |
+
+For an editable owned stack, Left/Right drafts a quantity within its unlocked native capacity. **A** opens a confirmation and a separate **A** submits it. **X** prepares a refill and **Y** prepares removal to zero; both also require confirmation. **B** cancels a confirmation. Drafting or cancelling leaves the inventory unchanged.
+
+The six editable stacks enforce current-age restrictions: arrows require Adult Link; seeds and sticks require Young Link. Empty stacks require existing tool/bag ownership or verified acquisition evidence. Positive capacity alone does not grant an item, and a Bomb Bag does not prove Bombchu acquisition. Removing stock leaves the owning tool/bag intact. The fourteen gear entries remain read only. Quest/trade items, bottles, beans, dungeon keys, progression flags and arbitrary names or save addresses are excluded.
+
+**Turn Infinite Items OFF before editing.** A confirmed operation is dispatched once and may commit on later native frames. The menu waits for the actual quantity to match its target. While acknowledgement is pending, further edits, Infinite Items refills, Fast Travel and autosave are held; manual Save confirmation follows Cancel. Normal Load remains available.
+
+After a two-second timeout or an ambiguous native result, the temporary hold ends and inventory editing becomes read only until a **normal save reload**. Follow the displayed reload instruction; the mod never automatically retries or guesses at a rollback. The native APIs update ordinary game inventory, which a normal game save can persist. Exact persistence evidence and supported scope are recorded in [inventory verification](docs/inventory-verification.md) and the test report.
 
 ## Fly Mode
 
@@ -162,7 +199,7 @@ Additional ceiling, water, stairs, equipment, high-speed and camera combinations
 
 ## Fast Travel
 
-Open **FAST TRAVEL** with LB/RB. Start from a compact region overview. A opens a region or dungeon subgroup; indented rows show entrances without repeating the region name. Choose an entrance and press A. A separate confirmation shows the destination and selected age; press A again to travel or B to cancel. Travel begins after the menu releases its pause. Requests are not repeated by holding A. B returns to the parent region; R3 closes from anywhere. Counts, a scroll marker, and the full confirmation name keep long lists readable. Expanded groups, selection and viewport are remembered separately for each age during the session and restored when returning from CHEATS.
+Open **FAST TRAVEL** with LB/RB. Start from a compact region overview. A opens a region or dungeon subgroup; indented rows show entrances without repeating the region name. Choose an entrance and press A. A separate confirmation shows the destination and selected age; press A again to travel or B to cancel. Travel begins after the menu releases its pause. Requests are not repeated by holding A. B returns to the parent region; R3 closes from anywhere. Counts, a scroll marker, and the full confirmation name keep long lists readable. Expanded groups, selection and viewport are remembered separately for each age during the session and restored when returning from either other tab.
 
 **X** switches between Young and Adult destination lists. A cross-age trip uses the game's native age-change event and intermediate Market scene. This path has separate verification requirements and can change in-memory story state; do not assume every progression combination is safe.
 
@@ -174,17 +211,17 @@ The Young and Adult Gerudo Valley river exits (`887aed4f`, `834153be`) immediate
 
 **Castle door (enters castle)** and **Fortress gate (exits wasteland)** keep their original coordinates and recognize their verified native follow-on scenes. Their labels explicitly describe the resulting transition. Unexpected stable scene changes end the mod's pending transaction with an explanation, allowing the menu to reopen instead of waiting for the full loading timeout.
 
-The four resource/health toggles and selected normal speed survive ordinary travel, with unsafe writes suspended during loading. Fly and Noclip deactivate. Actual save loads take precedence and reset all cheats OFF and effective Movement Speed to 1×.
+The four resource/health toggles and selected normal speed survive ordinary travel, with unsafe writes suspended during loading. Fly, Noclip and Free Camera deactivate. Pending Item Manager operations temporarily block new travel. Actual save loads take precedence and reset active cheats OFF, effective Movement Speed and Damage Multiplier to 1×, and Return unavailable.
 
 ## Preferences and saves
 
-Preferences use a versioned checksum-protected pair of files, `preferences-a.bin` and `preferences-b.bin`, in `sdmc/Hyrule-Cheat-Menu/`. The inactive generation is written, flushed, and read back before being accepted. Verification compares both speed settings and every Favorite ID as well as the generation and checksum. A mismatched candidate is rejected and removed; the previous active file stays untouched. Failed saves remain pending for retry on a later menu close. Missing/corrupt files use safe defaults; unknown favorite IDs are discarded. Future schema versions are rejected safely. No older public schema needs migration yet.
+Preferences use a versioned checksum-protected pair of files, `preferences-a.bin` and `preferences-b.bin`, in `sdmc/Hyrule-Cheat-Menu/`. The inactive generation is written, flushed, and read back before being accepted. Verification compares both speed settings, the stored damage selection and every Favorite ID as well as the generation and checksum. A mismatched candidate is rejected and removed; the previous active file stays untouched. Failed saves remain pending for retry on a later menu close. Missing/corrupt files use safe defaults; unknown favorite IDs are discarded. Schema 2 reads v1.0.0 schema-1 speeds and Favorites, defaults the new damage preference to 1×, and writes the expanded checked format on the next preference save. Future schema versions are rejected safely.
 
-Stored speeds never reactivate cheats on save load. A filesystem failure leaves Favorites usable for the session and exposes a status inside the menu.
+Stored speed and damage preferences never reactivate cheats on save load. Effective normal speed and damage return to 1×; Fly, Noclip, Free Camera and One Hit Kill remain OFF. A filesystem failure leaves Favorites usable for the session and exposes a status inside the menu.
 
-Health, magic, normal speed, ammunition and custom-movement work are bound to the save generation that began the operation. If a normal save reload starts inside a native getter or before the next controller poll, stale work is rejected instead of applying the previous save's cheats or inventory evidence. Reliable savestate notification remains unsupported; load a normal save after restoring a savestate.
+Health, magic, normal speed, combat, camera, ammunition and custom-movement work are bound to the save generation that began the operation. If a normal save reload starts inside a native getter or before the next controller poll, stale work is rejected instead of applying the previous save's cheats or inventory evidence. Reliable savestate notification remains unsupported; load a normal save after restoring a savestate.
 
-**Saving during movement cheats:** while Fly or Noclip is active, or a travel/recovery hold is pending, confirming the native Save screen follows Back/Cancel instead. Recover and turn movement cheats OFF before saving. Load and the other stock menus keep their normal controls. A short explanation is retained inside the cheat menu. This controller-path guard does not replace a backup.
+**Saving during an unsafe hold:** while Fly or Noclip is active, travel/recovery is pending, or Item Manager awaits native acknowledgement, confirming the native Save screen follows Back/Cancel instead. Recover, turn movement cheats OFF and let an inventory acknowledgement finish before saving. Load and the other stock menus keep their normal controls. A short explanation is retained inside the cheat menu. This controller-path guard does not replace a backup.
 
 **Manual backup:** with the game closed, use Lichii's **Open Save Data Location**, then copy that entire save directory to a separate dated folder. Restore only while the game is closed. Automatic copying of live saves is not implemented because a consistent snapshot has not been established. Native gameplay can save changed resources or progression even though the mod does not write save files directly.
 
@@ -194,10 +231,12 @@ Health, magic, normal speed, ammunition and custom-movement work are bound to th
 - **Grey entry:** read its description. Magic requires an unlocked meter; Fly and Noclip need verified travel support and a safe ground anchor. Signature mismatches disable affected features.
 - **Travel refused:** stand on stable ground or swim in a recognized scene and wait until ordinary gameplay resumes. Some underwater arrival states reject native events; swim away or surface before trying again. A timeout ends the mod's pending transaction; let native dialogue, cutscenes or loading finish before trying again. Reload a copied save if ordinary gameplay cannot resume. Native event refusals are reported without blindly repeating the request.
 - **Depleted consumables:** empty nut and stick stacks use the corresponding owned bag. Bombchus use positive stock observed this session (including while Items is OFF) or the native saved guide-opened flag. A fresh zero-stock save refilled after prior native use; a new-game empty inventory stayed empty. Unknown zero-stock Bombchus remain unchanged, and a Bomb Bag alone never proves acquisition. Rental-item and broader progression cases still need coverage.
+- **Inventory read only:** equipment is view only; ammunition requires prior acquisition and the correct age. Disable Infinite Items before editing. After an uncertain update, reload a normal save before another edit.
+- **Free Camera control recovery:** release the sticks, triggers and R3+B combination to neutral after exiting. Use R3+B if the main menu is closed.
 - **Wallet prompt:** filling the wallet can trigger the game's normal wallet-full Navi message.
 - **Diagnostics:** search Lichii's local log for `[hyrule]`. The mod limits its own contribution to 64 KiB per process; the emulator controls the overall log's retention. Nothing is uploaded.
 - **Coverage limits:** additional progression, damage/upgrade, boss/minigame/audio, peripheral and display combinations remain follow-up work unless a concrete serious failure is found. Other executables/forks are unverified. Savestate notifications are unsupported; reload a normal save after restoring one.
-- **Memory and sound:** maximum-size display staging uses about 81.4 MiB. Menu sounds and vibration are not implemented; gameplay audio remains under the native pause profile and needs broader checks.
+- **Memory and sound:** maximum-size display staging uses about 108.7 MiB. Menu sounds and vibration are not implemented; gameplay audio remains under the native pause profile and needs broader checks.
 
 ## Building from source
 
@@ -212,12 +251,12 @@ To include the separate source archive and validate both distributions:
 
 ```powershell
 python build.py --zig "C:\path\to\zig.exe" --source-archive
-python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.0.0-source.zip"
+python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.1.0-source.zip"
 ```
 
-The default add-on is `dist/Hyrule-Cheat-Menu-v1.0.0.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
+The default add-on is `dist/Hyrule-Cheat-Menu-v1.1.0.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
 
-An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.0.0`; it publishes the tested artifacts and refuses an existing release/tag.
+An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.1.0`; it publishes the tested artifacts and refuses an existing release/tag.
 
 ## Support & Bug Reports
 

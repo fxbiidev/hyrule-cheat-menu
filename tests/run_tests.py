@@ -92,14 +92,14 @@ if __name__ == "__main__":
     with tempfile.TemporaryDirectory(prefix="hyrule-state-tests-") as temporary:
         output = Path(temporary) / ("menu_test.exe" if sys.platform == "win32" else "menu_test")
         sources = [ROOT / "tests/menu_test.c"] + [ROOT / "src" / name for name in (
-            "menu.c", "travel.c", "preferences.c")]
+            "menu.c", "travel.c", "preferences.c", "inventory_catalog.c")]
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         *map(str, sources), "-o", str(output)], check=True)
         subprocess.run([str(output)], check=True, timeout=15)
         travel = Path(temporary) / ("travel_test.exe" if sys.platform == "win32" else "travel_test")
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         str(ROOT / "tests/travel_test.c"), *[str(ROOT / "src" / name) for name in (
-                            "menu.c", "preferences.c", "travel.c")], "-o", str(travel)], check=True)
+                            "menu.c", "preferences.c", "travel.c", "inventory_catalog.c")], "-o", str(travel)], check=True)
         subprocess.run([str(travel)], check=True, timeout=15)
         native_dir = Path(temporary) / "travel-runtime"
         native_dir.mkdir()
@@ -114,6 +114,15 @@ if __name__ == "__main__":
                         "-I", str(native_dir), str(ROOT / "tests/flight_test.c"),
                         "-o", str(flight)], check=True)
         subprocess.run([str(flight)], check=True, timeout=15)
+        for fixture, extra in (("combat_test", []), ("free_camera_test", []),
+                               ("preferences_test", ["preferences.c", "travel.c"])):
+            target = native_dir / (fixture + (".exe" if sys.platform == "win32" else ""))
+            subprocess.run([args.zig, "cc", "-O2", "-UNDEBUG", "-Wall", "-Wextra", "-Werror",
+                            "-I", str(ROOT / "src"), "-I", str(native_dir),
+                            str(ROOT / "tests" / (fixture + ".c")),
+                            *[str(ROOT / "src" / name) for name in extra], "-o", str(target)], check=True)
+            subprocess.run([str(target)], check=True, timeout=30)
+
         (Path(temporary) / "profile.h").write_text("\n".join(
             f"#define {name} ((uintptr_t){function})" for name, function in (
                 ("GAME_noclip_position", "mock_position"),
@@ -158,6 +167,12 @@ if __name__ == "__main__":
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         "-I", temporary, str(ROOT / "tests/items_test.c"), "-o", str(items)], check=True)
         subprocess.run([str(items)], check=True, timeout=15)
+        inventory = Path(temporary) / ("inventory_test.exe" if sys.platform == "win32" else "inventory_test")
+        subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
+                        "-I", temporary, str(ROOT / "tests/inventory_test.c"),
+                        str(ROOT / "src/inventory_catalog.c"), "-o", str(inventory)], check=True)
+        subprocess.run([str(inventory)], check=True, timeout=30)
+
         wallet = Path(temporary) / ("wallet_test.exe" if sys.platform == "win32" else "wallet_test")
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         "-I", temporary, str(ROOT / "tests/wallet_test.c"), "-o", str(wallet)], check=True)
@@ -171,9 +186,9 @@ if __name__ == "__main__":
                         "-I", temporary, str(ROOT / "tests/save_guard_test.c"), "-o", str(save_guard)], check=True)
         subprocess.run([str(save_guard)], check=True, timeout=15)
         overlay = Path(temporary) / ("overlay_test.exe" if sys.platform == "win32" else "overlay_test")
-        subprocess.run([args.zig, "cc", "-O2", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
+        subprocess.run([args.zig, "cc", "-O2", "-UNDEBUG", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         str(ROOT / "tests/overlay_test.c"), *[str(ROOT / "src" / name) for name in (
-                            "menu.c", "preferences.c", "travel.c")], "-o", str(overlay)], check=True)
+                            "menu.c", "preferences.c", "travel.c", "inventory_catalog.c")], "-o", str(overlay)], check=True)
         subprocess.run([str(overlay)], check=True, timeout=30)
         storage = Path(temporary) / ("storage_test.exe" if sys.platform == "win32" else "storage_test")
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),

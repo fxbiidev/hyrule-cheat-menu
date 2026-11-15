@@ -48,11 +48,31 @@ HOOKS = [
     # Only the airborne-to-ground calculator's final Fall (cause 4) dispatch.
     # Other callers of the shared damage queue retain their native instructions.
     (0x804A2A54, "9f0b00946effff170820417929008052", "flight_fall_damage", 0x804A58D0),
+    # Accepted external physical hits, after native attack acceptance.
+    (0x804A99FC, "280128b888265c291f01096b0a090054", "combat_hook", None),
+    # Gameplay camera view matrix has just been built; source camera remains stock.
+    (0x804E5068, "681240f9685800b415a940f9550300b4", "free_camera_hook", None),
 ]
 EXTRA_HANDLERS = {"autosave_gate", "flight_step", "flight_job", "noclip_move", "ammo_use", "ammo_nut_use",
-                  "flight_fall_damage"}
+                  "flight_fall_damage", "combat_hook", "free_camera_hook"}
 
 FUNCTIONS = {
+    "combat_contact_channel": (0x804A77A8, "a94311b885100094d54000b4a80240f9"),
+    "combat_contact_source": (0x804AA8D0, "898201914201899a8102088b8dfeff97"),
+    "combat_source_generation": (0x804A8B08, "693240b93f050031e0110054681640f9"),
+    "combat_source_handle": (0x804A8B14, "681640f90a4940b95f01096b61110054"),
+    "combat_source_actor": (0x804A8B24, "082140f9281100b4082d40b9081d0051"),
+    "combat_packet_cap": (0x804A87AC, "6a7240395f050071c10000546a0240b9"),
+    "combat_packet_cap_amount": (0x804A87BC, "6b1a40b95f010b6b4ab18b1a6a0200b9"),
+    "combat_receiver_layout": (0x804A9140, "880640f9083941f9884300b4085d41f9"),
+    "combat_receiver_health": (0x804A9150, "484300b408094ef9084300b4080940b9"),
+    "combat_external_offset": (0x804A5230, "604208916102158b5a07009460824df9"),
+    "combat_life_backref": (0x804BD938, "740e40f9883a41f9a80000b4095941f9"),
+    "combat_native_health_clamp": (0x804BDCCC, "0a0940b96b0e4ef94b0000b46b0940b9"),
+    "combat_native_queue_flags": (0x804A99D0, "680240b9691640b98a1240b92a010037"),
+
+    "camera_view_source_layout": (0x804E4E58, "8006066d820e076d8416086d3240621e"),
+    "camera_view_matrix_layout": (0x804E4FE0, "901e012d8512052dd208251ef5c0221e"),
     "fall_damage_dispatch": (0x804A58D0, "7f2303d5fd7bbda9f65701a9f44f02a9"),
     "fall_ground_transition": (0x804A27F4, "89b655398ab2553988b615398a000037"),
     "fall_start_height_reference": (0x804A28E4, "e00315aaaae70d94000040bd96000037"),
@@ -130,6 +150,24 @@ FUNCTIONS = {
 CAS_SITE = 0x804BDCF8
 CAS_SIGNATURE = "ac7dab887f010a6ba1720054680a4ef9"
 CHEAT_SIGNATURES = {
+    "combat_contact_channel": "ONE_HIT DAMAGE",
+    "combat_contact_source": "ONE_HIT DAMAGE",
+    "combat_source_generation": "ONE_HIT DAMAGE",
+    "combat_source_handle": "ONE_HIT DAMAGE",
+    "combat_source_actor": "ONE_HIT DAMAGE",
+    "combat_packet_cap": "ONE_HIT DAMAGE",
+    "combat_packet_cap_amount": "ONE_HIT DAMAGE",
+    "combat_receiver_layout": "ONE_HIT DAMAGE",
+    "combat_receiver_health": "ONE_HIT DAMAGE",
+    "combat_external_offset": "ONE_HIT DAMAGE",
+    "combat_life_backref": "ONE_HIT DAMAGE",
+    "combat_native_health_clamp": "ONE_HIT DAMAGE",
+    "combat_native_queue_flags": "ONE_HIT DAMAGE",
+
+    "combat_hook": "ONE_HIT DAMAGE",
+    "free_camera_hook": "FREE_CAMERA",
+    "camera_view_source_layout": "FREE_CAMERA",
+    "camera_view_matrix_layout": "FREE_CAMERA",
     "flight_fall_damage": "FLY FLIGHT_SPEED", "fall_damage_dispatch": "FLY FLIGHT_SPEED",
     "fall_ground_transition": "FLY FLIGHT_SPEED", "fall_start_height_reference": "FLY FLIGHT_SPEED",
     "fall_high_threshold_reference": "FLY FLIGHT_SPEED", "fall_instant_kill_reference": "FLY FLIGHT_SPEED",
@@ -139,20 +177,21 @@ CHEAT_SIGNATURES = {
     "read_rupees": "RUPEES", "wallet_cap": "RUPEES",
     "read_struct_int": "MAGIC", "write_struct_int": "RUPEES MAGIC",
     "magic_component": "MAGIC", "heal_magic": "MAGIC", "consume_magic": "MAGIC",
-    "ammo_count": "ITEMS", "ammo_capacity": "ITEMS", "give_ammo": "ITEMS", "child_link": "ITEMS TRAVEL",
-    "action_guide_opened": "ITEMS",
-    "ammo_use": "ITEMS", "ammo_nut_use": "ITEMS", "consume_ammo": "ITEMS",
+    "ammo_count": "ITEMS INVENTORY", "ammo_capacity": "ITEMS INVENTORY",
+    "give_ammo": "ITEMS INVENTORY", "child_link": "ITEMS TRAVEL INVENTORY",
+    "action_guide_opened": "ITEMS INVENTORY",
+    "ammo_use": "ITEMS", "ammo_nut_use": "ITEMS", "consume_ammo": "ITEMS INVENTORY",
     "ground_motion": "SPEED", "swim_motion": "SPEED", "climb_motion": "SPEED",
     "ground_velocity": "SPEED", "swim_velocity": "SPEED", "climb_velocity": "SPEED",
     "climb_vector_reader": "SPEED",
     "event_request_init": "TRAVEL", "event_request": "TRAVEL", "event_request_cleanup": "TRAVEL",
     "event_request_tail": "TRAVEL",
     "event_scope_reference": "TRAVEL",
-    "read_text": "TRAVEL", "write_text": "TRAVEL", "write_vector": "TRAVEL",
+    "read_text": "TRAVEL FREE_CAMERA ONE_HIT DAMAGE", "write_text": "TRAVEL", "write_vector": "TRAVEL",
     "ground_state_reference": "TRAVEL",
     "water_body_reference": "TRAVEL", "water_flags_reference": "TRAVEL",
-    "autosave_gate": "TRAVEL",
-    "read_ui_type": "TRAVEL", "ui_type_write_reference": "TRAVEL",
+    "autosave_gate": "TRAVEL INVENTORY",
+    "read_ui_type": "TRAVEL INVENTORY", "ui_type_write_reference": "TRAVEL INVENTORY",
     "flight_step": "FLY FLIGHT_SPEED",
     "flight_job": "FLY FLIGHT_SPEED", "flight_job_member": "FLY FLIGHT_SPEED",
     "set_linear_velocity": "FLY FLIGHT_SPEED NOCLIP",

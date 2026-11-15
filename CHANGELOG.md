@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.1.0 — 2026-11-15
+
+**Release validation passed.** The approved design, targeted native checks, host fixtures and reproducible install/source archives are complete. See [release readiness](RELEASE_READINESS.md) and [TEST_REPORT.md](TEST_REPORT.md) for actual binary identities and test results.
+
+- Redesigned the menu with Emerald & Gold panels, a stronger title, state indicators, contextual descriptions, controller hints and adaptive scrolling. Retained `HYRULE CHEAT MENU` and exact credit `Created by fxbii.dev`; approved subtitle is `STANDALONE CHEAT MENU FOR OOTR`.
+- Added the owner-requested three-tab layout: **CHEATS | FAST TRAVEL | ITEM MANAGER**. Tabs wrap in both directions and remember independent selection/scroll. Player, Movement, Combat and Camera & World remain collapsible; Damage Multiplier is directly below One Hit Kill. Fast Travel retains its regions, Favorites, ages, Return and confirmation.
+- Integrated conservative One Hit Kill and 1×/1.5×/2×/3× outgoing damage policy for eight exact ordinary-enemy variants, with checked player attribution, upward half-point rounding, One Hit Kill priority and stored multiplier resumption. Bosses, minibosses, Link, friendly actors and unlisted targets are excluded. Native Master Sword/Fairy Bow tests verify all four factors, priority, OFF resumption and unchanged received damage; host fixtures retain their separate safety scope.
+- Added Free Camera translation/rotation and trigger altitude controls, native view restoration, direct R3+B exit, interruption deactivation and isolation from Link/Fly controls. The world keeps running. Camera input drains through emergency-exit release; owner retention remains scoped to the same save and scene.
+- Replaced inventory examples with a real 20-ID ownership catalog. Six acquired ammunition/consumable stacks support confirmed bounded quantities, emptying and refill; fourteen weapon/shield/equipment entries are view only. Age, ownership, capacity and save-epoch checks exclude unsafe first acquisition, quest items and arbitrary save writes.
+- Fixed deferred native inventory updates being misreported as failures. Each confirmed write dispatches once, waits for later-frame readback, and holds autosave/manual Save/new travel while pending. Timeout or ambiguous results make edits read only until normal reload, without retrying or guessing a rollback. Infinite Items must be OFF before editing.
+- Added checksum-protected preference schema 2 with schema-1 speed/Favorite migration and a stored damage selection. Save reloads clear active cheats and effective speed/damage while preserving safe preferences.
+- Expanded host fixtures, renderer coverage and executed ARM64 bridge ABI checks. Current native tests and defects retain their exact module provenance; earlier design captures and v1.0.0 evidence are historical.
+
 ## v1.0.0 — Full Release
 
 - Replaced ordinary midair Fly OFF recovery with current-position native descent and one actor/save-scoped native fall-damage guard. Final-module ordinary God-OFF descent retained full health and retired its landing guard.
