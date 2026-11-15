@@ -4,7 +4,7 @@
 
 **A controller-operated cheat menu and integrated Fast Travel for Ocarina of Time remake.**
 
-`v1.0.0-rc5` 
+`v1.0.0` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
 
 **Created by fxbii.dev**
 
@@ -12,7 +12,7 @@
 
 </div>
 
-> **Local review candidate.** Gameplay features are marked **EXP** while verification is incomplete. This is not the final v1.0.0 release. See [release readiness](RELEASE_READINESS.md) and the [test report](TEST_REPORT.md) for evidence and outstanding checks.
+**Hyrule Cheat Menu v1.0.0** provides eight cheat controls and integrated Fast Travel for the exact target below. The release UI shows **V1.0.0**, with runtime signature and availability checks. See [release readiness](RELEASE_READINESS.md) and the [test report](TEST_REPORT.md) for the practical release decision, exact binary evidence and disclosed limitations.
 
 ## What it is
 
@@ -32,19 +32,32 @@ Hyrule Cheat Menu runs inside the game as an ExeFS add-on. Press **R3** to open 
 | Noclip | Grounded wall bypass with native floor support; combine with Fly for walls, floors and ceilings. Conservative safe-position recovery. |
 | Fast Travel | All 214 reference destinations in 37 collapsible groups, including dungeon subgroups, concise entrance labels, age selection, confirmation, Favorites and Return. |
 
-The first experimental activation asks for consent for the current game session. Unsupported features remain readable but cannot be activated. Noclip is implemented and remains EXP while geometry, transitions and equipment coverage are incomplete. Each cheat can be disabled independently. Grounded Noclip uses the same normal multiplier once, including A-held movement; flight keeps its separate speed.
+Supported features activate directly. Unavailable features remain readable but cannot be activated. Each cheat can be disabled independently. Grounded Noclip uses the same normal multiplier once, including A-held movement; flight keeps its separate speed.
 
-The arrival sweep records **211 smoke passes across RC3 builds**, **two blocked river exits**, and **a later membership-qualified trainer arrival on the integrated production build**. These checks do not establish every progression state. See the [per-destination evidence](docs/destination-coverage.csv).
+The historical arrival sweep records **211 smoke passes across RC3 builds**, **two blocked river exits**, and **a later membership-qualified trainer arrival on the earlier integrated build**. These checks do not verify the changed development module or every progression state. See the [per-destination evidence](docs/destination-coverage.csv).
 
 ## Screenshots
 
 <p align="center">
-  <img src="docs/screenshots/cheats.png" width="49%" alt="Cheats tab">
-  <img src="docs/screenshots/fast-travel.png" width="49%" alt="Fast Travel tab">
+  <img src="docs/screenshots/release-cheats.png" width="49%" alt="v1.0.0 Cheats tab">
+  <img src="docs/screenshots/release-travel.png" width="49%" alt="v1.0.0 Fast Travel tab">
 </p>
 
+Genuine release captures retain the green/gold style, English controls, golden pointer and exact credit. Current landing/recovery evidence is recorded in [TEST_REPORT.md](TEST_REPORT.md) and [landing results](docs/fly-landing-verification.json). Earlier six-speed, 100-cycle and destination measurements retain their original binary provenance.
+
 <details>
-<summary>View regions, flight, Noclip and pause captures</summary>
+<summary>Landing and earlier Build 177 Noclip captures</summary>
+
+![Release Fly OFF landing](docs/screenshots/release-landing.png)
+
+![Fly with Noclip below the tested Kakariko floor](docs/screenshots/build177-noclip.png)
+
+![Independent grounded Noclip inside the ranch fence, without Fly](docs/screenshots/build177-grounded-noclip.png)
+
+</details>
+
+<details>
+<summary>Historical regions, flight, Noclip and pause captures</summary>
 
 ![Compact region overview](docs/screenshots/regions.png)
 
@@ -58,24 +71,27 @@ The arrival sweep records **211 smoke passes across RC3 builds**, **two blocked 
 
 </details>
 
-Genuine emulator captures. Cheats shows the refreshed RC5 integration with all four core toggles, selected normal 3x, Fly 10x and Noclip active. Regions and ceiling Noclip show RC3 development revisions; the diving pause image shows the tested RC3 baseline. The flight and underwater images retain their RC2 provenance. Screenshots demonstrate the pictured state, not all destination or display combinations. See the test report for exact coverage.
+The captures inside the historical section retain their original provenance: regions, ceiling Noclip and diving pause show RC3 revisions; flight and underwater show RC2. Earlier RC5 Cheats and RC3 Fast Travel captures also remain in the source archive. They are not new Build 177 validation. Screenshots demonstrate only the pictured state; see the test report for exact coverage.
 
 ## Compatibility
 
 | Component | Target |
 |---|---|
-| Emulator | Lichii Build 130 on Windows |
-| Game update | 1.1.1 |
+| Current emulator target | Lichii Build 177 on Windows |
+| Current library update label | 2.0.0 |
 | Title ID | `0400486024DEC000` |
 | Main Build ID | `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348` |
+| Pinned compressed main SHA-256 | `7db9ddfda088c22d219ef13496decd7077c68cd67d4b37f53f4ac46a082768f2` |
 
-The IPS filename gates loading by Build ID. Runtime title/layout and function signatures guard activation, with feature-specific failures. Other builds, regions, forks, and arbitrary hook mods are unverified. An existing mod using `subsdk8` conflicts with this installation. Built-in FPS Unlock and Dynamic FPS coexistence and disabled controls have been exercised; that does not establish universal mod compatibility.
+The owner's current game container displays update **2.0.0**, but its title1 main executable is byte-identical to the private executable used for the earlier 1.1.1-profile testing. Its Build ID is unchanged, so this exact executable needs no hook-address port. This is an identity check, not a claim that every update labelled 2.0.0 is compatible or that all gameplay tests have been rerun on Build 177. Earlier gameplay evidence used Build 130; consult the current test report for subsequent results.
+
+The IPS filename gates loading by Build ID. Runtime title/layout and function signatures guard activation, with feature-specific failures. Other executables, regions, forks, and arbitrary hook mods are unverified. An existing mod using `subsdk8` conflicts with this installation. Historical built-in FPS Unlock and Dynamic FPS checks do not establish universal mod compatibility.
 
 ## Installation
 
 1. Close the game. Back up your saves using the procedure below.
 2. In Lichii, right-click the supported game and choose **Open Mod Data Location**.
-3. Extract `Hyrule-Cheat-Menu-v1.0.0-rc5.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
+3. Extract `Hyrule-Cheat-Menu-v1.0.0.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
 
 ```text
 <game's mod data location>/
@@ -92,6 +108,8 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 5. During ordinary gameplay, press **R3**. No separate executable or runtime service is required.
 
 Avoid an extra nested `Hyrule-Cheat-Menu/Hyrule-Cheat-Menu` folder. Disable a separate Fast Travel overlay during integrated-travel testing so its controls cannot interfere.
+
+The optional `Hyrule-Cheat-Menu-v1.0.0-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
 
 ### Updates and removal
 
@@ -116,15 +134,19 @@ Labels refer to logical game inputs after Lichii's configured controller mapping
 | RT / logical ZR | Ascend |
 | LT / logical ZL | Descend |
 
-The mod reads the game's Player 1 input, with handheld fallback. Navigation inputs are consumed while the menu is open. Flight consumes the left stick and altitude triggers; other gameplay inputs retain their native behavior. The visible standalone emulator retained the menu through a focus roundtrip and a logical Player 1 disconnect/reconnect; navigation and R3 worked afterward. Physical Xbox, PlayStation and Nintendo controllers still need acceptance testing.
+The mod reads the game's Player 1 input, with handheld fallback. Navigation inputs are consumed while the menu is open. Flight consumes the left stick and altitude triggers; other gameplay inputs retain their native behavior. The earlier standalone Build 130 test retained the menu through a focus roundtrip and a logical Player 1 disconnect/reconnect. That result is historical. Physical Xbox, PlayStation and Nintendo controllers still need acceptance testing.
 
 ## Fly Mode
 
 Activation requires a dry, grounded recovery position captured in the current supported scene. Release flight controls to hover. Normal Movement Speed is temporarily suspended during flight. Solid geometry remains handled by the native controller; Fly Mode does not enable Noclip. Underwater control has been exercised at Zora's Fountain; flight alone does not prevent native underwater damage.
 
-When Fly Mode is turned off in midair, this candidate uses a native scene reload to the last recorded safe grounded position. The menu closes for that recovery. It does not attempt an unverified downward raycast or blind landing. Autosave requests are withheld during flight, Noclip, safe recovery and travel, then normal behavior resumes. Fly Mode is cleared during loading, scripted unsafe states, travel, and save resets. Flight Speed is retained as a preference.
+Turning Fly OFF releases Link at his current ordinary position to native gravity and collision, protecting one landing from native fall damage. It does not rewind an ordinary descent to the takeoff point. Finite positions within 80 metres above or below the captured safe ground are eligible; God Mode permits higher finite descents. This landing guard does not provide enemy, fire or other general damage immunity.
 
-High-speed streaming boundaries, equipment-specific water states, animation transitions, boss/minigame use, and broad landing coverage remain release gates. The verified native LoadingPause condition temporarily holds custom movement at zero and resumes the selected speed after loading. This does not predict unloaded geometry ahead of Link or establish arbitrary altitude safety. Native collision, recognized scenes, bounded per-step displacement and finite recovery coordinates remain necessary. Existing native animations are retained without a dedicated flight animation override. See the test report before using this candidate on an important save.
+**Extreme or below-floor recovery:** invalid/extreme positions and known below-floor Noclip history request checked-ground recovery. The game can refuse that native event while airborne. Fly then remains visibly ON with the menu open and zero hover drift; descend under Fly to safe ground. Below a floor, keep Fly on, enable Noclip, ascend into clear space, restore Noclip collision, then turn Fly off. Automatic anchor teleportation is not guaranteed in every native state.
+
+Autosave requests stay held during flight, its protected descent, Noclip, recovery and travel. A missing landing after 30 seconds of unpaused play requests recovery or restores visible Fly/menu control. Menu pause does not expire landing protection. Rejected airborne travel retains the landing guard. Scene transitions and normal save loads clear movement state; Flight Speed remains a preference.
+
+High-speed streaming boundaries, equipment-specific water states, animations and additional boss/minigame scenarios remain follow-up coverage. The verified native LoadingPause condition holds custom movement at zero and resumes the selected speed after loading. It does not predict unloaded geometry or guarantee arbitrary altitude safety. Native animations are retained without a dedicated flight animation override. Back up saves before using movement cheats.
 
 ## Noclip
 
@@ -136,7 +158,7 @@ High-speed streaming boundaries, equipment-specific water states, animation tran
 
 Fly and Noclip retain their pre-cheat ground anchors while either movement cheat owns the body; a lagging ground-contact flag cannot overwrite them during ascent or clipping. Normal scene changes clear movement state even before the new player is identified. Normal scene transitions and genuine save loads clear Noclip. Travel first restores and confirms the captured ground position, then clears Fly/Noclip and dispatches the native event. The pre-Noclip ground position becomes Return's source. No global world collision filters are changed.
 
-Noclip remains **EXP**. Broad ceiling, water, stairs, equipment, high-speed and camera tests are release gates; a passing selected wall test is not universal collision verification.
+Additional ceiling, water, stairs, equipment, high-speed and camera combinations are disclosed follow-up coverage; the selected wall/fence tests do not establish every map condition.
 
 ## Fast Travel
 
@@ -156,9 +178,11 @@ The four resource/health toggles and selected normal speed survive ordinary trav
 
 ## Preferences and saves
 
-Preferences use a versioned checksum-protected pair of files, `preferences-a.bin` and `preferences-b.bin`, in `sdmc/Hyrule-Cheat-Menu/`. The inactive generation is written, flushed, and read back before being accepted. A previous valid generation survives a failed write. Missing/corrupt files use safe defaults; unknown favorite IDs are discarded. Future schema versions are rejected safely. No older public schema needs migration yet.
+Preferences use a versioned checksum-protected pair of files, `preferences-a.bin` and `preferences-b.bin`, in `sdmc/Hyrule-Cheat-Menu/`. The inactive generation is written, flushed, and read back before being accepted. Verification compares both speed settings and every Favorite ID as well as the generation and checksum. A mismatched candidate is rejected and removed; the previous active file stays untouched. Failed saves remain pending for retry on a later menu close. Missing/corrupt files use safe defaults; unknown favorite IDs are discarded. Future schema versions are rejected safely. No older public schema needs migration yet.
 
 Stored speeds never reactivate cheats on save load. A filesystem failure leaves Favorites usable for the session and exposes a status inside the menu.
+
+Health, magic, normal speed, ammunition and custom-movement work are bound to the save generation that began the operation. If a normal save reload starts inside a native getter or before the next controller poll, stale work is rejected instead of applying the previous save's cheats or inventory evidence. Reliable savestate notification remains unsupported; load a normal save after restoring a savestate.
 
 **Saving during movement cheats:** while Fly or Noclip is active, or a travel/recovery hold is pending, confirming the native Save screen follows Back/Cancel instead. Recover and turn movement cheats OFF before saving. Load and the other stock menus keep their normal controls. A short explanation is retained inside the cheat menu. This controller-path guard does not replace a backup.
 
@@ -172,7 +196,7 @@ Stored speeds never reactivate cheats on save load. A filesystem failure leaves 
 - **Depleted consumables:** empty nut and stick stacks use the corresponding owned bag. Bombchus use positive stock observed this session (including while Items is OFF) or the native saved guide-opened flag. A fresh zero-stock save refilled after prior native use; a new-game empty inventory stayed empty. Unknown zero-stock Bombchus remain unchanged, and a Bomb Bag alone never proves acquisition. Rental-item and broader progression cases still need coverage.
 - **Wallet prompt:** filling the wallet can trigger the game's normal wallet-full Navi message.
 - **Diagnostics:** search Lichii's local log for `[hyrule]`. The mod limits its own contribution to 64 KiB per process; the emulator controls the overall log's retention. Nothing is uploaded.
-- **Verification gaps:** progression across destinations, every damage source/upgrade, the full boss/minigame/audio matrix, physical controllers, savestate restores, display modes and other forks are not yet fully verified. EXP labels remain until those gates pass.
+- **Coverage limits:** additional progression, damage/upgrade, boss/minigame/audio, peripheral and display combinations remain follow-up work unless a concrete serious failure is found. Other executables/forks are unverified. Savestate notifications are unsupported; reload a normal save after restoring one.
 - **Memory and sound:** maximum-size display staging uses about 81.4 MiB. Menu sounds and vibration are not implemented; gameplay audio remains under the native pause profile and needs broader checks.
 
 ## Building from source
@@ -184,15 +208,26 @@ python build.py --zig "C:\path\to\zig.exe"
 python tests/run_tests.py --zig "C:\path\to\zig.exe"
 ```
 
-An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the verified profile. No game dump, ROM, key, or extracted asset is needed for the default build or prepared CI. The workflow compiles and tests menu, registry, Noclip state/movement contracts, storage and package behavior; it does not run gameplay tests or publish a release.
+To include the separate source archive and validate both distributions:
+
+```powershell
+python build.py --zig "C:\path\to\zig.exe" --source-archive
+python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.0.0-source.zip"
+```
+
+The default add-on is `dist/Hyrule-Cheat-Menu-v1.0.0.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
+
+An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.0.0`; it publishes the tested artifacts and refuses an existing release/tag.
 
 ## Support & Bug Reports
 
-Discord support will be added by the owner before publication:
+Project repository: [fxbiidev/hyrule-cheat-menu](https://github.com/fxbiidev/hyrule-cheat-menu). Older tags and releases retain their original provenance.
+
+Discord support will be added by the owner:
 
 `DISCORD_INVITE_URL_TO_BE_ADDED_BY_OWNER`
 
-Include the mod version, emulator build, game update, other enabled mods, reproduction steps, and a relevant local log excerpt. Do not submit game files, keys, or saves containing personal information. GitHub Issues are intended to be disabled when the repository is created; this local project has no remote repository settings.
+Include the mod version, emulator build, game update, other enabled mods, reproduction steps, and a relevant local log excerpt. Do not submit game files, keys, or saves containing personal information. GitHub Issues are disabled; support uses the owner's Discord link once supplied.
 
 ## Credits and rights
 

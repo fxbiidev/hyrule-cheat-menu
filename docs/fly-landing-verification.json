@@ -1,0 +1,1178 @@
+{
+  "format_version": 1,
+  "date": "2026-11-15",
+  "target": {
+    "emulator": "Lichii Build 177 Windows",
+    "displayed_update": "2.0.0",
+    "title_id": "0400486024DEC000",
+    "main_build_id": "E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348",
+    "compressed_main_sha256": "7db9ddfda088c22d219ef13496decd7077c68cd67d4b37f53f4ac46a082768f2"
+  },
+  "release_module": {
+    "module_sha256": "d2a061f7b31071e7f536f64f5d3d1885ef2ffd9ed0130d422de850ce935d0772",
+    "text_bytes": 60296,
+    "expected_text_sha256": "6391427b75dd307eae5e1dae55c276af6b5cbf8ed8aaa002bc2ea3ca232af5a3",
+    "running_text_sha256": "6391427b75dd307eae5e1dae55c276af6b5cbf8ed8aaa002bc2ea3ca232af5a3"
+  },
+  "owner_acceptance": "Owner reports extended play without observed bugs; no duration or exhaustive coverage inferred.",
+  "native_fall_control": {
+    "module": "eb19b1c77b323ebad30af037e01823f9048a4366b5380a242741b51bca2804cc",
+    "life_before": 40,
+    "airborne": [
+      -119.7861557006836,
+      108.95923614501953,
+      60.055477142333984
+    ],
+    "after": [
+      -119.80845642089844,
+      96.68830108642578,
+      60.02396774291992
+    ],
+    "life_after": 38,
+    "final_notice": "",
+    "final_enabled": 0
+  },
+  "ordinary_rewind_reproduction": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "source": [
+      -119.78282928466797,
+      96.61579895019531,
+      58.69283676147461
+    ],
+    "airborne": [
+      -119.78657531738281,
+      105.80327606201172,
+      60.22673416137695
+    ],
+    "off_state": {
+      "cursor": 7,
+      "speed": 0,
+      "flight_speed": 0,
+      "enabled": 0,
+      "alpha": 0,
+      "tab": 0,
+      "age": 1,
+      "scroll": 1,
+      "tab_cursor": [
+        7,
+        1
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        1,
+        1
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        0,
+        0
+      ],
+      "return_age": 0,
+      "travel_target": 0,
+      "travel_request": 0,
+      "initialized": true,
+      "open": false,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": false,
+      "preferences_dirty": false,
+      "notice": "",
+      "preferences": {
+        "generation": 196,
+        "normal": 3,
+        "flight": 0,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773,
+          2438026575
+        ]
+      },
+      "phase": 3
+    },
+    "seconds": 5.343999999999141,
+    "after": [
+      -119.78282928466797,
+      96.61579895019531,
+      58.69283676147461
+    ],
+    "state_after": {
+      "cursor": 7,
+      "speed": 0,
+      "flight_speed": 0,
+      "enabled": 0,
+      "alpha": 0,
+      "tab": 0,
+      "age": 1,
+      "scroll": 1,
+      "tab_cursor": [
+        7,
+        1
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        1,
+        1
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        0,
+        0
+      ],
+      "return_age": 0,
+      "travel_target": 0,
+      "travel_request": 0,
+      "initialized": true,
+      "open": false,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": false,
+      "preferences_dirty": false,
+      "notice": "Returned to the last safe ground position.",
+      "preferences": {
+        "generation": 196,
+        "normal": 3,
+        "flight": 0,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773,
+          2438026575
+        ]
+      },
+      "phase": 0
+    },
+    "rewound_to_source": true
+  },
+  "unsafe_refusal_reproduction": {
+    "module": "8ca0396d6525af6aed72cd3fe2c32b412e7dce9daf4aadcfbea9c11f231b8cd9",
+    "height_requested": 100.0,
+    "god": false,
+    "source": [
+      -97.66021728515625,
+      97.41983795166016,
+      49.70566177368164
+    ],
+    "life_before": 40,
+    "airborne": [
+      -98.32835388183594,
+      198.0252685546875,
+      49.70566177368164
+    ],
+    "life_airborne": 40,
+    "poses": [
+      [
+        -98.32835388183594,
+        198.0252685546875,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        197.3571319580078,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        195.28807067871094,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        192.12503051757812,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        186.07583618164062,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        174.65301513671875,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        159.11944580078125,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        140.46852111816406,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        121.3631591796875,
+        49.70566177368164
+      ],
+      [
+        -98.32835388183594,
+        103.02332305908203,
+        49.70566177368164
+      ],
+      [
+        -98.25081634521484,
+        97.50328826904297,
+        49.82668685913086
+      ],
+      [
+        -98.25081634521484,
+        97.50328826904297,
+        49.82668685913086
+      ]
+    ],
+    "seconds": 3.686999999999898,
+    "after": [
+      -98.25081634521484,
+      97.50328826904297,
+      49.82668685913086
+    ],
+    "life_after": 20,
+    "landing_token_after": 0,
+    "final_notice": "The game refused the travel request.",
+    "final_enabled": 0
+  },
+  "intermediate_height_checks": [
+    {
+      "module": "8ca0396d6525af6aed72cd3fe2c32b412e7dce9daf4aadcfbea9c11f231b8cd9",
+      "height_requested": 25.0,
+      "god": false,
+      "source": [
+        -95.50596618652344,
+        97.36652374267578,
+        49.63967514038086
+      ],
+      "life_before": 40,
+      "airborne": [
+        -96.40715026855469,
+        122.6045913696289,
+        49.63967514038086
+      ],
+      "life_airborne": 40,
+      "poses": [
+        [
+          -96.40715026855469,
+          122.5897216796875,
+          49.63967514038086
+        ],
+        [
+          -96.40715026855469,
+          121.4113540649414,
+          49.63967514038086
+        ],
+        [
+          -96.40715026855469,
+          118.25160217285156,
+          49.63967514038086
+        ],
+        [
+          -96.40715026855469,
+          112.29276275634766,
+          49.63967514038086
+        ],
+        [
+          -96.40715026855469,
+          102.45445251464844,
+          49.63967514038086
+        ],
+        [
+          -96.39302825927734,
+          97.4137954711914,
+          49.64622497558594
+        ],
+        [
+          -96.39302825927734,
+          97.4137954711914,
+          49.64622497558594
+        ]
+      ],
+      "seconds": 2.313000000000102,
+      "after": [
+        -96.39302825927734,
+        97.4137954711914,
+        49.64622497558594
+      ],
+      "life_after": 40,
+      "landing_token_after": 0,
+      "final_notice": "",
+      "final_enabled": 0
+    },
+    {
+      "module": "bb161c999e32781f4b0df0ef930e1f1e64989e592334d83200c4b7d7407699f7",
+      "height_requested": 75.0,
+      "god": false,
+      "source": [
+        -95.57078552246094,
+        97.36783599853516,
+        49.63751983642578
+      ],
+      "life_before": 40,
+      "airborne": [
+        -96.28549194335938,
+        172.99485778808594,
+        49.63751983642578
+      ],
+      "life_airborne": 40,
+      "poses": [
+        [
+          -96.28549194335938,
+          172.99485778808594,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          172.21580505371094,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          170.00376892089844,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          166.34996032714844,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          159.5575408935547,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          148.6715545654297,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          134.6447296142578,
+          49.63751983642578
+        ],
+        [
+          -96.28549194335938,
+          115.31885528564453,
+          49.63751983642578
+        ],
+        [
+          -96.24520874023438,
+          97.40879821777344,
+          49.65373229980469
+        ],
+        [
+          -96.24520874023438,
+          97.40879821777344,
+          49.65373229980469
+        ]
+      ],
+      "seconds": 5.061999999999898,
+      "after": [
+        -96.24520874023438,
+        97.40879821777344,
+        49.65373229980469
+      ],
+      "life_after": 40,
+      "landing_token_after": 0,
+      "final_notice": "",
+      "final_enabled": 0
+    },
+    {
+      "module": "bb161c999e32781f4b0df0ef930e1f1e64989e592334d83200c4b7d7407699f7",
+      "height_requested": 100.0,
+      "god": true,
+      "source": [
+        -96.24520874023438,
+        97.40879821777344,
+        49.65373229980469
+      ],
+      "life_before": 40,
+      "airborne": [
+        -96.89167785644531,
+        198.32345581054688,
+        49.65373229980469
+      ],
+      "life_airborne": 40,
+      "poses": [
+        [
+          -96.89167785644531,
+          198.31329345703125,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          197.57516479492188,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          195.75747680664062,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          192.77316284179688,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          187.6625213623047,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          178.18722534179688,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          164.7421417236328,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          143.90330505371094,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          121.11688232421875,
+          49.65373229980469
+        ],
+        [
+          -96.89167785644531,
+          102.54546356201172,
+          49.65373229980469
+        ],
+        [
+          -97.04570007324219,
+          97.4048843383789,
+          49.64506149291992
+        ],
+        [
+          -97.04570007324219,
+          97.4048843383789,
+          49.64506149291992
+        ]
+      ],
+      "seconds": 3.985000000000582,
+      "after": [
+        -97.04570007324219,
+        97.4048843383789,
+        49.64506149291992
+      ],
+      "life_after": 40,
+      "landing_token_after": 0,
+      "final_notice": "",
+      "final_enabled": 1
+    }
+  ],
+  "final_height_checks": [
+    {
+      "module": "d2a061f7b31071e7f536f64f5d3d1885ef2ffd9ed0130d422de850ce935d0772",
+      "height_requested": 12.0,
+      "god": false,
+      "source": [
+        -94.53224182128906,
+        97.34598541259766,
+        49.641658782958984
+      ],
+      "life_before": 40,
+      "airborne": [
+        -95.5972671508789,
+        109.739501953125,
+        49.641658782958984
+      ],
+      "life_airborne": 40,
+      "poses": [
+        [
+          -95.5972671508789,
+          109.66937255859375,
+          49.641658782958984
+        ],
+        [
+          -95.5972671508789,
+          107.7259521484375,
+          49.641658782958984
+        ],
+        [
+          -95.5972671508789,
+          103.01725769042969,
+          49.641658782958984
+        ],
+        [
+          -95.59129333496094,
+          97.36827087402344,
+          49.638301849365234
+        ],
+        [
+          -95.59129333496094,
+          97.36827087402344,
+          49.638301849365234
+        ]
+      ],
+      "seconds": 1.6560000000008586,
+      "after": [
+        -95.59129333496094,
+        97.36827087402344,
+        49.638301849365234
+      ],
+      "life_after": 40,
+      "landing_token_after": 0,
+      "final_notice": "",
+      "final_enabled": 0
+    },
+    {
+      "module": "d2a061f7b31071e7f536f64f5d3d1885ef2ffd9ed0130d422de850ce935d0772",
+      "height_requested": 100.0,
+      "god": false,
+      "source": [
+        -95.59129333496094,
+        97.36827087402344,
+        49.638301849365234
+      ],
+      "life_before": 40,
+      "airborne": [
+        -96.24417877197266,
+        197.90911865234375,
+        49.638301849365234
+      ],
+      "life_airborne": 40,
+      "poses": [
+        [
+          -96.24417877197266,
+          197.90911865234375,
+          49.638301849365234
+        ]
+      ],
+      "recovery_refused_safe_hover": true,
+      "hover_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "seconds": 1.0939999999991414,
+      "after": [
+        -96.24417877197266,
+        197.90911865234375,
+        49.638301849365234
+      ],
+      "life_after": 40,
+      "landing_token_after": 0,
+      "final_notice": "Safe recovery refused. Fly restored; choose safe ground.",
+      "final_enabled": 32
+    }
+  ],
+  "final_regressions": {
+    "module": "d2a061f7b31071e7f536f64f5d3d1885ef2ffd9ed0130d422de850ce935d0772",
+    "refusal_pause_masks": "05013a30a44094108d00010000000000",
+    "refusal_menu_zero_drift": true,
+    "god_retry_landed": {
+      "position": [
+        -96.21470642089844,
+        97.4081039428711,
+        49.6479606628418
+      ],
+      "life": 40,
+      "state": {
+        "cursor": 7,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 1,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          7,
+          15
+        ],
+        "tab_scroll": [
+          1,
+          7
+        ],
+        "age_cursor": [
+          1,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          65
+        ],
+        "return_age": 1,
+        "travel_target": 460738790,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "combined_below_floor": {
+      "source": [
+        -96.21470642089844,
+        97.4081039428711,
+        49.6479606628418
+      ],
+      "below": [
+        -96.21470642089844,
+        91.51325988769531,
+        49.6479606628418
+      ]
+    },
+    "noclip_off_retains_fly": {
+      "ack": {
+        "restore_request": 1,
+        "restore_complete": 1,
+        "restore_nearby": 1,
+        "restore_fallback": 0
+      },
+      "position": [
+        -96.21470642089844,
+        91.51325988769531,
+        49.6479606628418
+      ],
+      "state": {
+        "cursor": 9,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 32,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          9,
+          15
+        ],
+        "tab_scroll": [
+          1,
+          7
+        ],
+        "age_cursor": [
+          1,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          65
+        ],
+        "return_age": 1,
+        "travel_target": 460738790,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Collision restored at a checked nearby position.",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "below_floor_fly_off": {
+      "position": [
+        -96.21470642089844,
+        91.51325988769531,
+        49.6479606628418
+      ],
+      "life": 40,
+      "state": {
+        "cursor": 7,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 32,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          7,
+          15
+        ],
+        "tab_scroll": [
+          1,
+          7
+        ],
+        "age_cursor": [
+          1,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          65
+        ],
+        "return_age": 1,
+        "travel_target": 460738790,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Safe recovery refused. Fly restored; choose safe ground.",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "manual_escape": {
+      "position": [
+        -96.21270751953125,
+        97.40806579589844,
+        49.647403717041016
+      ],
+      "life": 40,
+      "state": {
+        "cursor": 7,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 0,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          7,
+          15
+        ],
+        "tab_scroll": [
+          1,
+          7
+        ],
+        "age_cursor": [
+          1,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          65
+        ],
+        "return_age": 1,
+        "travel_target": 460738790,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "toggle_cycles": [
+      {
+        "cycle": 1,
+        "position": [
+          -96.2071762084961,
+          97.40796661376953,
+          49.646053314208984
+        ],
+        "life": 40,
+        "landing_token": 0
+      },
+      {
+        "cycle": 2,
+        "position": [
+          -96.20148468017578,
+          97.4078598022461,
+          49.644649505615234
+        ],
+        "life": 40,
+        "landing_token": 0
+      },
+      {
+        "cycle": 3,
+        "position": [
+          -96.20067596435547,
+          97.40784454345703,
+          49.6444206237793
+        ],
+        "life": 40,
+        "landing_token": 0
+      },
+      {
+        "cycle": 4,
+        "position": [
+          -96.19612121582031,
+          97.40776062011719,
+          49.643150329589844
+        ],
+        "life": 40,
+        "landing_token": 0
+      },
+      {
+        "cycle": 5,
+        "position": [
+          -96.19242858886719,
+          97.4076919555664,
+          49.642147064208984
+        ],
+        "life": 40,
+        "landing_token": 0
+      },
+      {
+        "cycle": 6,
+        "position": [
+          -96.1884536743164,
+          97.40762329101562,
+          49.64103698730469
+        ],
+        "life": 40,
+        "landing_token": 0
+      }
+    ],
+    "airborne_travel_rejected": {
+      "state": {
+        "cursor": 15,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 0,
+        "alpha": 175,
+        "tab": 1,
+        "age": 1,
+        "scroll": 7,
+        "tab_cursor": [
+          7,
+          15
+        ],
+        "tab_scroll": [
+          1,
+          7
+        ],
+        "age_cursor": [
+          1,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          65
+        ],
+        "return_age": 1,
+        "travel_target": 460738790,
+        "travel_request": 0,
+        "initialized": true,
+        "open": true,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Land before travelling.",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      },
+      "landing_token": 142977841272
+    },
+    "protected_rejected_travel_landed": {
+      "life": 40,
+      "position": [
+        -96.18145751953125,
+        97.4074935913086,
+        49.63908386230469
+      ],
+      "landing_token": 0
+    },
+    "travel_source": [
+      -96.18145751953125,
+      97.4074935913086,
+      49.63908386230469
+    ],
+    "travel": {
+      "seconds": 44.98500000000058,
+      "scene": "KakarikoVillage_Child",
+      "state": {
+        "cursor": 8,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 0,
+        "alpha": 0,
+        "tab": 1,
+        "age": 0,
+        "scroll": 0,
+        "tab_cursor": [
+          7,
+          8
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          8,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          65
+        ],
+        "return_age": 1,
+        "travel_target": 3879165411,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Travel completed. Return location stored.",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "return": {
+      "position": [
+        -96.18145751953125,
+        97.4074935913086,
+        49.63908386230469
+      ],
+      "seconds": 65.20299999999952,
+      "state": {
+        "cursor": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "enabled": 0,
+        "alpha": 0,
+        "tab": 1,
+        "age": 0,
+        "scroll": 0,
+        "tab_cursor": [
+          7,
+          0
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          0,
+          15
+        ],
+        "age_scroll": [
+          0,
+          7
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          65
+        ],
+        "return_age": 0,
+        "travel_target": 4294967295,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Travel completed. Return location stored.",
+        "preferences": {
+          "generation": 197,
+          "normal": 3,
+          "flight": 3,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "complete": true
+  },
+  "prior_save_reload_check": {
+    "module": "3752860c05475a265669d764560e630e038aeaf7dd95f9c8cbdf36e1bf1b9bc9",
+    "seconds": 6.515999999999622,
+    "state": {
+      "cursor": 9,
+      "speed": 0,
+      "flight_speed": 3,
+      "enabled": 0,
+      "alpha": 175,
+      "tab": 0,
+      "age": 1,
+      "scroll": 1,
+      "tab_cursor": [
+        9,
+        15
+      ],
+      "tab_scroll": [
+        1,
+        7
+      ],
+      "age_cursor": [
+        1,
+        15
+      ],
+      "age_scroll": [
+        0,
+        7
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        0,
+        65
+      ],
+      "return_age": 0,
+      "travel_target": 0,
+      "travel_request": 0,
+      "initialized": true,
+      "open": true,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": false,
+      "preferences_dirty": false,
+      "notice": "",
+      "preferences": {
+        "generation": 197,
+        "normal": 3,
+        "flight": 3,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773,
+          2438026575
+        ]
+      },
+      "phase": 0
+    },
+    "position": [
+      -119.78282928466797,
+      96.61579895019531,
+      58.69283676147461
+    ],
+    "landing_token": 0,
+    "save_guard_unchanged_files": 15
+  },
+  "local_host_checks": "All production host fixtures and exact install/source package validation passed after final code changes.",
+  "package_counts": {
+    "installation_files": 26,
+    "maintained_source_files": 88
+  },
+  "scope": "Private isolated profile, logical Player 1 inputs and read-only state inspection; not an exhaustive geometry/progression/peripheral matrix. Native fall diagnostics are buffered; per-case log-count differences are not used as acceptance evidence.",
+  "recovery_limitation": "Native recovery may refuse extreme/clipped poses. Explicit Fly/menu control is restored; final native test reenables Noclip, ascends above floor, restores collision and lands safely."
+}

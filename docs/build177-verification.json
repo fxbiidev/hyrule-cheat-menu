@@ -1,0 +1,5402 @@
+{
+  "date": "2026-11-15",
+  "target": {
+    "emulator": "Lichii Build 177",
+    "scm_rev": "87d84d513c67275ad0d6ae50ba51cce76e7e3ded",
+    "library_update_label": "2.0.0",
+    "main_build_id": "E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348",
+    "compressed_main_sha256": "7db9ddfda088c22d219ef13496decd7077c68cd67d4b37f53f4ac46a082768f2"
+  },
+  "module_identity": {
+    "module_sha256": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "text_bytes": 57672,
+    "expected_text_sha256": "6d8a1479a543a0ab66bfd1510e7b655b941a3174ac0b21686f2fa6cf8a7bcddc",
+    "running_text_sha256": "6d8a1479a543a0ab66bfd1510e7b655b941a3174ac0b21686f2fa6cf8a7bcddc"
+  },
+  "scope": "Logical Player 1 inputs and read-only guest inspection in an isolated portable profile with copied saves. Physical controller, display and broad gameplay acceptance remain open.",
+  "flight_and_recovery": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "checks": {
+      "clean_save_start": {
+        "cursor": 1,
+        "speed": 0,
+        "flight_speed": 5,
+        "enabled": 0,
+        "alpha": 175,
+        "tab": 0,
+        "age": 1,
+        "scroll": 0,
+        "tab_cursor": [
+          1,
+          1
+        ],
+        "tab_scroll": [
+          0,
+          0
+        ],
+        "age_cursor": [
+          1,
+          1
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          0
+        ],
+        "return_age": 0,
+        "travel_target": 0,
+        "travel_request": 0,
+        "initialized": true,
+        "open": true,
+        "consent": false,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": false,
+        "preferences_dirty": false,
+        "notice": "",
+        "preferences": {
+          "generation": 182,
+          "normal": 3,
+          "flight": 5,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773
+          ]
+        },
+        "phase": 0
+      },
+      "menu_pause_link": {
+        "position": [
+          -119.78282928466797,
+          96.61579895019531,
+          58.69283676147461
+        ],
+        "six_seconds_unchanged": true,
+        "native_pause_masks": "05013a30a44094108d00010000000000"
+      },
+      "combined_floor_bypass_hover": {
+        "before": [
+          -119.87245178222656,
+          96.60592651367188,
+          58.635623931884766
+        ],
+        "below": [
+          -119.87245178222656,
+          85.94300079345703,
+          58.635623931884766
+        ],
+        "zero_drift_90_presents": true
+      },
+      "noclip_off_retains_fly": {
+        "seconds": 0.125,
+        "ack": {
+          "restore_request": 1,
+          "restore_complete": 1,
+          "restore_nearby": 1,
+          "restore_fallback": 0
+        },
+        "state": {
+          "cursor": 9,
+          "speed": 3,
+          "flight_speed": 0,
+          "enabled": 47,
+          "alpha": 0,
+          "tab": 0,
+          "age": 1,
+          "scroll": 1,
+          "tab_cursor": [
+            9,
+            1
+          ],
+          "tab_scroll": [
+            1,
+            0
+          ],
+          "age_cursor": [
+            1,
+            1
+          ],
+          "age_scroll": [
+            0,
+            0
+          ],
+          "cheat_sections": 3,
+          "travel_sections": [
+            0,
+            0
+          ],
+          "return_age": 0,
+          "travel_target": 0,
+          "travel_request": 0,
+          "initialized": true,
+          "open": false,
+          "consent": true,
+          "prompt": false,
+          "travel_prompt": false,
+          "can_return": false,
+          "preferences_dirty": false,
+          "notice": "Collision restored at a checked nearby position.",
+          "preferences": {
+            "generation": 189,
+            "normal": 3,
+            "flight": 0,
+            "favorites": [
+              3039099700,
+              1870487544,
+              2503292773
+            ]
+          },
+          "phase": 0
+        }
+      },
+      "fly_off": {
+        "seconds": 5.2970000000000255,
+        "ack": {
+          "restore_request": 1,
+          "restore_complete": 1,
+          "restore_nearby": 1,
+          "restore_fallback": 0
+        },
+        "state": {
+          "cursor": 7,
+          "speed": 3,
+          "flight_speed": 0,
+          "enabled": 15,
+          "alpha": 0,
+          "tab": 0,
+          "age": 1,
+          "scroll": 1,
+          "tab_cursor": [
+            7,
+            1
+          ],
+          "tab_scroll": [
+            1,
+            0
+          ],
+          "age_cursor": [
+            1,
+            1
+          ],
+          "age_scroll": [
+            0,
+            0
+          ],
+          "cheat_sections": 3,
+          "travel_sections": [
+            0,
+            0
+          ],
+          "return_age": 0,
+          "travel_target": 0,
+          "travel_request": 0,
+          "initialized": true,
+          "open": false,
+          "consent": true,
+          "prompt": false,
+          "travel_prompt": false,
+          "can_return": false,
+          "preferences_dirty": false,
+          "notice": "Returned to the last safe ground position.",
+          "preferences": {
+            "generation": 189,
+            "normal": 3,
+            "flight": 0,
+            "favorites": [
+              3039099700,
+              1870487544,
+              2503292773
+            ]
+          },
+          "phase": 0
+        }
+      },
+      "final_core_state": {
+        "cursor": 7,
+        "speed": 3,
+        "flight_speed": 0,
+        "enabled": 15,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          7,
+          1
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          1,
+          1
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          0,
+          0
+        ],
+        "return_age": 0,
+        "travel_target": 0,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": false,
+        "preferences_dirty": false,
+        "notice": "Returned to the last safe ground position.",
+        "preferences": {
+          "generation": 189,
+          "normal": 3,
+          "flight": 0,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773
+          ]
+        },
+        "phase": 0
+      },
+      "complete": true
+    },
+    "flight": [
+      {
+        "factor": 1,
+        "ascent": {
+          "delta": [
+            0.0,
+            2.3916168212890625,
+            0.0
+          ],
+          "seconds": 0.6556072
+        },
+        "idle": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 2.0368594
+        },
+        "descent": {
+          "delta": [
+            0.0,
+            -2.1803131103515625,
+            0.0
+          ],
+          "seconds": 0.5768821
+        },
+        "stop": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 0.9213584
+        }
+      },
+      {
+        "factor": 1.5,
+        "ascent": {
+          "delta": [
+            0.0,
+            3.3867645263671875,
+            0.0
+          ],
+          "seconds": 0.6072522
+        },
+        "idle": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 2.4933546
+        },
+        "descent": {
+          "delta": [
+            0.0,
+            -3.2816162109375,
+            0.0
+          ],
+          "seconds": 0.5781085
+        },
+        "stop": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 0.880483
+        }
+      },
+      {
+        "factor": 2,
+        "ascent": {
+          "delta": [
+            0.0,
+            4.5194244384765625,
+            0.0
+          ],
+          "seconds": 0.6234171
+        },
+        "idle": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 3.7745528
+        },
+        "descent": {
+          "delta": [
+            0.0,
+            -4.781883239746094,
+            0.0
+          ],
+          "seconds": 0.6220721
+        },
+        "stop": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 0.8678488
+        }
+      },
+      {
+        "factor": 3,
+        "ascent": {
+          "delta": [
+            0.0,
+            6.777687072753906,
+            0.0
+          ],
+          "seconds": 0.6490692
+        },
+        "idle": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 2.0341536
+        },
+        "descent": {
+          "delta": [
+            -0.01142120361328125,
+            -6.832939147949219,
+            -0.007289886474609375
+          ],
+          "seconds": 0.600013
+        },
+        "stop": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 0.8728601
+        }
+      },
+      {
+        "factor": 5,
+        "ascent": {
+          "delta": [
+            0.0,
+            11.699989318847656,
+            0.0
+          ],
+          "seconds": 0.6954817
+        },
+        "idle": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 2.1373612
+        },
+        "descent": {
+          "delta": [
+            -0.0082855224609375,
+            -11.700904846191406,
+            -0.005290985107421875
+          ],
+          "seconds": 0.5857385
+        },
+        "stop": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 0.8971672
+        }
+      },
+      {
+        "factor": 10,
+        "ascent": {
+          "delta": [
+            0.0,
+            25.68793487548828,
+            0.0
+          ],
+          "seconds": 0.787253
+        },
+        "idle": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 2.1590489
+        },
+        "descent": {
+          "delta": [
+            -0.069915771484375,
+            -25.695632934570312,
+            -0.0446319580078125
+          ],
+          "seconds": 0.8441705
+        },
+        "stop": {
+          "delta": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "seconds": 1.0716598
+        }
+      }
+    ]
+  },
+  "travel_and_independent_noclip": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "adult_source": [
+      -119.78282928466797,
+      96.61579895019531,
+      58.69283676147461
+    ],
+    "cross_age": {
+      "seconds": 57.84400000000005,
+      "scene": "KakarikoVillage_Child",
+      "state": {
+        "cursor": 8,
+        "speed": 3,
+        "flight_speed": 0,
+        "enabled": 15,
+        "alpha": 0,
+        "tab": 1,
+        "age": 0,
+        "scroll": 0,
+        "tab_cursor": [
+          7,
+          8
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          8,
+          1
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          0
+        ],
+        "return_age": 1,
+        "travel_target": 3879165411,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Travel completed. Return location stored.",
+        "preferences": {
+          "generation": 189,
+          "normal": 3,
+          "flight": 0,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "wall_baseline": {
+      "start": [
+        -41.19875717163086,
+        109.93441009521484,
+        -16.00177764892578
+      ],
+      "positions": [
+        [
+          -43.79098129272461,
+          109.89996337890625,
+          -16.7099609375
+        ],
+        [
+          -46.806663513183594,
+          110.23062896728516,
+          -20.08188247680664
+        ],
+        [
+          -46.39841842651367,
+          110.26193237304688,
+          -20.817243576049805
+        ],
+        [
+          -46.42119598388672,
+          110.48881530761719,
+          -20.742267608642578
+        ],
+        [
+          -46.44401931762695,
+          111.16779327392578,
+          -20.75063133239746
+        ],
+        [
+          -46.690582275390625,
+          111.7414321899414,
+          -20.888275146484375
+        ]
+      ],
+      "direction": [
+        -0.9719610667032202,
+        -0.23514183977577957
+      ]
+    },
+    "wall_noclip": {
+      "positions": [
+        [
+          -47.0419921875,
+          110.25115966796875,
+          -20.005977630615234
+        ],
+        [
+          -49.02053451538086,
+          109.86027526855469,
+          -20.314441680908203
+        ],
+        [
+          -48.00101852416992,
+          110.67322540283203,
+          -20.081371307373047
+        ],
+        [
+          -46.8918571472168,
+          110.21176147460938,
+          -19.847213745117188
+        ],
+        [
+          -45.98677444458008,
+          110.09846496582031,
+          -19.72757911682129
+        ],
+        [
+          -48.14625549316406,
+          110.27136993408203,
+          -20.060272216796875
+        ]
+      ],
+      "stationary": [
+        -45.98677444458008,
+        110.09846496582031,
+        -19.72757911682129
+      ]
+    },
+    "wall_comparison": {
+      "native_last_40_frames_progress": 0.2961654683146132,
+      "noclip_last_40_frames_progress": 1.269325315408237
+    },
+    "walking_noclip_off": {
+      "state": {
+        "cursor": 9,
+        "speed": 0,
+        "flight_speed": 0,
+        "enabled": 15,
+        "alpha": 0,
+        "tab": 0,
+        "age": 0,
+        "scroll": 1,
+        "tab_cursor": [
+          9,
+          8
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          8,
+          1
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          0
+        ],
+        "return_age": 1,
+        "travel_target": 3879165411,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Collision restored at a checked nearby position.",
+        "preferences": {
+          "generation": 190,
+          "normal": 0,
+          "flight": 0,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773
+          ]
+        },
+        "phase": 0
+      },
+      "ack": {
+        "restore_request": 2,
+        "restore_complete": 2,
+        "restore_nearby": 2,
+        "restore_fallback": 0
+      },
+      "position": [
+        -45.98604202270508,
+        110.09827423095703,
+        -19.72643280029297
+      ]
+    },
+    "return": {
+      "seconds": 54.358999999999924,
+      "source": [
+        -119.78282928466797,
+        96.61579895019531,
+        58.69283676147461
+      ],
+      "actual": [
+        -119.78282928466797,
+        96.61579895019531,
+        58.69283676147461
+      ],
+      "max_error": 0.0,
+      "state": {
+        "cursor": 0,
+        "speed": 3,
+        "flight_speed": 0,
+        "enabled": 15,
+        "alpha": 0,
+        "tab": 1,
+        "age": 0,
+        "scroll": 0,
+        "tab_cursor": [
+          6,
+          0
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          0,
+          1
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          0
+        ],
+        "return_age": 0,
+        "travel_target": 4294967295,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Travel completed. Return location stored.",
+        "preferences": {
+          "generation": 191,
+          "normal": 3,
+          "flight": 0,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773
+          ]
+        },
+        "phase": 0
+      }
+    },
+    "complete": true,
+    "wall_proof_limit": "The comparison assertion passed, but obstacle oscillation and last-clear restoration mean this does not prove complete wall traversal."
+  },
+  "recovery_stress": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "cycles": [
+      {
+        "fly": false,
+        "index": 0,
+        "before": [
+          -83.9519271850586,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.9519271850586,
+          150.61672973632812,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 3,
+          "restore_complete": 3,
+          "restore_nearby": 3,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 1,
+        "before": [
+          -83.95195770263672,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95195770263672,
+          150.61175537109375,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 4,
+          "restore_complete": 4,
+          "restore_nearby": 4,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 2,
+        "before": [
+          -83.95199584960938,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95199584960938,
+          150.6192169189453,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 5,
+          "restore_complete": 5,
+          "restore_nearby": 5,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 3,
+        "before": [
+          -83.95201873779297,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95201873779297,
+          150.613037109375,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 6,
+          "restore_complete": 6,
+          "restore_nearby": 6,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 4,
+        "before": [
+          -83.95205688476562,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95205688476562,
+          150.61746215820312,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 7,
+          "restore_complete": 7,
+          "restore_nearby": 7,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 5,
+        "before": [
+          -83.95207977294922,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95207977294922,
+          150.61410522460938,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 8,
+          "restore_complete": 8,
+          "restore_nearby": 8,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 6,
+        "before": [
+          -83.95211029052734,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95211029052734,
+          150.6163787841797,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 9,
+          "restore_complete": 9,
+          "restore_nearby": 9,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 7,
+        "before": [
+          -83.95214080810547,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95214080810547,
+          150.6129913330078,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 10,
+          "restore_complete": 10,
+          "restore_nearby": 10,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 8,
+        "before": [
+          -83.95217895507812,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95217895507812,
+          150.61688232421875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 11,
+          "restore_complete": 11,
+          "restore_nearby": 11,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 9,
+        "before": [
+          -83.95220947265625,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95220947265625,
+          150.61212158203125,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 12,
+          "restore_complete": 12,
+          "restore_nearby": 12,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 10,
+        "before": [
+          -83.9522476196289,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.9522476196289,
+          150.61512756347656,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 13,
+          "restore_complete": 13,
+          "restore_nearby": 13,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 11,
+        "before": [
+          -83.95227813720703,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95227813720703,
+          150.61497497558594,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 14,
+          "restore_complete": 14,
+          "restore_nearby": 14,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 12,
+        "before": [
+          -83.95230865478516,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95230865478516,
+          150.61732482910156,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 15,
+          "restore_complete": 15,
+          "restore_nearby": 15,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 13,
+        "before": [
+          -83.95233917236328,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95233917236328,
+          150.6163787841797,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 16,
+          "restore_complete": 16,
+          "restore_nearby": 16,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 14,
+        "before": [
+          -83.9523696899414,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95240020751953,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 17,
+          "restore_complete": 17,
+          "restore_nearby": 17,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 15,
+        "before": [
+          -83.95240020751953,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95240020751953,
+          150.61439514160156,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 18,
+          "restore_complete": 18,
+          "restore_nearby": 18,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 16,
+        "before": [
+          -83.95243072509766,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95243072509766,
+          150.61529541015625,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 19,
+          "restore_complete": 19,
+          "restore_nearby": 19,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 17,
+        "before": [
+          -83.95246124267578,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95246124267578,
+          150.6178436279297,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 20,
+          "restore_complete": 20,
+          "restore_nearby": 20,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 18,
+        "before": [
+          -83.95248413085938,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95248413085938,
+          150.61708068847656,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 21,
+          "restore_complete": 21,
+          "restore_nearby": 21,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 19,
+        "before": [
+          -83.9525146484375,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.9525146484375,
+          150.61878967285156,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 22,
+          "restore_complete": 22,
+          "restore_nearby": 22,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 20,
+        "before": [
+          -83.9525375366211,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.9525375366211,
+          150.61700439453125,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 23,
+          "restore_complete": 23,
+          "restore_nearby": 23,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 21,
+        "before": [
+          -83.95256042480469,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95256042480469,
+          150.61676025390625,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 24,
+          "restore_complete": 24,
+          "restore_nearby": 24,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 22,
+        "before": [
+          -83.95259094238281,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95259094238281,
+          150.6168212890625,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 25,
+          "restore_complete": 25,
+          "restore_nearby": 25,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 23,
+        "before": [
+          -83.95262145996094,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95262145996094,
+          150.61697387695312,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 26,
+          "restore_complete": 26,
+          "restore_nearby": 26,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 24,
+        "before": [
+          -83.95265197753906,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95265197753906,
+          150.61795043945312,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 27,
+          "restore_complete": 27,
+          "restore_nearby": 27,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 25,
+        "before": [
+          -83.95267486572266,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95267486572266,
+          150.6176300048828,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 28,
+          "restore_complete": 28,
+          "restore_nearby": 28,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 26,
+        "before": [
+          -83.95269775390625,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95269775390625,
+          150.6161346435547,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 29,
+          "restore_complete": 29,
+          "restore_nearby": 29,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 27,
+        "before": [
+          -83.95272827148438,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95272827148438,
+          150.6162109375,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 30,
+          "restore_complete": 30,
+          "restore_nearby": 30,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 28,
+        "before": [
+          -83.9527587890625,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.9527587890625,
+          150.6167755126953,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 31,
+          "restore_complete": 31,
+          "restore_nearby": 31,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 29,
+        "before": [
+          -83.9527816772461,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.9527816772461,
+          150.61788940429688,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 32,
+          "restore_complete": 32,
+          "restore_nearby": 32,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 30,
+        "before": [
+          -83.95280456542969,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95282745361328,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 33,
+          "restore_complete": 33,
+          "restore_nearby": 33,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 31,
+        "before": [
+          -83.95282745361328,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95282745361328,
+          150.617431640625,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 34,
+          "restore_complete": 34,
+          "restore_nearby": 34,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 32,
+        "before": [
+          -83.95285034179688,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95285034179688,
+          150.6173095703125,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 35,
+          "restore_complete": 35,
+          "restore_nearby": 35,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 33,
+        "before": [
+          -83.952880859375,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.952880859375,
+          150.6163330078125,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 36,
+          "restore_complete": 36,
+          "restore_nearby": 36,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 34,
+        "before": [
+          -83.95291137695312,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95291137695312,
+          150.61643981933594,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 37,
+          "restore_complete": 37,
+          "restore_nearby": 37,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 35,
+        "before": [
+          -83.95294189453125,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95294189453125,
+          150.6171417236328,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 38,
+          "restore_complete": 38,
+          "restore_nearby": 38,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 36,
+        "before": [
+          -83.95296478271484,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95296478271484,
+          150.6149139404297,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 39,
+          "restore_complete": 39,
+          "restore_nearby": 39,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 37,
+        "before": [
+          -83.95299530029297,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95299530029297,
+          150.61807250976562,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 40,
+          "restore_complete": 40,
+          "restore_nearby": 40,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 38,
+        "before": [
+          -83.95301818847656,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95301818847656,
+          150.61807250976562,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 41,
+          "restore_complete": 41,
+          "restore_nearby": 41,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 39,
+        "before": [
+          -83.95304107666016,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95304107666016,
+          150.6149139404297,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 42,
+          "restore_complete": 42,
+          "restore_nearby": 42,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 40,
+        "before": [
+          -83.95307159423828,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95307159423828,
+          150.61766052246094,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 43,
+          "restore_complete": 43,
+          "restore_nearby": 43,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 41,
+        "before": [
+          -83.95309448242188,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95309448242188,
+          150.6182403564453,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 44,
+          "restore_complete": 44,
+          "restore_nearby": 44,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 42,
+        "before": [
+          -83.95311737060547,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95311737060547,
+          150.61837768554688,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 45,
+          "restore_complete": 45,
+          "restore_nearby": 45,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 43,
+        "before": [
+          -83.95314025878906,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95314025878906,
+          150.6179962158203,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 46,
+          "restore_complete": 46,
+          "restore_nearby": 46,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 44,
+        "before": [
+          -83.95316314697266,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95316314697266,
+          150.61770629882812,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 47,
+          "restore_complete": 47,
+          "restore_nearby": 47,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 45,
+        "before": [
+          -83.95318603515625,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95318603515625,
+          150.61831665039062,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 48,
+          "restore_complete": 48,
+          "restore_nearby": 48,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 46,
+        "before": [
+          -83.95320892333984,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95320892333984,
+          150.61878967285156,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 49,
+          "restore_complete": 49,
+          "restore_nearby": 49,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 47,
+        "before": [
+          -83.95323181152344,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95323181152344,
+          150.61915588378906,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 50,
+          "restore_complete": 50,
+          "restore_nearby": 50,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 48,
+        "before": [
+          -83.95325469970703,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95325469970703,
+          150.6177978515625,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 51,
+          "restore_complete": 51,
+          "restore_nearby": 51,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": false,
+        "index": 49,
+        "before": [
+          -83.95327758789062,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95327758789062,
+          150.61814880371094,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 52,
+          "restore_complete": 52,
+          "restore_nearby": 52,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 0,
+        "before": [
+          -83.95330047607422,
+          150.59539794921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 53,
+          "restore_complete": 53,
+          "restore_nearby": 53,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 1,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 54,
+          "restore_complete": 54,
+          "restore_nearby": 54,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 2,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 55,
+          "restore_complete": 55,
+          "restore_nearby": 55,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 3,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 56,
+          "restore_complete": 56,
+          "restore_nearby": 56,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 4,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 57,
+          "restore_complete": 57,
+          "restore_nearby": 57,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 5,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 58,
+          "restore_complete": 58,
+          "restore_nearby": 58,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 6,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 59,
+          "restore_complete": 59,
+          "restore_nearby": 59,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 7,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 60,
+          "restore_complete": 60,
+          "restore_nearby": 60,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 8,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 61,
+          "restore_complete": 61,
+          "restore_nearby": 61,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 9,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 62,
+          "restore_complete": 62,
+          "restore_nearby": 62,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 10,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 63,
+          "restore_complete": 63,
+          "restore_nearby": 63,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 11,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 64,
+          "restore_complete": 64,
+          "restore_nearby": 64,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 12,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 65,
+          "restore_complete": 65,
+          "restore_nearby": 65,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 13,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 66,
+          "restore_complete": 66,
+          "restore_nearby": 66,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 14,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 67,
+          "restore_complete": 67,
+          "restore_nearby": 67,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 15,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 68,
+          "restore_complete": 68,
+          "restore_nearby": 68,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 16,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 69,
+          "restore_complete": 69,
+          "restore_nearby": 69,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 17,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 70,
+          "restore_complete": 70,
+          "restore_nearby": 70,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 18,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 71,
+          "restore_complete": 71,
+          "restore_nearby": 71,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 19,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 72,
+          "restore_complete": 72,
+          "restore_nearby": 72,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 20,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 73,
+          "restore_complete": 73,
+          "restore_nearby": 73,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 21,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 74,
+          "restore_complete": 74,
+          "restore_nearby": 74,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 22,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 75,
+          "restore_complete": 75,
+          "restore_nearby": 75,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 23,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 76,
+          "restore_complete": 76,
+          "restore_nearby": 76,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 24,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 77,
+          "restore_complete": 77,
+          "restore_nearby": 77,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 25,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 78,
+          "restore_complete": 78,
+          "restore_nearby": 78,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 26,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 79,
+          "restore_complete": 79,
+          "restore_nearby": 79,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 27,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 80,
+          "restore_complete": 80,
+          "restore_nearby": 80,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 28,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 81,
+          "restore_complete": 81,
+          "restore_nearby": 81,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 29,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 82,
+          "restore_complete": 82,
+          "restore_nearby": 82,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 30,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 83,
+          "restore_complete": 83,
+          "restore_nearby": 83,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 31,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 84,
+          "restore_complete": 84,
+          "restore_nearby": 84,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 32,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 85,
+          "restore_complete": 85,
+          "restore_nearby": 85,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 33,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 86,
+          "restore_complete": 86,
+          "restore_nearby": 86,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 34,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 87,
+          "restore_complete": 87,
+          "restore_nearby": 87,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 35,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 88,
+          "restore_complete": 88,
+          "restore_nearby": 88,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 36,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 89,
+          "restore_complete": 89,
+          "restore_nearby": 89,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 37,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 90,
+          "restore_complete": 90,
+          "restore_nearby": 90,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 38,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 91,
+          "restore_complete": 91,
+          "restore_nearby": 91,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 39,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 92,
+          "restore_complete": 92,
+          "restore_nearby": 92,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 40,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 93,
+          "restore_complete": 93,
+          "restore_nearby": 93,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 41,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 94,
+          "restore_complete": 94,
+          "restore_nearby": 94,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 42,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 95,
+          "restore_complete": 95,
+          "restore_nearby": 95,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 43,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 96,
+          "restore_complete": 96,
+          "restore_nearby": 96,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 44,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 97,
+          "restore_complete": 97,
+          "restore_nearby": 97,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 45,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 98,
+          "restore_complete": 98,
+          "restore_nearby": 98,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 46,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 99,
+          "restore_complete": 99,
+          "restore_nearby": 99,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 47,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 100,
+          "restore_complete": 100,
+          "restore_nearby": 100,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 48,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 101,
+          "restore_complete": 101,
+          "restore_nearby": 101,
+          "restore_fallback": 0
+        }
+      },
+      {
+        "fly": true,
+        "index": 49,
+        "before": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "after": [
+          -83.95330047607422,
+          150.59930419921875,
+          227.3725128173828
+        ],
+        "recovery": {
+          "restore_request": 102,
+          "restore_complete": 102,
+          "restore_nearby": 102,
+          "restore_fallback": 0
+        }
+      }
+    ],
+    "samples": [
+      {
+        "label": "warm",
+        "process": {
+          "pid": 24384,
+          "private": 11994066944,
+          "working_set": 16296935424,
+          "cpu_seconds": 1435.6875
+        },
+        "frames": {
+          "fps": 31.202538014442098,
+          "frames": 124,
+          "intervals_ms": [
+            34.8,
+            35.3,
+            32.3,
+            29.4,
+            31.4,
+            31.6,
+            31.9,
+            36.4,
+            29.9,
+            31.7,
+            32.7,
+            36.4,
+            29.9,
+            33.2,
+            31.5,
+            32.9,
+            31.3,
+            31.7,
+            32.4,
+            29.7,
+            28.8,
+            29.4,
+            31.0,
+            31.2,
+            34.3,
+            32.0,
+            34.9,
+            30.1,
+            29.7,
+            29.2,
+            34.5,
+            31.6,
+            32.9,
+            31.0,
+            33.2,
+            28.0,
+            31.0,
+            33.3,
+            32.3,
+            29.5,
+            32.8,
+            33.2,
+            31.8,
+            30.9,
+            32.2,
+            30.6,
+            33.5,
+            32.3,
+            28.4,
+            30.2,
+            33.8,
+            29.2,
+            31.5,
+            30.8,
+            33.1,
+            31.4,
+            33.1,
+            31.0,
+            32.8,
+            29.1,
+            28.9,
+            34.5,
+            33.7,
+            30.5,
+            34.1,
+            32.0,
+            32.4,
+            28.7,
+            28.3,
+            31.2,
+            33.2,
+            29.4,
+            33.1,
+            38.6,
+            34.0,
+            30.7,
+            29.2,
+            32.6,
+            37.9,
+            34.2,
+            43.3,
+            32.9,
+            36.6,
+            30.1,
+            30.5,
+            32.2,
+            34.5,
+            32.1,
+            36.8,
+            32.1,
+            32.5,
+            29.9,
+            31.1,
+            30.5,
+            34.5,
+            32.6,
+            32.7,
+            30.1,
+            33.6,
+            29.4,
+            33.4,
+            29.9,
+            32.2,
+            30.9,
+            32.8,
+            32.4,
+            33.8,
+            29.1,
+            31.5,
+            33.8,
+            32.0,
+            31.2,
+            30.4,
+            33.0,
+            30.9,
+            28.5,
+            29.7,
+            35.7,
+            33.5,
+            30.9
+          ],
+          "max_ms": 43.2749,
+          "mean_ms": 32.048674999999996,
+          "min_ms": 27.9922,
+          "p50_ms": 31.913449999999997,
+          "p90_ms": 34.512010000000004,
+          "p99_ms": 38.453599999999994,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 0.9919354838709677,
+            "3": 0.008064516129032258,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735068.040517
+      },
+      {
+        "label": "walk10",
+        "process": {
+          "pid": 24384,
+          "private": 11663941632,
+          "working_set": 15290138624,
+          "cpu_seconds": 1511.453125
+        },
+        "frames": {
+          "fps": 30.359832767001173,
+          "frames": 121,
+          "intervals_ms": [
+            34.4,
+            30.5,
+            33.4,
+            33.4,
+            34.4,
+            35.7,
+            32.3,
+            31.1,
+            33.1,
+            33.4,
+            33.9,
+            41.6,
+            34.0,
+            30.0,
+            31.9,
+            32.2,
+            33.4,
+            32.6,
+            32.3,
+            42.6,
+            31.9,
+            30.1,
+            30.3,
+            32.5,
+            33.6,
+            37.8,
+            36.6,
+            33.6,
+            34.1,
+            30.0,
+            30.7,
+            31.3,
+            33.6,
+            30.8,
+            33.7,
+            32.0,
+            32.0,
+            27.9,
+            30.2,
+            32.1,
+            32.4,
+            28.1,
+            32.1,
+            37.7,
+            32.2,
+            31.0,
+            29.8,
+            30.5,
+            32.5,
+            35.2,
+            40.9,
+            37.0,
+            33.0,
+            32.3,
+            29.6,
+            34.0,
+            34.8,
+            31.5,
+            37.8,
+            32.3,
+            33.0,
+            31.0,
+            31.8,
+            34.8,
+            36.5,
+            35.4,
+            30.6,
+            32.1,
+            32.3,
+            27.7,
+            31.6,
+            30.1,
+            31.4,
+            30.8,
+            32.5,
+            32.5,
+            34.4,
+            30.4,
+            32.2,
+            33.4,
+            36.2,
+            39.8,
+            32.8,
+            31.5,
+            32.1,
+            30.0,
+            29.9,
+            34.1,
+            37.0,
+            30.6,
+            33.0,
+            33.9,
+            34.7,
+            30.6,
+            31.0,
+            31.9,
+            39.2,
+            32.0,
+            32.7,
+            31.9,
+            35.2,
+            30.5,
+            29.7,
+            38.2,
+            32.2,
+            30.7,
+            30.4,
+            31.2,
+            35.5,
+            29.8,
+            29.0,
+            39.7,
+            35.3,
+            32.1,
+            32.4,
+            32.9,
+            33.6,
+            27.3,
+            39.4,
+            33.1
+          ],
+          "max_ms": 42.6194,
+          "mean_ms": 32.938257851239676,
+          "min_ms": 27.2861,
+          "p50_ms": 32.3303,
+          "p90_ms": 36.9926,
+          "p99_ms": 41.47748,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 0.9917355371900827,
+            "3": 0.008264462809917356,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735094.3837366
+      },
+      {
+        "label": "walk20",
+        "process": {
+          "pid": 24384,
+          "private": 11595329536,
+          "working_set": 15095021568,
+          "cpu_seconds": 1588.25
+        },
+        "frames": {
+          "fps": 31.71752433243862,
+          "frames": 126,
+          "intervals_ms": [
+            31.8,
+            29.7,
+            29.7,
+            33.6,
+            31.4,
+            30.4,
+            32.0,
+            31.3,
+            34.3,
+            29.5,
+            30.4,
+            31.9,
+            33.7,
+            30.0,
+            31.1,
+            33.6,
+            33.1,
+            30.6,
+            29.8,
+            32.4,
+            31.0,
+            31.4,
+            33.3,
+            33.1,
+            33.2,
+            29.4,
+            33.1,
+            30.6,
+            34.4,
+            29.0,
+            30.9,
+            30.0,
+            31.5,
+            30.5,
+            29.0,
+            31.0,
+            33.4,
+            30.2,
+            35.1,
+            31.8,
+            32.7,
+            28.6,
+            30.7,
+            32.7,
+            33.7,
+            28.3,
+            31.6,
+            29.7,
+            31.2,
+            29.0,
+            30.5,
+            33.0,
+            34.1,
+            32.5,
+            32.2,
+            32.9,
+            32.8,
+            30.1,
+            30.0,
+            32.8,
+            31.2,
+            30.4,
+            32.6,
+            33.2,
+            33.3,
+            30.5,
+            30.4,
+            30.5,
+            32.2,
+            29.6,
+            33.1,
+            32.8,
+            33.5,
+            31.8,
+            29.6,
+            32.2,
+            31.4,
+            31.1,
+            31.9,
+            29.4,
+            32.6,
+            29.5,
+            30.3,
+            30.8,
+            32.2,
+            28.7,
+            34.0,
+            30.5,
+            32.9,
+            31.6,
+            31.3,
+            31.6,
+            32.4,
+            30.8,
+            31.8,
+            33.8,
+            32.2,
+            30.4,
+            33.0,
+            31.7,
+            33.8,
+            28.7,
+            35.0,
+            31.8,
+            32.3,
+            30.0,
+            31.2,
+            31.4,
+            31.5,
+            29.1,
+            29.3,
+            30.5,
+            31.7,
+            30.2,
+            30.8,
+            32.5,
+            33.1,
+            35.3,
+            32.7,
+            32.6
+          ],
+          "max_ms": 35.2929,
+          "mean_ms": 31.528311904761907,
+          "min_ms": 27.6977,
+          "p50_ms": 31.476300000000002,
+          "p90_ms": 33.6161,
+          "p99_ms": 35.05195,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735120.127145
+      },
+      {
+        "label": "walk30",
+        "process": {
+          "pid": 24384,
+          "private": 11501711360,
+          "working_set": 15101603840,
+          "cpu_seconds": 1659.171875
+        },
+        "frames": {
+          "fps": 31.15763191243057,
+          "frames": 124,
+          "intervals_ms": [
+            38.5,
+            39.2,
+            34.4,
+            31.0,
+            31.6,
+            31.4,
+            33.6,
+            30.4,
+            31.5,
+            31.9,
+            34.4,
+            31.5,
+            34.3,
+            35.0,
+            33.8,
+            34.6,
+            34.2,
+            31.3,
+            33.2,
+            31.8,
+            34.9,
+            30.3,
+            32.3,
+            30.5,
+            29.2,
+            33.3,
+            33.9,
+            31.0,
+            33.3,
+            33.0,
+            32.3,
+            28.4,
+            30.5,
+            34.1,
+            33.4,
+            28.1,
+            31.6,
+            33.3,
+            33.6,
+            32.4,
+            30.8,
+            32.6,
+            33.6,
+            32.7,
+            33.0,
+            33.3,
+            33.4,
+            30.1,
+            31.7,
+            31.4,
+            31.4,
+            30.1,
+            31.5,
+            32.9,
+            33.3,
+            29.8,
+            30.8,
+            31.0,
+            32.0,
+            29.5,
+            32.4,
+            36.4,
+            33.3,
+            29.4,
+            32.1,
+            33.1,
+            31.8,
+            30.6,
+            33.2,
+            32.7,
+            33.1,
+            31.7,
+            31.5,
+            29.1,
+            32.5,
+            29.8,
+            31.1,
+            31.3,
+            32.3,
+            29.2,
+            31.4,
+            31.9,
+            32.7,
+            31.8,
+            32.9,
+            31.8,
+            33.6,
+            31.0,
+            31.1,
+            31.8,
+            32.5,
+            30.5,
+            32.5,
+            29.6,
+            33.8,
+            29.1,
+            31.8,
+            33.7,
+            33.3,
+            31.2,
+            30.9,
+            32.0,
+            30.5,
+            28.4,
+            30.4,
+            33.6,
+            34.0,
+            29.4,
+            31.8,
+            30.5,
+            31.4,
+            28.5,
+            31.2,
+            33.5,
+            33.7,
+            33.8,
+            29.5,
+            30.9,
+            32.7,
+            28.9
+          ],
+          "max_ms": 39.2019,
+          "mean_ms": 32.094865322580645,
+          "min_ms": 28.1226,
+          "p50_ms": 31.904600000000002,
+          "p90_ms": 34.05198,
+          "p99_ms": 38.330095,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735145.4155743
+      },
+      {
+        "label": "walk40",
+        "process": {
+          "pid": 24384,
+          "private": 11503579136,
+          "working_set": 15108358144,
+          "cpu_seconds": 1729.28125
+        },
+        "frames": {
+          "fps": 31.796726254488725,
+          "frames": 126,
+          "intervals_ms": [
+            32.3,
+            31.8,
+            33.0,
+            29.4,
+            30.3,
+            32.2,
+            31.7,
+            32.1,
+            31.9,
+            32.9,
+            34.7,
+            29.2,
+            30.6,
+            32.8,
+            30.3,
+            28.7,
+            30.5,
+            32.2,
+            34.3,
+            29.7,
+            31.5,
+            32.6,
+            32.4,
+            28.5,
+            32.9,
+            30.7,
+            34.2,
+            31.1,
+            31.5,
+            30.0,
+            31.6,
+            30.2,
+            31.5,
+            32.0,
+            32.7,
+            29.7,
+            32.4,
+            31.7,
+            29.4,
+            29.4,
+            32.2,
+            33.8,
+            32.8,
+            30.8,
+            30.8,
+            31.9,
+            31.3,
+            29.8,
+            31.2,
+            31.7,
+            34.0,
+            28.2,
+            33.9,
+            31.5,
+            33.2,
+            30.5,
+            30.9,
+            31.6,
+            32.4,
+            29.0,
+            28.3,
+            33.0,
+            33.1,
+            34.5,
+            29.7,
+            30.9,
+            32.4,
+            27.4,
+            30.8,
+            32.6,
+            33.2,
+            30.3,
+            29.8,
+            31.5,
+            32.4,
+            29.0,
+            29.2,
+            32.3,
+            34.0,
+            28.6,
+            30.8,
+            30.2,
+            32.2,
+            28.6,
+            31.7,
+            32.2,
+            30.6,
+            30.1,
+            31.8,
+            33.9,
+            32.4,
+            28.9,
+            35.3,
+            31.1,
+            33.8,
+            30.2,
+            31.9,
+            33.2,
+            31.6,
+            28.3,
+            31.7,
+            31.8,
+            33.5,
+            31.0,
+            32.9,
+            33.0,
+            33.7,
+            30.7,
+            32.4,
+            29.9,
+            31.7,
+            28.7,
+            32.9,
+            32.4,
+            33.7,
+            30.3,
+            32.2,
+            29.6,
+            31.6,
+            29.5
+          ],
+          "max_ms": 35.2915,
+          "mean_ms": 31.449778571428578,
+          "min_ms": 27.2046,
+          "p50_ms": 31.6717,
+          "p90_ms": 33.6732,
+          "p99_ms": 34.618750000000006,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735170.7096694
+      },
+      {
+        "label": "walk50",
+        "process": {
+          "pid": 24384,
+          "private": 11509018624,
+          "working_set": 14544072704,
+          "cpu_seconds": 1799.9375
+        },
+        "frames": {
+          "fps": 31.690666897388134,
+          "frames": 126,
+          "intervals_ms": [
+            32.0,
+            30.4,
+            31.9,
+            30.0,
+            31.2,
+            32.8,
+            35.1,
+            30.3,
+            31.2,
+            31.6,
+            32.0,
+            31.0,
+            31.5,
+            31.9,
+            30.6,
+            28.4,
+            31.1,
+            33.3,
+            33.2,
+            28.8,
+            30.2,
+            29.9,
+            32.1,
+            29.1,
+            30.2,
+            31.4,
+            31.0,
+            30.2,
+            30.6,
+            32.8,
+            34.3,
+            28.6,
+            31.6,
+            33.6,
+            30.2,
+            29.2,
+            30.3,
+            31.9,
+            33.8,
+            29.7,
+            32.3,
+            33.1,
+            30.6,
+            30.3,
+            31.6,
+            34.4,
+            32.4,
+            31.1,
+            33.0,
+            31.7,
+            34.2,
+            30.1,
+            30.7,
+            31.2,
+            31.8,
+            29.5,
+            28.5,
+            31.3,
+            35.4,
+            32.6,
+            33.1,
+            34.3,
+            35.3,
+            31.6,
+            32.1,
+            33.9,
+            34.0,
+            30.9,
+            34.2,
+            31.3,
+            33.7,
+            31.0,
+            29.6,
+            31.6,
+            33.2,
+            28.5,
+            35.7,
+            32.3,
+            33.6,
+            28.3,
+            31.6,
+            33.1,
+            34.1,
+            30.4,
+            32.4,
+            31.0,
+            30.9,
+            28.9,
+            30.4,
+            30.9,
+            32.5,
+            29.6,
+            30.1,
+            31.8,
+            32.6,
+            32.8,
+            29.3,
+            30.6,
+            32.8,
+            30.2,
+            31.9,
+            31.7,
+            33.0,
+            29.3,
+            30.0,
+            32.0,
+            30.7,
+            31.0,
+            31.1,
+            32.2,
+            33.2,
+            27.4,
+            34.6,
+            30.6,
+            32.5,
+            29.0,
+            31.6,
+            32.3,
+            34.1,
+            31.3
+          ],
+          "max_ms": 35.729,
+          "mean_ms": 31.555031746031748,
+          "min_ms": 27.4498,
+          "p50_ms": 31.5556,
+          "p90_ms": 33.951499999999996,
+          "p99_ms": 35.344575,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735195.6182451
+      },
+      {
+        "label": "fly10",
+        "process": {
+          "pid": 24384,
+          "private": 11526811648,
+          "working_set": 14286823424,
+          "cpu_seconds": 1883.859375
+        },
+        "frames": {
+          "fps": 31.44400004709053,
+          "frames": 125,
+          "intervals_ms": [
+            36.0,
+            33.1,
+            30.2,
+            32.6,
+            31.3,
+            33.5,
+            31.3,
+            30.5,
+            32.7,
+            32.2,
+            30.0,
+            30.2,
+            33.1,
+            31.6,
+            31.3,
+            31.5,
+            31.1,
+            33.5,
+            28.9,
+            30.2,
+            33.9,
+            32.7,
+            29.7,
+            32.0,
+            31.2,
+            33.5,
+            29.8,
+            28.6,
+            32.2,
+            30.7,
+            27.3,
+            32.5,
+            29.8,
+            32.1,
+            29.1,
+            31.7,
+            32.9,
+            34.0,
+            28.9,
+            33.1,
+            31.9,
+            32.1,
+            29.7,
+            31.1,
+            30.7,
+            32.6,
+            34.0,
+            28.1,
+            31.3,
+            31.8,
+            32.1,
+            30.3,
+            29.0,
+            32.9,
+            31.1,
+            30.2,
+            33.7,
+            33.9,
+            28.7,
+            29.5,
+            32.3,
+            30.9,
+            29.7,
+            29.3,
+            31.3,
+            32.2,
+            30.4,
+            29.4,
+            32.0,
+            33.4,
+            29.7,
+            32.3,
+            32.0,
+            33.6,
+            29.2,
+            30.0,
+            35.0,
+            31.9,
+            29.7,
+            30.7,
+            32.3,
+            35.9,
+            30.8,
+            33.8,
+            34.2,
+            37.4,
+            32.7,
+            37.7,
+            32.1,
+            32.2,
+            29.0,
+            31.6,
+            31.8,
+            36.7,
+            33.6,
+            33.9,
+            33.7,
+            36.6,
+            37.8,
+            34.9,
+            33.4,
+            30.0,
+            30.4,
+            30.6,
+            31.1,
+            33.1,
+            29.2,
+            30.4,
+            31.6,
+            32.1,
+            28.5,
+            29.4,
+            32.2,
+            31.6,
+            29.7,
+            31.0,
+            30.7,
+            32.5,
+            28.1,
+            29.6
+          ],
+          "max_ms": 40.4514,
+          "mean_ms": 31.802569600000005,
+          "min_ms": 27.2731,
+          "p50_ms": 31.6446,
+          "p90_ms": 34.01304,
+          "p99_ms": 37.738056,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735224.663243
+      },
+      {
+        "label": "fly20",
+        "process": {
+          "pid": 24384,
+          "private": 11524558848,
+          "working_set": 14289620992,
+          "cpu_seconds": 1958.109375
+        },
+        "frames": {
+          "fps": 31.625405421884814,
+          "frames": 125,
+          "intervals_ms": [
+            32.4,
+            29.9,
+            34.3,
+            30.3,
+            31.1,
+            34.4,
+            32.9,
+            31.2,
+            30.1,
+            30.7,
+            33.2,
+            29.9,
+            32.5,
+            31.1,
+            32.3,
+            29.9,
+            30.8,
+            30.6,
+            33.3,
+            31.5,
+            30.8,
+            31.9,
+            32.0,
+            32.6,
+            32.4,
+            34.2,
+            33.4,
+            30.6,
+            29.5,
+            30.2,
+            32.8,
+            29.7,
+            29.1,
+            29.4,
+            31.5,
+            28.5,
+            29.6,
+            33.9,
+            31.2,
+            29.1,
+            30.7,
+            29.3,
+            32.9,
+            28.9,
+            31.8,
+            32.7,
+            32.4,
+            29.5,
+            28.8,
+            30.5,
+            33.5,
+            29.0,
+            29.3,
+            37.1,
+            33.3,
+            31.3,
+            33.5,
+            33.9,
+            36.5,
+            34.8,
+            33.1,
+            38.7,
+            34.3,
+            32.6,
+            32.3,
+            30.5,
+            34.3,
+            29.3,
+            32.0,
+            32.9,
+            35.6,
+            32.5,
+            35.6,
+            33.6,
+            34.0,
+            30.4,
+            31.1,
+            32.2,
+            31.2,
+            29.1,
+            32.6,
+            32.4,
+            33.8,
+            30.0,
+            32.3,
+            34.0,
+            31.5,
+            30.0,
+            31.3,
+            30.0,
+            31.9,
+            27.0,
+            31.2,
+            31.8,
+            33.2,
+            29.2,
+            29.1,
+            31.1,
+            33.1,
+            28.3,
+            30.4,
+            30.5,
+            31.1,
+            31.5,
+            31.4,
+            31.5,
+            34.4,
+            29.8,
+            30.2,
+            32.3,
+            30.9,
+            30.9,
+            30.4,
+            34.2,
+            32.4,
+            30.8,
+            31.6,
+            29.5,
+            31.2,
+            30.9
+          ],
+          "max_ms": 38.6664,
+          "mean_ms": 31.620147999999993,
+          "min_ms": 27.0018,
+          "p50_ms": 31.274,
+          "p90_ms": 34.11384,
+          "p99_ms": 36.954988,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735249.7712247
+      },
+      {
+        "label": "fly30",
+        "process": {
+          "pid": 24384,
+          "private": 11526791168,
+          "working_set": 14294528000,
+          "cpu_seconds": 2027.765625
+        },
+        "frames": {
+          "fps": 32.26290516206482,
+          "frames": 129,
+          "intervals_ms": [
+            29.7,
+            31.9,
+            31.9,
+            28.9,
+            29.3,
+            31.0,
+            34.6,
+            29.7,
+            33.2,
+            33.2,
+            32.9,
+            30.1,
+            32.6,
+            29.6,
+            32.5,
+            29.9,
+            32.0,
+            34.1,
+            33.7,
+            30.6,
+            31.3,
+            31.3,
+            33.7,
+            29.4,
+            31.3,
+            30.8,
+            32.4,
+            28.9,
+            33.3,
+            29.6,
+            32.3,
+            29.7,
+            31.4,
+            32.2,
+            31.5,
+            28.5,
+            30.0,
+            29.8,
+            31.9,
+            32.1,
+            30.8,
+            32.7,
+            32.4,
+            29.8,
+            31.4,
+            31.5,
+            32.1,
+            29.1,
+            31.5,
+            34.7,
+            32.0,
+            30.3,
+            31.4,
+            31.6,
+            31.8,
+            30.5,
+            29.7,
+            30.0,
+            31.2,
+            28.3,
+            32.2,
+            29.7,
+            32.7,
+            29.1,
+            29.9,
+            34.0,
+            31.9,
+            27.3,
+            31.1,
+            30.4,
+            33.7,
+            30.0,
+            29.7,
+            30.0,
+            32.7,
+            26.9,
+            29.8,
+            31.3,
+            34.4,
+            28.6,
+            33.0,
+            28.2,
+            33.1,
+            29.1,
+            32.0,
+            31.4,
+            34.1,
+            29.5,
+            33.2,
+            31.5,
+            31.9,
+            28.3,
+            29.7,
+            32.0,
+            32.1,
+            30.2,
+            28.7,
+            29.5,
+            31.4,
+            28.4,
+            30.7,
+            30.5,
+            31.5,
+            29.1,
+            30.9,
+            30.6,
+            30.6,
+            28.1,
+            30.7,
+            31.9,
+            32.9,
+            28.7,
+            30.8,
+            30.1,
+            31.7,
+            28.1,
+            30.1,
+            30.1,
+            32.6,
+            29.8
+          ],
+          "max_ms": 34.7085,
+          "mean_ms": 30.99534883720931,
+          "min_ms": 26.8689,
+          "p50_ms": 31.1763,
+          "p90_ms": 33.16486,
+          "p99_ms": 34.573424,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735274.731845
+      },
+      {
+        "label": "fly40",
+        "process": {
+          "pid": 24384,
+          "private": 11531321344,
+          "working_set": 14299066368,
+          "cpu_seconds": 2098.421875
+        },
+        "frames": {
+          "fps": 31.14980173276801,
+          "frames": 124,
+          "intervals_ms": [
+            31.4,
+            31.5,
+            28.3,
+            32.5,
+            32.8,
+            33.8,
+            29.8,
+            31.0,
+            31.8,
+            34.8,
+            27.5,
+            30.7,
+            32.3,
+            33.1,
+            27.7,
+            31.1,
+            32.7,
+            30.5,
+            29.7,
+            30.6,
+            32.6,
+            33.5,
+            29.8,
+            32.1,
+            29.5,
+            30.7,
+            31.7,
+            30.9,
+            31.8,
+            33.9,
+            33.3,
+            30.9,
+            32.1,
+            33.2,
+            31.5,
+            32.2,
+            30.2,
+            31.3,
+            28.3,
+            30.3,
+            31.4,
+            33.0,
+            28.8,
+            30.4,
+            29.8,
+            32.9,
+            29.7,
+            30.7,
+            31.6,
+            30.7,
+            29.2,
+            32.6,
+            32.0,
+            33.7,
+            33.4,
+            33.6,
+            32.1,
+            37.0,
+            32.2,
+            32.9,
+            33.8,
+            41.0,
+            30.0,
+            31.8,
+            31.4,
+            32.8,
+            31.5,
+            33.0,
+            35.0,
+            68.4,
+            31.1,
+            39.1,
+            36.3,
+            38.9,
+            30.6,
+            30.1,
+            32.6,
+            33.5,
+            29.6,
+            31.3,
+            31.1,
+            32.5,
+            30.1,
+            30.8,
+            31.6,
+            35.7,
+            28.5,
+            32.3,
+            30.5,
+            32.5,
+            30.9,
+            34.9,
+            31.9,
+            31.7,
+            30.2,
+            30.1,
+            32.0,
+            30.8,
+            31.1,
+            30.9,
+            33.8,
+            32.5,
+            30.3,
+            33.8,
+            30.7,
+            33.4,
+            29.7,
+            31.8,
+            31.6,
+            32.1,
+            28.4,
+            30.0,
+            32.3,
+            32.7,
+            33.2,
+            31.2,
+            30.7,
+            32.5,
+            28.3,
+            31.7
+          ],
+          "max_ms": 68.3982,
+          "mean_ms": 32.10293306451613,
+          "min_ms": 27.5004,
+          "p50_ms": 31.6736,
+          "p90_ms": 33.81549,
+          "p99_ms": 40.54028899999999,
+          "stutters": 1,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 0.9919354838709677,
+            "3": 0.0,
+            "4+": 0.008064516129032258
+          }
+        },
+        "time": 1794735299.899266
+      },
+      {
+        "label": "fly50",
+        "process": {
+          "pid": 24384,
+          "private": 11537047552,
+          "working_set": 14423126016,
+          "cpu_seconds": 2167.625
+        },
+        "frames": {
+          "fps": 31.628828170742967,
+          "frames": 126,
+          "intervals_ms": [
+            31.6,
+            33.1,
+            29.5,
+            32.2,
+            28.6,
+            33.0,
+            30.5,
+            33.0,
+            31.1,
+            32.0,
+            31.6,
+            32.9,
+            34.5,
+            31.6,
+            30.1,
+            29.5,
+            31.5,
+            33.0,
+            29.2,
+            31.5,
+            29.4,
+            31.9,
+            28.7,
+            29.5,
+            30.6,
+            33.9,
+            27.5,
+            30.2,
+            32.1,
+            32.7,
+            33.3,
+            32.7,
+            32.3,
+            31.1,
+            29.5,
+            33.4,
+            33.0,
+            31.5,
+            30.2,
+            30.8,
+            32.7,
+            32.6,
+            27.8,
+            30.5,
+            29.9,
+            31.0,
+            29.5,
+            30.4,
+            31.9,
+            33.3,
+            27.6,
+            31.0,
+            31.7,
+            34.2,
+            29.7,
+            31.3,
+            30.2,
+            32.2,
+            30.2,
+            29.1,
+            34.0,
+            35.1,
+            32.7,
+            33.1,
+            33.9,
+            33.7,
+            30.1,
+            33.6,
+            31.7,
+            31.0,
+            30.4,
+            30.3,
+            30.4,
+            32.0,
+            28.0,
+            33.4,
+            32.2,
+            33.0,
+            31.1,
+            31.8,
+            33.0,
+            34.0,
+            31.3,
+            31.4,
+            30.6,
+            32.5,
+            32.1,
+            30.4,
+            32.9,
+            31.9,
+            30.4,
+            29.6,
+            30.6,
+            31.8,
+            36.2,
+            30.0,
+            33.7,
+            34.8,
+            31.0,
+            33.5,
+            33.2,
+            34.0,
+            30.5,
+            30.0,
+            31.0,
+            33.0,
+            28.5,
+            31.9,
+            33.1,
+            32.9,
+            30.3,
+            31.6,
+            33.6,
+            34.1,
+            31.9,
+            33.1,
+            35.6,
+            33.2,
+            32.6,
+            31.6
+          ],
+          "max_ms": 36.2213,
+          "mean_ms": 31.616726190476182,
+          "min_ms": 27.5356,
+          "p50_ms": 31.62995,
+          "p90_ms": 33.6726,
+          "p99_ms": 35.4462,
+          "stutters": 0,
+          "truncated": false,
+          "vsync_buckets": {
+            "1": 0.0,
+            "2": 1.0,
+            "3": 0.0,
+            "4+": 0.0
+          }
+        },
+        "time": 1794735325.134389
+      }
+    ],
+    "seconds": 261.6399999999999,
+    "final": {
+      "cursor": 7,
+      "speed": 3,
+      "flight_speed": 0,
+      "enabled": 15,
+      "alpha": 175,
+      "tab": 0,
+      "age": 1,
+      "scroll": 1,
+      "tab_cursor": [
+        7,
+        5
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        0,
+        5
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        64,
+        8
+      ],
+      "return_age": 1,
+      "travel_target": 2438026575,
+      "travel_request": 0,
+      "initialized": true,
+      "open": true,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": true,
+      "preferences_dirty": false,
+      "notice": "",
+      "preferences": {
+        "generation": 191,
+        "normal": 3,
+        "flight": 0,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773
+        ]
+      },
+      "phase": 0
+    }
+  },
+  "supported_fence_traversal": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "direction": [
+      0.1978999770013713,
+      0.9802222192456447
+    ],
+    "before": [
+      -86.74730682373047,
+      150.595703125,
+      231.88739013671875
+    ],
+    "positions": [
+      [
+        -86.73687744140625,
+        150.595703125,
+        231.8933563232422
+      ],
+      [
+        -86.83454132080078,
+        150.595703125,
+        231.87408447265625
+      ],
+      [
+        -86.63219451904297,
+        150.55665588378906,
+        232.69924926757812
+      ],
+      [
+        -86.36036682128906,
+        150.61439514160156,
+        233.975341796875
+      ],
+      [
+        -85.73930358886719,
+        150.6100616455078,
+        237.05162048339844
+      ],
+      [
+        -85.10250854492188,
+        150.61380004882812,
+        240.20579528808594
+      ],
+      [
+        -84.28837585449219,
+        150.595703125,
+        244.23834228515625
+      ],
+      [
+        -83.27811431884766,
+        150.595703125,
+        249.242431640625
+      ],
+      [
+        -82.29093933105469,
+        150.595703125,
+        254.13214111328125
+      ]
+    ],
+    "inside": [
+      -81.68408203125,
+      150.595703125,
+      257.13800048828125
+    ],
+    "off": {
+      "state": {
+        "cursor": 9,
+        "speed": 3,
+        "flight_speed": 0,
+        "enabled": 15,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          9,
+          5
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          0,
+          5
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          8
+        ],
+        "return_age": 1,
+        "travel_target": 2438026575,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Collision restored at a checked nearby position.",
+        "preferences": {
+          "generation": 194,
+          "normal": 3,
+          "flight": 0,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      },
+      "ack": {
+        "restore_request": 105,
+        "restore_complete": 105,
+        "restore_nearby": 105,
+        "restore_fallback": 0
+      },
+      "position": [
+        -81.68408203125,
+        150.6170196533203,
+        257.13800048828125
+      ]
+    },
+    "complete": true
+  },
+  "favorites": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "before": {
+      "cursor": 5,
+      "speed": 0,
+      "flight_speed": 0,
+      "enabled": 15,
+      "alpha": 175,
+      "tab": 1,
+      "age": 1,
+      "scroll": 0,
+      "tab_cursor": [
+        9,
+        5
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        0,
+        5
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        64,
+        8
+      ],
+      "return_age": 1,
+      "travel_target": 2438026575,
+      "travel_request": 0,
+      "initialized": true,
+      "open": true,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": true,
+      "preferences_dirty": false,
+      "notice": "",
+      "preferences": {
+        "generation": 192,
+        "normal": 0,
+        "flight": 0,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773
+        ]
+      },
+      "phase": 0
+    },
+    "toggles": [
+      {
+        "favorite": true,
+        "cursor": 5,
+        "scroll": 0
+      },
+      {
+        "favorite": false,
+        "cursor": 5,
+        "scroll": 0
+      },
+      {
+        "favorite": true,
+        "cursor": 5,
+        "scroll": 0
+      }
+    ],
+    "saved": {
+      "cursor": 5,
+      "speed": 0,
+      "flight_speed": 0,
+      "enabled": 15,
+      "alpha": 0,
+      "tab": 1,
+      "age": 1,
+      "scroll": 0,
+      "tab_cursor": [
+        9,
+        5
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        0,
+        5
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        64,
+        8
+      ],
+      "return_age": 1,
+      "travel_target": 2438026575,
+      "travel_request": 0,
+      "initialized": true,
+      "open": false,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": true,
+      "preferences_dirty": false,
+      "notice": "Added to Favorites.",
+      "preferences": {
+        "generation": 193,
+        "normal": 0,
+        "flight": 0,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773,
+          2438026575
+        ]
+      },
+      "phase": 0
+    }
+  },
+  "fixed_direction_fence_sweep": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "direction": [
+      0.1978999770013713,
+      0.9802222192456447
+    ],
+    "native": {
+      "start": [
+        -89.0656967163086,
+        150.58953857421875,
+        225.4779052734375
+      ],
+      "positions": [
+        [
+          -88.87089538574219,
+          150.59066772460938,
+          226.0161590576172
+        ],
+        [
+          -88.20703125,
+          150.595703125,
+          231.05250549316406
+        ],
+        [
+          -87.8438720703125,
+          150.595703125,
+          231.65341186523438
+        ],
+        [
+          -87.76996612548828,
+          150.595703125,
+          231.6813507080078
+        ],
+        [
+          -86.72333526611328,
+          150.595703125,
+          231.8878631591797
+        ],
+        [
+          -86.71539306640625,
+          150.59786987304688,
+          231.89393615722656
+        ],
+        [
+          -86.65807342529297,
+          150.595703125,
+          231.88047790527344
+        ],
+        [
+          -86.6694564819336,
+          150.59800720214844,
+          231.88990783691406
+        ],
+        [
+          -86.68840026855469,
+          150.595703125,
+          231.8983154296875
+        ],
+        [
+          -86.70672607421875,
+          150.595703125,
+          231.89500427246094
+        ],
+        [
+          -86.71060180664062,
+          150.59771728515625,
+          231.89453125
+        ],
+        [
+          -86.70941162109375,
+          150.595703125,
+          231.894775390625
+        ],
+        [
+          -86.71099853515625,
+          150.597900390625,
+          231.8948974609375
+        ],
+        [
+          -86.70904541015625,
+          150.595703125,
+          231.89527893066406
+        ],
+        [
+          -86.70993041992188,
+          150.59786987304688,
+          231.89540100097656
+        ],
+        [
+          -86.70886993408203,
+          150.595703125,
+          231.89561462402344
+        ],
+        [
+          -86.70994567871094,
+          150.5979766845703,
+          231.89569091796875
+        ],
+        [
+          -86.71012878417969,
+          150.595703125,
+          231.89601135253906
+        ],
+        [
+          -86.70893096923828,
+          150.59820556640625,
+          231.896240234375
+        ],
+        [
+          -86.70921325683594,
+          150.595703125,
+          231.89617919921875
+        ],
+        [
+          -86.70979309082031,
+          150.59832763671875,
+          231.8960723876953
+        ],
+        [
+          -86.70909881591797,
+          150.595703125,
+          231.89620971679688
+        ],
+        [
+          -86.71085357666016,
+          150.5981903076172,
+          231.89617919921875
+        ],
+        [
+          -86.7098617553711,
+          150.595703125,
+          231.89637756347656
+        ],
+        [
+          -86.70789337158203,
+          150.5985565185547,
+          231.89675903320312
+        ],
+        [
+          -86.71160888671875,
+          150.595703125,
+          231.89633178710938
+        ],
+        [
+          -86.71244812011719,
+          150.59864807128906,
+          231.8961639404297
+        ],
+        [
+          -86.72423553466797,
+          150.595703125,
+          231.89382934570312
+        ],
+        [
+          -86.75501251220703,
+          150.6024169921875,
+          231.88775634765625
+        ],
+        [
+          -86.7208023071289,
+          150.595703125,
+          231.89451599121094
+        ],
+        [
+          -86.70970153808594,
+          150.59828186035156,
+          231.89669799804688
+        ],
+        [
+          -86.67484283447266,
+          150.595703125,
+          231.89028930664062
+        ],
+        [
+          -86.70909881591797,
+          150.5985107421875,
+          231.89710998535156
+        ],
+        [
+          -86.70901489257812,
+          150.595703125,
+          231.8971405029297
+        ],
+        [
+          -86.70870971679688,
+          150.5984649658203,
+          231.89718627929688
+        ],
+        [
+          -86.70902252197266,
+          150.595703125,
+          231.8971405029297
+        ],
+        [
+          -86.70901489257812,
+          150.59848022460938,
+          231.8971405029297
+        ],
+        [
+          -86.70868682861328,
+          150.595703125,
+          231.89720153808594
+        ],
+        [
+          -86.70851135253906,
+          150.5984344482422,
+          231.89723205566406
+        ],
+        [
+          -86.70907592773438,
+          150.595703125,
+          231.89712524414062
+        ]
+      ]
+    },
+    "noclip": {
+      "positions": [
+        [
+          -86.69185638427734,
+          150.60011291503906,
+          231.9009246826172
+        ],
+        [
+          -86.22217559814453,
+          150.66429138183594,
+          231.95204162597656
+        ],
+        [
+          -86.10072326660156,
+          150.61610412597656,
+          232.56187438964844
+        ],
+        [
+          -85.789306640625,
+          150.61846923828125,
+          234.09617614746094
+        ],
+        [
+          -85.3099594116211,
+          150.61688232421875,
+          236.4705047607422
+        ],
+        [
+          -84.69379425048828,
+          150.61407470703125,
+          239.5225830078125
+        ],
+        [
+          -83.99658966064453,
+          150.595703125,
+          242.9759521484375
+        ],
+        [
+          -83.00960540771484,
+          150.595703125,
+          247.86476135253906
+        ],
+        [
+          -81.89627838134766,
+          150.59767150878906,
+          253.37939453125
+        ],
+        [
+          -80.94404602050781,
+          150.59767150878906,
+          258.0959167480469
+        ],
+        [
+          -80.05691528320312,
+          150.59767150878906,
+          262.4901428222656
+        ],
+        [
+          -79.24691009521484,
+          150.59767150878906,
+          266.5022277832031
+        ],
+        [
+          -78.49041748046875,
+          150.59767150878906,
+          270.24932861328125
+        ],
+        [
+          -77.7594223022461,
+          150.59767150878906,
+          273.8701171875
+        ],
+        [
+          -77.07417297363281,
+          150.5098876953125,
+          277.26434326171875
+        ],
+        [
+          -76.39213562011719,
+          150.4786834716797,
+          280.64263916015625
+        ],
+        [
+          -75.69110107421875,
+          150.46646118164062,
+          284.114990234375
+        ],
+        [
+          -74.98285675048828,
+          150.57293701171875,
+          287.62255859375
+        ],
+        [
+          -74.27788543701172,
+          150.59140014648438,
+          291.1149597167969
+        ],
+        [
+          -73.55476379394531,
+          150.59140014648438,
+          294.69671630859375
+        ],
+        [
+          -72.79916381835938,
+          150.28079223632812,
+          298.97381591796875
+        ],
+        [
+          -86.6945571899414,
+          150.595703125,
+          231.90170288085938
+        ],
+        [
+          -86.6828842163086,
+          150.65426635742188,
+          231.9040069580078
+        ],
+        [
+          -86.69454956054688,
+          150.595703125,
+          231.90170288085938
+        ],
+        [
+          -86.62892150878906,
+          150.81387329101562,
+          232.0029754638672
+        ],
+        [
+          -86.7646713256836,
+          150.5958251953125,
+          231.94595336914062
+        ],
+        [
+          -86.76612091064453,
+          150.59617614746094,
+          231.94561767578125
+        ],
+        [
+          -86.7710952758789,
+          150.59645080566406,
+          231.94448852539062
+        ],
+        [
+          -86.75936889648438,
+          150.60791015625,
+          231.9473876953125
+        ],
+        [
+          -86.71831512451172,
+          150.595703125,
+          231.8970184326172
+        ],
+        [
+          -86.71600341796875,
+          150.595703125,
+          231.8974609375
+        ],
+        [
+          -86.70553588867188,
+          150.595703125,
+          231.8995361328125
+        ],
+        [
+          -86.73168182373047,
+          150.59690856933594,
+          231.89437866210938
+        ],
+        [
+          -86.71040344238281,
+          150.59690856933594,
+          231.89857482910156
+        ],
+        [
+          -86.69219207763672,
+          150.5989532470703,
+          231.900390625
+        ],
+        [
+          -86.73151397705078,
+          150.5989532470703,
+          231.8944091796875
+        ],
+        [
+          -86.7247543334961,
+          150.5989532470703,
+          231.89573669433594
+        ],
+        [
+          -86.6954116821289,
+          150.60342407226562,
+          231.9015350341797
+        ],
+        [
+          -86.72882843017578,
+          150.60560607910156,
+          231.8949432373047
+        ],
+        [
+          -86.73210906982422,
+          150.60560607910156,
+          231.894287109375
+        ]
+      ],
+      "stationary": [
+        -86.74730682373047,
+        150.60560607910156,
+        231.89129638671875
+      ]
+    },
+    "comparison": {
+      "native_last40_distance": 0.00039650837586017713,
+      "noclip_last40_distance": 0.037469878989216866
+    },
+    "off": {
+      "state": {
+        "cursor": 9,
+        "speed": 3,
+        "flight_speed": 0,
+        "enabled": 15,
+        "alpha": 0,
+        "tab": 0,
+        "age": 1,
+        "scroll": 1,
+        "tab_cursor": [
+          9,
+          5
+        ],
+        "tab_scroll": [
+          1,
+          0
+        ],
+        "age_cursor": [
+          0,
+          5
+        ],
+        "age_scroll": [
+          0,
+          0
+        ],
+        "cheat_sections": 3,
+        "travel_sections": [
+          64,
+          8
+        ],
+        "return_age": 1,
+        "travel_target": 2438026575,
+        "travel_request": 0,
+        "initialized": true,
+        "open": false,
+        "consent": true,
+        "prompt": false,
+        "travel_prompt": false,
+        "can_return": true,
+        "preferences_dirty": false,
+        "notice": "Collision restored at a checked nearby position.",
+        "preferences": {
+          "generation": 194,
+          "normal": 3,
+          "flight": 0,
+          "favorites": [
+            3039099700,
+            1870487544,
+            2503292773,
+            2438026575
+          ]
+        },
+        "phase": 0
+      },
+      "position": [
+        -86.74730682373047,
+        150.595703125,
+        231.88739013671875
+      ],
+      "ack": {
+        "restore_request": 104,
+        "restore_complete": 104,
+        "restore_nearby": 104,
+        "restore_fallback": 0
+      }
+    },
+    "complete": true,
+    "limit": "The long sweep reached beyond the inner field and was conservatively restored on lost support. The separate short repeated traversal proves the supported fence crossing and checked OFF inside the field."
+  },
+  "xinput_hardware_check": {
+    "return_codes": [
+      1167,
+      1167,
+      1167,
+      1167
+    ],
+    "limit": "Read-only XInput check; SDL/non-XInput devices and physical input acceptance are not established."
+  },
+  "save_reload": {
+    "module": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "before": {
+      "cursor": 8,
+      "speed": 3,
+      "flight_speed": 2,
+      "enabled": 175,
+      "alpha": 0,
+      "tab": 0,
+      "age": 1,
+      "scroll": 1,
+      "tab_cursor": [
+        8,
+        5
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        0,
+        5
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        64,
+        8
+      ],
+      "return_age": 1,
+      "travel_target": 2438026575,
+      "travel_request": 0,
+      "initialized": true,
+      "open": false,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": true,
+      "preferences_dirty": false,
+      "notice": "",
+      "preferences": {
+        "generation": 195,
+        "normal": 3,
+        "flight": 2,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773,
+          2438026575
+        ]
+      },
+      "phase": 0
+    },
+    "above": [
+      -81.68408966064453,
+      150.5955047607422,
+      257.13800048828125
+    ],
+    "clipped": [
+      -81.68408966064453,
+      144.52169799804688,
+      257.13800048828125
+    ],
+    "unsafe_save_cancelled_hashes_unchanged": true,
+    "input_note": "First confirmation used the native default Cancel; it was not a reload. After observing the steady dialog, Up selected Load before Confirm.",
+    "after": {
+      "cursor": 8,
+      "speed": 0,
+      "flight_speed": 2,
+      "enabled": 0,
+      "alpha": 175,
+      "tab": 0,
+      "age": 1,
+      "scroll": 1,
+      "tab_cursor": [
+        8,
+        5
+      ],
+      "tab_scroll": [
+        1,
+        0
+      ],
+      "age_cursor": [
+        0,
+        5
+      ],
+      "age_scroll": [
+        0,
+        0
+      ],
+      "cheat_sections": 3,
+      "travel_sections": [
+        64,
+        8
+      ],
+      "return_age": 0,
+      "travel_target": 0,
+      "travel_request": 0,
+      "initialized": true,
+      "open": true,
+      "consent": true,
+      "prompt": false,
+      "travel_prompt": false,
+      "can_return": false,
+      "preferences_dirty": false,
+      "notice": "",
+      "preferences": {
+        "generation": 195,
+        "normal": 3,
+        "flight": 2,
+        "favorites": [
+          3039099700,
+          1870487544,
+          2503292773,
+          2438026575
+        ]
+      },
+      "phase": 0
+    },
+    "load_seconds": 9.07799999999952,
+    "position_after": [
+      -119.78282928466797,
+      96.61579895019531,
+      58.69283676147461
+    ],
+    "complete": true,
+    "checked_save_file_count": 15
+  },
+  "end_of_native_run_identity": {
+    "module_sha256": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "text_bytes": 57672,
+    "expected_text_sha256": "6d8a1479a543a0ab66bfd1510e7b655b941a3174ac0b21686f2fa6cf8a7bcddc",
+    "running_text_sha256": "6d8a1479a543a0ab66bfd1510e7b655b941a3174ac0b21686f2fa6cf8a7bcddc"
+  },
+  "module_build_validation": {
+    "default_and_private_main_sha256_match": true,
+    "expected_module_sha256": "f95dfb15faeaf42e2567d5f94161b1cb1a462b00d7f8df5dd1aa6a7f4edecfdd",
+    "private_native_constructor_guard": "passed; final store +0x1b1b inside 0x1b20"
+  },
+  "standalone_no_debug": {
+    "observed": true,
+    "scope": "Actual Build177 GUI, ordinary keyboard mappings to logical Player1; local debug listener absent. R3 opened menu, all visible core toggles OFF/normal1x, stored flight2x; RB switched tabs, A expanded Favorites, newly stored ranch Favorite appeared, R3 closed/resumed. No physical input acceptance. Private keyboard latches restored after closing."
+  },
+  "builtin_patch_scope": {
+    "max_resolution": "applied",
+    "fps_unlock": "applied",
+    "dynamic_fps_by_dark": "skipped by emulator because included in applied built-in patch",
+    "off_control": "not repeated on Build177"
+  }
+}

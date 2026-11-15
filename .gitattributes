@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# This reference registry is pinned byte-for-byte, including its original CRLF.
+src/destinations.inc -text whitespace=cr-at-eol
