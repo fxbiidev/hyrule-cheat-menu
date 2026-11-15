@@ -307,7 +307,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
         {"One valid hit defeats supported ordinary enemies.", "Bosses and scripted actors stay protected."},
         {"Scales supported attacks from Link.", "One Hit Kill overrides; your multiplier stays selected."},
         {"Left stick moves, right stick rotates. RT up, LT down.", "R3 and B together exit at any time."},
-        {"Safe inventory tools.", "Only verified owned ammunition is editable."}
+        {"Safe inventory tools.", "Confirmed ownership and quantity changes."}
     };
     uint32_t gold = pixel(c, 0xd8ba78, 255), bright = pixel(c, 0xf0ebd8, 255);
     uint32_t muted = pixel(c, 0x97b3a5, 255), green = pixel(c, 0x91dfb2, 255);
@@ -389,7 +389,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
                 quantity_text(state_label, sizeof state_label, quantity, entry->capacity);
                 state = state_label;
                 if (!entry->age_allowed || !entry->owned) color = muted;
-            } else { state = entry->owned ? "OWNED" : "NONE"; if (!entry->owned) color = muted; }
+            } else { state = entry->owned ? "OWNED" : "NOT OWNED"; if (!entry->owned) color = muted; }
         } else if (row.kind == DESTINATION_ROW) {
             name_x = 38; name = destination_label(row.value);
             if (row.parent == GROUP_FAVORITES) {
@@ -404,15 +404,17 @@ static void draw_panel(Canvas *c, uint32_t flags) {
             name = "Return to Previous Location"; name_x = 22;
             if (!menu.can_return || !(available & (1u << TRAVEL))) color = muted;
         }
-        char clipped[48]; unsigned length = 0, maximum = ((state[0] ? 216 : 260) - name_x) / 6;
+        bool ownership_badge = row.kind == ITEM_ROW && !inventory_catalog[row.value].quantity_editable;
+        char clipped[48]; unsigned length = 0, maximum = ((ownership_badge ? 198 : state[0] ? 216 : 260) - name_x) / 6;
         while (name[length] && length < maximum && length < sizeof clipped - 1) { clipped[length] = name[length]; ++length; }
         if (name[length] && length >= 3) clipped[length - 1] = clipped[length - 2] = clipped[length - 3] = '.';
         clipped[length] = 0; label(c, name_x, y, clipped, color);
         if (state[0]) {
-            bool on = state[0] == 'O' && state[1] == 'N'; unsigned length_state = 0;
+            bool on = state[0] == 'O' && (state[1] == 'N' || state[1] == 'W'); unsigned length_state = 0;
             while (state[length_state]) ++length_state;
-            rect(c, 219, y - 2, 44, 11, pixel(c, on ? 0x2a5a3d : 0x122f26, 250));
-            label(c, 241 - (int)length_state * 3, y, state, on ? green : muted);
+            rect(c, ownership_badge ? 201 : 219, y - 2, ownership_badge ? 62 : 44, 11,
+                pixel(c, on ? 0x2a5a3d : 0x122f26, 250));
+            label(c, (ownership_badge ? 232 : 241) - (int)length_state * 3, y, state, on ? green : muted);
         }
     }
     if (count > VISIBLE_ROWS) {
@@ -424,7 +426,9 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     char item_detail[128];
     if (menu.item_prompt && menu.item_prompt_index < INVENTORY_COUNT) {
         first = inventory_catalog[menu.item_prompt_index].name;
-        unsigned used = append_text(item_detail, 0, sizeof item_detail, "Set quantity to ");
+        unsigned used = append_text(item_detail, 0, sizeof item_detail,
+            menu.item_prompt_quantity == 0 ? "REMOVE ITEM. Quantity: " :
+            !inventory_catalog[menu.item_prompt_index].quantity_editable ? "ADD ITEM. Quantity: " : "SET ITEM QUANTITY: ");
         char number[12];
         number_text(number, (unsigned)menu.item_prompt_quantity);
         used = append_text(item_detail, used, sizeof item_detail, number);
@@ -459,16 +463,20 @@ static void draw_panel(Canvas *c, uint32_t flags) {
         first = item->name;
         if (!menu.inventory.valid || !entry->valid) second = "Inventory unavailable. Wait for safe gameplay.";
         else if (!entry->age_allowed) second = "This item is restricted to the other age.";
-        else if (!entry->owned && item->quantity_editable) second = "Acquire this item normally first.";
-        else if (!entry->can_set) second = "Read-only equipment. Acquire it through normal gameplay.";
+        else if (!entry->can_set) second = "No verified safe operation. Check capacity or reload after an uncertain update.";
         else if (menu.enabled & (1u << ITEMS)) second = "Disable Infinite Items before editing quantities.";
-        else second = "Edit owned ammunition within its unlocked capacity. Every change asks for confirmation.";
-        tag = entry->can_set ? "CONFIRM BEFORE APPLY" : "VIEW EQUIPMENT";
+        else second = item->quantity_editable ?
+            "Add or remove stock within native capacity. Left-Right drafts quantity; X refills." :
+            "Edit real equipment ownership. Removal restores valid native equipment.";
+        tag = entry->owned ? "OWNED / REMOVE ITEM" : "NOT OWNED / ADD ITEM";
         if (menu.item_edit_index == selected.value && menu.item_quantity != entry->count) tag = "DRAFT / NOT APPLIED";
-        hint = entry->can_set ? "Left-Right Qty / A Apply / X Fill / Y Empty" : "LB-RB Tabs / B Category / R3 Close";
+        hint = !entry->can_set ? "LB-RB Tabs / B Category / R3 Close" :
+            item->quantity_editable && menu.item_edit_index == selected.value && menu.item_quantity != entry->count ?
+            "Left-Right Qty / A Apply / X Fill / Y Remove" :
+            entry->owned ? "A REMOVE ITEM / LB-RB Tabs / B Category" : "A ADD ITEM / LB-RB Tabs / B Category";
     } else if (selected.kind == ITEM_SECTION) {
-        first = "Browse owned equipment and ammunition.";
-        second = "Equipment is read-only. Editable quantities respect age and capacity.";
+        first = "Browse equipment and ammunition.";
+        second = "Add or remove supported items. Every change requires confirmation.";
         tag = "SAFE ITEM MANAGER";
         hint = "A Expand / LB-RB Tabs / B Back";
     } else if (selected.kind == DESTINATION_ROW) {
@@ -490,7 +498,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     rect(c, 12, 233, WIDTH - 24, 1, trim); label(c, 16, 242, hint, gold);
     label(c, 16, 256, tag, muted); label(c, 294, 256, "R3 OPEN / CLOSE", muted);
     rect(c, 12, 268, WIDTH - 24, 1, trim);
-    label(c, 16, 275, "Created by fxbii.dev", muted); label(c, 354, 275, "V1.1.0", gold);
+    label(c, 16, 275, "Created by fxbii.dev", muted); label(c, 354, 275, "V1.1.1", gold);
 }
 
 static void blend_panel(Canvas *canvas, const uint32_t *scene, unsigned fade) {

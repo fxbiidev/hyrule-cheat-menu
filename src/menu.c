@@ -236,11 +236,11 @@ static void item_input(Menu *menu, MenuRow selected, uint32_t pressed, unsigned 
         return;
     }
     if (!entry->age_allowed) { menu->notice = "This item is restricted to the other age."; return; }
-    if (!entry->owned && inventory_catalog[index].quantity_editable) { menu->notice = "Acquire this item normally first."; return; }
-    if (!entry->can_set) { menu->notice = "Read-only gear. Acquire equipment in the game."; return; }
+    if (!entry->can_set) { menu->notice = "No verified safe inventory operation is available."; return; }
     if (menu->enabled & (1u << ITEMS)) { menu->notice = "Disable Infinite Items before editing."; return; }
     int delta = (pressed & RIGHT ? 1 : 0) - (pressed & LEFT ? 1 : 0);
     if (delta) {
+        if (!inventory_catalog[index].quantity_editable) return;
         int next = menu->item_quantity + delta;
         if (next >= 0 && next <= entry->capacity) menu->item_quantity = next;
         return;
@@ -256,7 +256,10 @@ static void item_input(Menu *menu, MenuRow selected, uint32_t pressed, unsigned 
         action = INVENTORY_REMOVE;
         quantity = 0;
     } else if (!(pressed & CONFIRM)) return;
-    if (quantity == entry->count) { menu->notice = "Adjust with Left-Right, X refill or Y empty."; return; }
+    else if (!inventory_catalog[index].quantity_editable || quantity == entry->count) {
+        action = entry->owned ? INVENTORY_REMOVE : INVENTORY_SET;
+        quantity = entry->owned ? 0 : 1;
+    }
     menu->item_prompt_index = index;
     menu->item_prompt_quantity = quantity;
     menu->item_action = action;

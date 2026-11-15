@@ -21,26 +21,26 @@ jobs:
       - name: Compile the ARM64 module from the verified profile
         run: python build.py --zig python-zig --source-archive
       - name: Run host tests and check the distribution
-        run: python tests/run_tests.py --zig python-zig --source-package dist/Hyrule-Cheat-Menu-v1.1.0-source.zip
+        run: python tests/run_tests.py --zig python-zig --source-package dist/Hyrule-Cheat-Menu-v1.1.1-source.zip
       - uses: actions/upload-artifact@v7
         with:
-          name: Hyrule-Cheat-Menu-v1.1.0
+          name: Hyrule-Cheat-Menu-v1.1.1
           path: |
-            dist/Hyrule-Cheat-Menu-v1.1.0.zip
-            dist/Hyrule-Cheat-Menu-v1.1.0.zip.sha256
-            dist/Hyrule-Cheat-Menu-v1.1.0-source.zip
-            dist/Hyrule-Cheat-Menu-v1.1.0-source.zip.sha256
+            dist/Hyrule-Cheat-Menu-v1.1.1.zip
+            dist/Hyrule-Cheat-Menu-v1.1.1.zip.sha256
+            dist/Hyrule-Cheat-Menu-v1.1.1-source.zip
+            dist/Hyrule-Cheat-Menu-v1.1.1-source.zip.sha256
           if-no-files-found: error
           retention-days: 7
 
   publish:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.head_commit.message == 'Release v1.1.0'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.head_commit.message == 'Release v1.1.1'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     concurrency:
-      group: publish-v1.1.0
+      group: publish-v1.1.1
       cancel-in-progress: false
     env:
       GH_TOKEN: ${{ github.token }}
@@ -51,33 +51,33 @@ jobs:
           ref: ${{ github.sha }}
       - uses: actions/download-artifact@v8
         with:
-          name: Hyrule-Cheat-Menu-v1.1.0
+          name: Hyrule-Cheat-Menu-v1.1.1
           path: dist
       - name: Verify the tested archive checksums
         working-directory: dist
         run: |
-          sha256sum --check Hyrule-Cheat-Menu-v1.1.0.zip.sha256
-          sha256sum --check Hyrule-Cheat-Menu-v1.1.0-source.zip.sha256
+          sha256sum --check Hyrule-Cheat-Menu-v1.1.1.zip.sha256
+          sha256sum --check Hyrule-Cheat-Menu-v1.1.1-source.zip.sha256
       - name: Refuse an existing release or tag
         run: |
-          if gh release view v1.1.0 > /dev/null 2>&1; then
-            echo "::error::Release v1.1.0 already exists; refusing to modify it."
+          if gh release view v1.1.1 > /dev/null 2>&1; then
+            echo "::error::Release v1.1.1 already exists; refusing to modify it."
             exit 1
           fi
-          existing_tag="$(git ls-remote --tags origin refs/tags/v1.1.0)"
+          existing_tag="$(git ls-remote --tags origin refs/tags/v1.1.1)"
           if [ -n "$existing_tag" ]; then
-            echo "::error::Tag v1.1.0 already exists; refusing to reuse or move it."
+            echo "::error::Tag v1.1.1 already exists; refusing to reuse or move it."
             exit 1
           fi
-      - name: Publish the tested v1.1.0 release
+      - name: Publish the tested v1.1.1 release
         run: |
-          gh release create v1.1.0 \
+          gh release create v1.1.1 \
             --target "$GITHUB_SHA" \
-            --title "Hyrule Cheat Menu v1.1.0" \
+            --title "Hyrule Cheat Menu v1.1.1" \
             --notes-file RELEASE_NOTES.md \
             --latest \
-            dist/Hyrule-Cheat-Menu-v1.1.0.zip \
-            dist/Hyrule-Cheat-Menu-v1.1.0.zip.sha256 \
-            dist/Hyrule-Cheat-Menu-v1.1.0-source.zip \
-            dist/Hyrule-Cheat-Menu-v1.1.0-source.zip.sha256 \
+            dist/Hyrule-Cheat-Menu-v1.1.1.zip \
+            dist/Hyrule-Cheat-Menu-v1.1.1.zip.sha256 \
+            dist/Hyrule-Cheat-Menu-v1.1.1-source.zip \
+            dist/Hyrule-Cheat-Menu-v1.1.1-source.zip.sha256 \
             RELEASE_NOTES.md

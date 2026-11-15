@@ -1,3 +1,22 @@
+# Progress — Item Manager ownership patch v1.1.1
+
+15 November 2026. **Native ownership/persistence and host acceptance PASS. Local release GO within the documented scope; final archive and external delivery gates are enforced before publication.**
+
+- **Recovery/safety:** clean main recovered at published v1.1.0 `fbfb5cb4e9ebff0987fc2d5f353abbd547bd3351`; safe branch `fix/item-manager-ownership`. Prior history/releases, public visibility and licenses remain intact. User explicitly authorized verified patch publication.
+- **Fix:**20 canonical IDs now support real native ownership add/remove; six stacks accept first grants within native capacity. Empty stock displays NOT OWNED. Approved Emerald & Gold tabs/navigation remain; A prepares ADD ITEM/REMOVE ITEM or a drafted quantity, separate A confirms.
+- **Save safety:** native give/consume and equipment cleanup; no raw save/quest writes. Current-age, capacity, Hookshot/Longshot slot and Bow/Slingshot ammunition dependencies. Deferred acknowledgement and Save/travel/epoch/uncertainty fences remain. Infinite Items now checks current tool ownership before refilling cached arrows/seeds.
+- **Exact native-tested module:** `5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443`; loaded 82,728 RX bytes match `09346ed8625397d0856986ac42bc37aec05e54ce2990e99254a49338eff044ef` on the pinned Build 177 target.
+- **Native results:** absent Goron 0→add1→stock Adult equip; stock Save/Load restores granted ownership/equipment after unsaved removal. Equipped removal0 restores normal tunic; saved removal survives an unsaved re-add and stock Load. Mirror Shield/Iron Boots equipped removal and Hammer grants/removals pass. All six stacks empty/add/refill across both ages; age/slot/tool and Infinite conflicts refused. Removed Bow/arrows stay0 with Infinite ON; normal restored Bow firing30→29 works.
+- **Host evidence:** complete runner with19 C fixtures, archive checks and 936 renderer cases passes. All 20 ID ownership operations and original feature regressions covered. Failure fixtures remain distinct from native gameplay evidence.
+- **Evidence:** [test report](TEST_REPORT.md), [inventory mechanisms](docs/inventory-verification.md), [sanitized final native observations](docs/v1.1.1-native-results.json). Earlier f7a prototype and all v1.1.0 results retain separate identities.
+- **Cleanup complete:** isolated emulator stopped; all 15 copied saves, two preferences, two ExeFS files and three configs restored byte-identically. Owner installation/saves untouched.
+- **Brief native smoke:** actual cross-age travel and both tab wrap directions pass; Free Camera translation keeps Link stationary and R3+B restores native view.
+- **Delivery gates:** freeze documents/evidence, rebuild/revalidate installation/source archives and clean-source byte reproduction, then create the release commit. Require branch CI before main, publication job success, exact tag and downloaded byte checks. These later external results are reported separately after commit.
+
+The previous release record below retains its original version, binary identities and pre-publication evidence.
+
+---
+
 # Progress — Hyrule Cheat Menu v1.1.0
 
 15 November 2026. **DESIGN APPROVED. Local v1.1.0 release GO: runtime, host, package and clean-source reproduction acceptance passed.** CI/publication/download verification follows the release commit; no future external success is claimed here.

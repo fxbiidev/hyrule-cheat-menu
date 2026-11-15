@@ -34,11 +34,12 @@ enum InventoryAction { INVENTORY_SET, INVENTORY_REFILL, INVENTORY_REMOVE };
 enum InventoryResult {
     INV_OK, INV_UNCHANGED, INV_UNAVAILABLE, INV_STALE, INV_READ_ONLY, INV_AGE_RESTRICTED,
     INV_NOT_OWNED, INV_CAPACITY, INV_CONFIRM_REQUIRED, INV_INFINITE_ITEMS, INV_NATIVE_FAILED,
-    INV_PENDING, INV_TIMEOUT, INV_BUSY
+    INV_PENDING, INV_TIMEOUT, INV_BUSY,
+    INV_SLOT_CONFLICT, INV_REMOVE_AMMO_FIRST, INV_ADD_TOOL_FIRST
 };
 
-// A prior valid snapshot retains positive acquisition evidence only for this actor,
-// pouch and save epoch. On failure the output is invalidated, never partly published.
+// Read real native stock/ownership, including absent items. On failure the output
+// is invalidated, never partly published. No normal-acquisition evidence is needed.
 bool inventory_read(uintptr_t pouch, uintptr_t actor, unsigned epoch, InventorySnapshot *snapshot);
 // All mutations require a separate confirmation and a still-current snapshot.
 // Disable Infinite Items before editing so its refill cannot undo a confirmed edit.

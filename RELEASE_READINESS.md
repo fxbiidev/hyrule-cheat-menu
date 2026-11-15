@@ -1,43 +1,33 @@
-# Release readiness — Hyrule Cheat Menu v1.1.0
+# Release readiness — Hyrule Cheat Menu v1.1.1
 
-15 November 2026. **GO for local v1.1.0 release on the supported target.** Runtime, host, package and clean-source reproduction acceptance have passed. Live CI, tag/publication and downloaded assets are verified separately after commit. Design approval is complete; another design approval is not required. This is the current v1.1.0 decision; historical v1.0.0 GO decisions apply only to their own binaries.
+15 November 2026. **Native and host acceptance PASS. Local release GO within the scope below; frozen-source package and external delivery checks are mandatory before publication.** Published v1.1.0 is preserved at `fbfb5cb4e9ebff0987fc2d5f353abbd547bd3351`; this is a separate backward-compatible patch.
 
-## Supported target and frozen runtime identity
+## Exact supported runtime
 
-Windows Lichii **Build 177**, displayed update **2.0.0**, title `0400486024DEC000`, main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`. Compressed main SHA-256: `7db9ddfda088c22d219ef13496decd7077c68cd67d4b37f53f4ac46a082768f2`.
+Windows Lichii Build 177, displayed update 2.0.0, title `0400486024DEC000`, main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`.
 
-- Module SHA-256: **`ab2a5a1e6a44b90ebb5698cbbb64c667bcf620addc40709dc9e7e930abe230d5`**.
-- Running RX: **82,728 bytes**, SHA-256 **`8d9592d6c54982efb573cb331000a7a8b33553a6fa10678d7eb2cd5f0b133922`**.
-- Exact results and prior-module provenance: [TEST_REPORT.md](TEST_REPORT.md), [sanitized native evidence](docs/v1.1.0-native-results.json).
+- Module SHA-256: `5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443`.
+- Loaded RX: 82,728 bytes; SHA-256 `09346ed8625397d0856986ac42bc37aec05e54ce2990e99254a49338eff044ef`.
+- All loaded RX bytes matched the independently retained module model before native actions.
 
-## Acceptance status
+## Acceptance gates
 
-| Gate | Current evidence / remaining work |
+| Gate | Evidence |
 |---|---|
-| Owner-approved design | **PASS.** CHEATS / FAST TRAVEL / ITEM MANAGER, uppercase subtitle `STANDALONE CHEAT MENU FOR OOTR`, exact credit `Created by fxbii.dev`. |
-| Combat | Current module passes accepted **2→3** Master Sword at 1.5×, **2→4** Fairy Bow at 2×, One Hit Kill **2→3** against life 3 despite stored 3×, then immediate stored 3× resumption **2→6**. **PASS for all four factors and priority/OFF.** At 1× a fresh Blue HP3 became HP1 with modification count unchanged; God-OFF incoming damage at outgoing 3× remained native 2, Link HP40→38. |
-| Free Camera | **PASS in current native scope.** Translation 28.968 units, rotation and both triggers left Link exactly stationary. R3+B/menu OFF restored native eye within 3.55e-5/1.81e-5. Fly+Noclip combination and strict held-exit edge kept zero Link movement, then resumed Fly after neutral. Fast Travel deactivated camera. |
-| Safe Item Manager | **PASS in current native scope.** Arrow cancel/decrement/increment/empty/refill **5/4/5/0/30**, verified notices, nuts/bombs/Bombchus decrement/refill and gear/age/Infinite Items refusals. Young Seeds **40→39→40**. Stock Save/load restores **7→3 unsaved→7 loaded**. |
-| Reset / upgrade compatibility | **PASS in measured scope.** Current native Load clears active controls and effective speed/damage while preserving stored damage, Flight Speed and four Favorites. Frozen v1→v2 migration and all-Favorite/corrupt-storage fixtures pass. Active-camera save interruption is covered by host fixtures, not a separately recorded native load with camera ON. |
-| Existing functions / UI | **PASS for targeted checks.** God-OFF natural Fly OFF from 24.935 units retained health 40. Native Young travel, settled Adult Return and Kakariko follow-up passed. Favorites **4→5→4** restored original IDs exactly; both three-tab wrap directions restored item selection/viewport. Original resource/movement/recovery/Save/travel fixtures pass; earlier broad sweeps retain their historical scope. |
-| ARM64 / host / graphics | **PASS for the completed checks:** warnings-as-errors ARM64 build, 21 C fixtures, 744 renderer cases and executed bridge ABI checks. |
-| Install/source ZIP | **PASS.** Full build/runner validates install and source ZIP membership, checksums, canonical metadata and exact maintained bytes. Packaged NSO is byte-identical to native-tested `ab2a5a1e…`. Clean extracted source reproduces both ZIPs and SHA sidecars byte for byte. Revalidate the final document-only refresh before publication. |
-| CI / publication / download | **Delivery verification after commit.** Confirm successful CI, exact tag target, release assets and downloaded checksums; no future pass or release URL is claimed by this pre-publication source document. |
+| Goron Tunic ownership and native inventory | PASS: genuinely absent0 → confirmed add1 → stock equipment screen and Adult equip. |
+| Granted ownership persistence | PASS: save equipped Goron 1 → unsaved removal0 → stock Load restores Goron 1 and equipped `Armor_Adult_Goron`. |
+| Removal persistence / equipped safety | PASS: equipped removal0 restores `Armor_Adult_Normal`; save removal0 → unsaved add1 → stock Load restores absent0 / normal tunic. |
+| Other equipment categories | PASS: Mirror Shield and Iron Boots granted, equipped through stock UI, removed with saved references cleared; unowned Megaton Hammer0→1→0. |
+| Stack / dependency policy | PASS for measured Adult nuts/arrows/bombs/Bombchus0→1→capacity; Bow-with-arrows and Hookshot/Longshot conflicts refused. Young sticks/seeds0→1→20/40 pass; both-age refusals pass. Infinite ON does not recreate removed Bow/arrows; ordinary restored Bow firing30→29 works. |
+| Host / ARM64 | PASS: warnings-as-errors module build,19 C fixtures, all 20 ID ownership cases, age/capacity/dependency/confirmation/epoch tests, renderer 936 cases and original feature regressions. |
+| Frozen installation/source archives | The complete build/runner validates exact maintained bytes, checksums, NSO hashes and archive membership; final documents/evidence are rebuilt and clean-source reproduced before commit. |
+| Isolated test cleanup | PASS: emulator stopped; all 15 copied saves, two preferences, two ExeFS files and three configs equal baseline bytes. Owner data untouched; cleanup is recorded in public native evidence. |
+| CI / publication / downloaded assets | Pending exact release commit; verify successful branch CI before main, main publication job, tag target and downloaded asset bytes. |
 
-Release blockers are reproducible crashes/save corruption, game-breaking softlocks, unsafe mandatory features, serious camera/controller failures and major v1.0.0 regressions. Minor cosmetic or additional unsupported-combination coverage can be deferred. All required local gates pass within the documented scope; no unresolved release blocker is known there. CI/publication and downloaded assets are verified against the exact committed artifacts as delivery proceeds.
+The approved Emerald & Gold design and three tabs/controller navigation are preserved. Preference schema remains 2 with existing migration. Runtime changes are confined to Item Manager and the required Infinite Items ownership interaction; movement, Free Camera, combat, travel and save-reset implementations remain intact and retain host regressions. Historical native results for those features keep their own version/module scope in TEST_REPORT.md.
 
-## Supported limitations
+## Boundaries and rights
 
-Combat is restricted to eight exact ordinary-enemy variants with checked player attribution; Link, friendly NPCs, bosses, minibosses and unknown targets remain native. Native caps and phases remain in force. Inventory has 20 real-ID views, six acquired-stack quantity editors and fourteen read-only gear entries; it cannot grant unsafe quest/equipment progression. Every mutation requires confirmation and Infinite Items OFF. Pending native updates hold new edits, Save/autosave and travel; timeout or ambiguous results make the save epoch read only until normal reload, without retry or rollback.
+The 20-ID catalog excludes quest/trade items, bottles, dungeon keys, beans, upgrades and arbitrary save addresses. Current age, native capacity, shared Hookshot/Longshot slot and Bow/Slingshot ammunition prerequisites are enforced. Stock removal empties ammunition without deleting its tool/bag. Pending updates keep existing Save/travel holds; uncertain updates require normal save reload. Broad maps/progression/peripheral/soak testing and native timeout fault injection are not claimed.
 
-Free Camera leaves the world running and has a direct R3+B exit; input remains drained through neutral release. If native Fly recovery is refused while airborne/clipped, Fly/menu stay visibly ON. Descend under Fly, or use Fly+Noclip to ascend clear of a floor, restore collision and disable Fly. Automatic anchor teleportation is not guaranteed. Savestates require a normal save reload. Additional maps, equipment/progression states, physical controllers, displays and soak coverage retain their disclosed scope.
-
-## Cleanup and authorized publication
-
-The isolated emulator is stopped. All **15 copied save hashes**, isolated preferences and the baseline ExeFS module match their pretest state. The owner installation and saves were not modified.
-
-## Rights and delivery
-
-Publish only to the existing public [fxbiidev/hyrule-cheat-menu](https://github.com/fxbiidev/hyrule-cheat-menu), whose identity and write/admin access were verified. Preserve history, visibility, licenses/notices and published v1.0.0 assets. The prepared workflow requires a successful build from main with exact commit message `Release v1.1.0`, refuses an existing v1.1.0 tag/release and publishes the tested archives. Final tag target, release URL, assets and downloaded SHA-256 still require verification.
-
-The supplied Clay Mullis Fast Travel registry MIT notice is retained; no project-wide license is added. Game assets/binaries, keys, owner saves, reference compiled modules and private QA clients are excluded. Discord support remains `DISCORD_INVITE_URL_TO_BE_ADDED_BY_OWNER`.
+Publish only after these local gates pass and no critical crash, softlock, save-corruption or major regression remains. No such blocker was observed in the completed native/host scope. User publication authorization covers the existing public repository. The workflow publishes only exact `Release v1.1.1` on main after its build, refuses existing v1.1.1 tag/release and uploads the tested artifacts. Preserve previous history/releases/visibility and third-party notices. No game files, keys, copied saves or private QA clients ship.

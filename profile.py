@@ -104,6 +104,8 @@ FUNCTIONS = {
     "action_guide_opened": (0x80A96B10, "7f2303d5ffc300d1fd7b01a9f31300f9"),
     "give_ammo": (0x8112D570, "7f2303d5fd7bbaa9fc6f01a9fa6702a9"),
     "consume_ammo": (0x833C4FA0, "7f2303d5fd7bbaa9fc6f01a9fa6702a9"),
+    "inventory_equipped": (0x80A91080, "7f2303d5ffc302d1fd7b06a9f93b00f9"),
+    "inventory_unequip": (0x833C6A40, "7f2303d5ffc302d1fd7b07a9f85f08a9"),
     "child_link": (0x804D6DB0, "7f2303d5ff8300d1fd7b01a9fd430091"),
     "ground_velocity": (0x809552F0, "7f2303d5ffc300d1fd7b02a9fd830091"),
     "swim_velocity": (0x83039C50, "7f2303d5ff0303d1ee2300fded33056d"),

@@ -52,6 +52,13 @@ void items_update(uintptr_t pouch, uintptr_t actor, unsigned observed[2], bool r
         if (generation != save_epoch()) return;
         if (amount < 0) continue;
         unsigned mask = 1u << i;
+        // These tools can be removed by Item Manager. Cached ammunition
+        // evidence must never recreate arrows/seeds after their tool is gone.
+        if (i == 0 || i == 2) {
+            int tool = count(pouch, ammo[i].tools[0]);
+            if (generation != save_epoch()) return;
+            if (tool != 1) { owned &= ~mask; continue; }
+        }
         if (amount) owned |= mask;
         if (!refill) continue;
         // Ask the native getter for independent persisted acquisition/use

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.1 — Item Manager ownership patch
+
+- Fix gear being read only and stack edits requiring normal acquisition. Confirmed native grants/removals now edit real ownership for the supported catalog, with clear ownership/actions and bounded quantities.
+- Retain native equipment cleanup, add shared-slot/tool-ammunition safeguards, and prevent cached Infinite Items ownership from restoring ammunition for removed tools.
+- Preserve approved tabs, controller navigation, schema-2 preferences and existing cheats/camera/movement/travel behavior. Verification is recorded separately in the current test report.
+
 ## v1.1.0 — 2026-11-15
 
 **Release validation passed.** The approved design, targeted native checks, host fixtures and reproducible install/source archives are complete. See [release readiness](RELEASE_READINESS.md) and [TEST_REPORT.md](TEST_REPORT.md) for actual binary identities and test results.

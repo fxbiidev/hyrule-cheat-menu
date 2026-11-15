@@ -6,17 +6,14 @@
 
 uintptr_t main_base = GAME_BASE;
 static unsigned epoch = 7, writes, count_calls;
-static bool child = true, ready = true, safe = true, readable = true, guide_ready = true, bombchu_used;
-static bool reset_count, reset_capacity, reset_age, reset_guide, reset_write, fail_write, partial_write;
+static bool child = true, ready = true, safe = true, readable = true;
+static bool reset_count, reset_capacity, reset_age, reset_write, fail_write, partial_write;
+static bool reset_equipped, unsafe_equipped, defer_unequip;
+static bool equipped[INVENTORY_COUNT];
 static bool defer_write;
 static int queued_index = -1, queued_quantity;
 static uint64_t now;
-static int amounts[INVENTORY_COUNT], capacities[INVENTORY_COUNT], bags[9];
-static const char *const bag_names[] = {
-    "Item_StickBag_Small", "Item_StickBag_Medium", "Item_StickBag_Large",
-    "Item_NutBag_Small", "Item_NutBag_Medium", "Item_NutBag_Large",
-    "Item_BombBag_Small", "Item_BombBag_Medium", "Item_BombBag_Large"
-};
+static int amounts[INVENTORY_COUNT], capacities[INVENTORY_COUNT];
 unsigned save_epoch(void) { return epoch; }
 uint64_t monotonic_ms(void) { return now; }
 bool world_safe(void) { return safe; }
@@ -34,11 +31,11 @@ static int mock_count(uintptr_t pouch, const char **name, unsigned alt, unsigned
     assert(pouch == 1 && !alt && !flags);
     ++count_calls;
     if (reset_count) { ++epoch; reset_count = false; }
-    for (unsigned i = 0; i < 9; ++i) if (!strcmp(*name, bag_names[i])) return bags[i];
     return amounts[index_of(*name)];
 }
 static int mock_capacity(uintptr_t pouch, const char **name, unsigned alt, uintptr_t flags) {
     assert(pouch == 1 && !alt && !flags);
+    assert(inventory_catalog[index_of(*name)].quantity_editable);
     if (reset_capacity) { ++epoch; reset_capacity = false; }
     return capacities[index_of(*name)];
 }
@@ -47,17 +44,18 @@ static unsigned mock_child(uintptr_t actor) {
     if (reset_age) { ++epoch; reset_age = false; }
     return child;
 }
-static unsigned mock_guide(uintptr_t unused, unsigned type) {
-    assert(!unused && type == 36);
-    if (reset_guide) { ++epoch; reset_guide = false; }
-    return bombchu_used;
+static unsigned mock_equipped(uintptr_t pouch, const char **name) {
+    assert(pouch == 1);
+    if (reset_equipped) { ++epoch; reset_equipped = false; }
+    if (unsafe_equipped) { safe = false; unsafe_equipped = false; }
+    return equipped[index_of(*name)];
 }
 static unsigned mock_give(uintptr_t pouch, const char **name, unsigned alt, int delta,
     unsigned a, unsigned b, unsigned c, unsigned d, unsigned e) {
     assert(pouch == 1 && !alt && !a && !b && !c && !d && !e);
     int i = index_of(*name);
     assert(inventory_busy()); // Save/travel hold is published before native dispatch.
-    assert(inventory_catalog[i].quantity_editable && delta > 0 && amounts[i] + delta <= capacities[i]);
+    assert(delta > 0 && amounts[i] + delta <= capacities[i]);
     ++writes;
     if (defer_write) { queued_index = i; queued_quantity = amounts[i] + delta; }
     else if (!fail_write) amounts[i] += partial_write ? delta - 1 : delta;
@@ -69,10 +67,11 @@ static void mock_consume(uintptr_t pouch, const char **name, unsigned delta, uns
     assert(pouch == 1 && !alt && !a && !b);
     int i = index_of(*name);
     assert(inventory_busy());
-    assert(inventory_catalog[i].quantity_editable && delta > 0 && delta <= (unsigned)amounts[i]);
+    assert(delta > 0 && delta <= (unsigned)amounts[i]);
     ++writes;
     if (defer_write) { queued_index = i; queued_quantity = amounts[i] - (int)delta; }
     else if (!fail_write) amounts[i] -= (int)delta;
+    if (!fail_write && !defer_write && !amounts[i] && !defer_unequip) equipped[i] = false;
     if (reset_write) { ++epoch; reset_write = false; }
 }
 static uintptr_t mock_singleton(uintptr_t address) {
@@ -81,8 +80,8 @@ static uintptr_t mock_singleton(uintptr_t address) {
     return ready;
 }
 static uintptr_t mock_pointer(uintptr_t address) {
-    assert(address == 0x84eb6888 || address == 0x84ea42a8);
-    return address == 0x84ea42a8 ? guide_ready : ready;
+    assert(address == 0x84eb6888);
+    return ready;
 }
 #define singleton mock_singleton
 #define pointer mock_pointer
@@ -98,27 +97,138 @@ int main(void) {
     for (unsigned i = 0; i < INVENTORY_COUNT; ++i) capacities[i] = i < INV_DEKU_STICKS ? 1 : 30;
     assert(inventory_read(1, 2, epoch, &snapshot) && snapshot.valid && snapshot.child);
     for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
-        assert(!snapshot.entries[i].owned && !snapshot.entries[i].can_set);
-        if (i < INV_DEKU_STICKS) assert(apply(&snapshot, i, INVENTORY_SET, 1) == INV_READ_ONLY);
+        assert(!snapshot.entries[i].owned);
+        assert(snapshot.entries[i].can_set == snapshot.entries[i].age_allowed);
     }
-    assert(apply(&snapshot, INV_BOMBS, INVENTORY_REFILL, 0) == INV_NOT_OWNED && !writes);
-    bags[0] = bags[3] = bags[6] = 1;
-    amounts[INV_BOW] = amounts[INV_SLINGSHOT] = amounts[INV_KOKIRI_SWORD] = 1;
+    // Every allowed ID can be granted from zero without acquisition evidence,
+    // then removed. Arrows/seeds retain their corresponding native tool.
+    for (unsigned age = 0; age < 2; ++age) {
+        child = age == 0;
+        for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
+            assert(inventory_read(1, 2, epoch, &snapshot));
+            if (!snapshot.entries[i].age_allowed) {
+                assert(apply(&snapshot, i, INVENTORY_SET, 1) == INV_AGE_RESTRICTED);
+                continue;
+            }
+            if (i == INV_ARROWS) amounts[INV_BOW] = 1;
+            if (i == INV_DEKU_SEEDS) amounts[INV_SLINGSHOT] = 1;
+            assert(inventory_read(1, 2, epoch, &snapshot));
+            assert(apply(&snapshot, i, INVENTORY_SET, 1) == INV_OK && amounts[i] == 1);
+            assert(inventory_read(1, 2, epoch, &snapshot) && snapshot.entries[i].owned);
+            equipped[i] = !inventory_catalog[i].quantity_editable;
+            assert(apply(&snapshot, i, INVENTORY_REMOVE, 0) == INV_OK && !amounts[i] && !equipped[i]);
+            assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[i].owned);
+            if (i == INV_ARROWS) amounts[INV_BOW] = 0;
+            if (i == INV_DEKU_SEEDS) amounts[INV_SLINGSHOT] = 0;
+        }
+    }
+    // Shared-slot and tool/ammunition dependencies are checked on the live
+    // snapshot, before any native dispatch. They need no gameplay acquisition.
+    unsigned dependency_writes = writes;
     assert(inventory_read(1, 2, epoch, &snapshot));
-    assert(snapshot.entries[INV_KOKIRI_SWORD].owned && !snapshot.entries[INV_KOKIRI_SWORD].can_set);
+    amounts[INV_LONGSHOT] = 1; // Other slot owner appeared after confirmation.
+    assert(apply(&snapshot, INV_HOOKSHOT, INVENTORY_SET, 1) == INV_SLOT_CONFLICT);
+    assert(writes == dependency_writes && !inventory_busy());
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(apply(&snapshot, INV_LONGSHOT, INVENTORY_REMOVE, 0) == INV_OK);
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(apply(&snapshot, INV_HOOKSHOT, INVENTORY_SET, 1) == INV_OK);
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    dependency_writes = writes;
+    assert(apply(&snapshot, INV_LONGSHOT, INVENTORY_REFILL, 0) == INV_SLOT_CONFLICT);
+    assert(writes == dependency_writes);
+    assert(apply(&snapshot, INV_HOOKSHOT, INVENTORY_REMOVE, 0) == INV_OK);
+    amounts[INV_LONGSHOT] = -1;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(apply(&snapshot, INV_HOOKSHOT, INVENTORY_SET, 1) == INV_UNAVAILABLE);
+    amounts[INV_LONGSHOT] = 0;
+    for (unsigned age = 0; age < 2; ++age) {
+        child = age != 0;
+        unsigned tool = child ? INV_SLINGSHOT : INV_BOW;
+        unsigned ammo = child ? INV_DEKU_SEEDS : INV_ARROWS;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        dependency_writes = writes;
+        assert(apply(&snapshot, ammo, INVENTORY_SET, 1) == INV_ADD_TOOL_FIRST);
+        assert(apply(&snapshot, ammo, INVENTORY_REFILL, 0) == INV_ADD_TOOL_FIRST);
+        assert(writes == dependency_writes && !inventory_busy());
+        capacities[ammo] = 0;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, ammo, INVENTORY_SET, 1) == INV_ADD_TOOL_FIRST);
+        capacities[ammo] = 30;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, tool, INVENTORY_SET, 1) == INV_OK);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, ammo, INVENTORY_REFILL, 0) == INV_OK);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        dependency_writes = writes;
+        assert(apply(&snapshot, tool, INVENTORY_REMOVE, 0) == INV_REMOVE_AMMO_FIRST);
+        assert(writes == dependency_writes && amounts[tool] == 1);
+        assert(apply(&snapshot, ammo, INVENTORY_REMOVE, 0) == INV_OK);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        amounts[ammo] = 1; // Stock changed after the removal confirmation.
+        assert(apply(&snapshot, tool, INVENTORY_REMOVE, 0) == INV_REMOVE_AMMO_FIRST);
+        amounts[ammo] = -1;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, tool, INVENTORY_REMOVE, 0) == INV_UNAVAILABLE);
+        amounts[ammo] = 0;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, tool, INVENTORY_REMOVE, 0) == INV_OK);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        amounts[ammo] = 3; // An existing orphan can still be emptied safely.
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, ammo, INVENTORY_SET, 4) == INV_ADD_TOOL_FIRST);
+        assert(apply(&snapshot, ammo, INVENTORY_SET, 2) == INV_OK);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, ammo, INVENTORY_REMOVE, 0) == INV_OK);
+        amounts[tool] = 2;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, ammo, INVENTORY_SET, 1) == INV_UNAVAILABLE);
+        amounts[tool] = 0;
+    }
+    assert(strstr(inventory_result_text(INV_SLOT_CONFLICT), "share an inventory slot"));
+    assert(strstr(inventory_result_text(INV_REMOVE_AMMO_FIRST), "ammunition"));
+    assert(strstr(inventory_result_text(INV_ADD_TOOL_FIRST), "Item Manager"));
+    child = false;
+    // A removed equipped tunic cannot be acknowledged while a native reference
+    // still points to it, even if its count has already reached zero.
+    amounts[INV_GORON_TUNIC] = 1; equipped[INV_GORON_TUNIC] = true; defer_unequip = true;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(apply(&snapshot, INV_GORON_TUNIC, INVENTORY_REMOVE, 0) == INV_PENDING);
+    assert(inventory_busy() && !amounts[INV_GORON_TUNIC]);
+    equipped[INV_GORON_TUNIC] = false;
+    assert(inventory_poll(1, 2, epoch) == INV_OK && !inventory_busy());
+    amounts[INV_GORON_TUNIC] = 1; equipped[INV_GORON_TUNIC] = true;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    reset_equipped = true;
+    assert(apply(&snapshot, INV_GORON_TUNIC, INVENTORY_REMOVE, 0) == INV_STALE && !inventory_busy());
+    equipped[INV_GORON_TUNIC] = false; defer_unequip = false;
+    // A same-epoch scene/world invalidation inside the final equipment getter
+    // cannot acknowledge success or authorize another edit without a reload.
+    amounts[INV_GORON_TUNIC] = 1;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    unsafe_equipped = true;
+    assert(apply(&snapshot, INV_GORON_TUNIC, INVENTORY_REMOVE, 0) == INV_NATIVE_FAILED);
+    assert(!inventory_busy());
+    safe = true;
+    assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[INV_GORON_TUNIC].can_set);
+    ++epoch; inventory_reset();
+    child = true;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(!snapshot.entries[INV_KOKIRI_SWORD].owned && snapshot.entries[INV_KOKIRI_SWORD].can_set);
     assert(snapshot.entries[INV_BOMBS].can_refill && snapshot.entries[INV_DEKU_STICKS].can_set);
     assert(snapshot.entries[INV_DEKU_SEEDS].can_set && !snapshot.entries[INV_ARROWS].age_allowed);
-    assert(apply(&snapshot, INV_ARROWS, INVENTORY_SET, 1) == INV_AGE_RESTRICTED && !writes);
+    unsigned initial_writes = writes;
+    assert(apply(&snapshot, INV_ARROWS, INVENTORY_SET, 1) == INV_AGE_RESTRICTED && writes == initial_writes);
     assert(inventory_apply(1, 2, epoch, &snapshot, INV_BOMBS, INVENTORY_SET, 1, false, false) == INV_CONFIRM_REQUIRED);
     assert(inventory_apply(1, 2, epoch, &snapshot, INV_BOMBS, INVENTORY_SET, 1, true, true) == INV_INFINITE_ITEMS);
-    assert(!writes);
+    assert(writes == initial_writes);
     assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 31) == INV_CAPACITY);
-    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, -1) == INV_CAPACITY && !writes);
-    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 7) == INV_OK && amounts[INV_BOMBS] == 7 && writes == 1);
+    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, -1) == INV_CAPACITY && writes == initial_writes);
+    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 7) == INV_OK && amounts[INV_BOMBS] == 7 && writes == initial_writes + 1);
     // Confirmation tied to an old count cannot stack or replay a previous edit.
-    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 7) == INV_STALE && writes == 1);
+    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 7) == INV_STALE && writes == initial_writes + 1);
     assert(inventory_read(1, 2, epoch, &snapshot));
-    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 7) == INV_UNCHANGED && writes == 1);
+    assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 7) == INV_UNCHANGED && writes == initial_writes + 1);
     assert(apply(&snapshot, INV_BOMBS, INVENTORY_SET, 3) == INV_OK && amounts[INV_BOMBS] == 3);
     assert(inventory_read(1, 2, epoch, &snapshot));
     assert(apply(&snapshot, INV_BOMBS, INVENTORY_REMOVE, 999) == INV_OK && !amounts[INV_BOMBS]);
@@ -127,8 +237,7 @@ int main(void) {
     assert(apply(&snapshot, INV_BOMBS, INVENTORY_REFILL, 0) == INV_STALE);
     assert(inventory_read(1, 2, epoch, &snapshot));
     assert(apply(&snapshot, INV_BOMBS, INVENTORY_REFILL, 0) == INV_OK && amounts[INV_BOMBS] == 40);
-    // A known acquired Bombchu may be restored after removing its last unit,
-    // but this session evidence must never cross a save generation.
+    // First Bombchu acquisition works even after a fresh save epoch.
     amounts[INV_BOMBCHUS] = 1;
     assert(inventory_read(1, 2, epoch, &snapshot));
     assert(apply(&snapshot, INV_BOMBCHUS, INVENTORY_REMOVE, 0) == INV_OK);
@@ -136,9 +245,6 @@ int main(void) {
     assert(apply(&snapshot, INV_BOMBCHUS, INVENTORY_SET, 2) == INV_OK);
     amounts[INV_BOMBCHUS] = 0; ++epoch;
     assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[INV_BOMBCHUS].owned);
-    bombchu_used = true; guide_ready = false;
-    assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[INV_BOMBCHUS].owned);
-    guide_ready = true;
     assert(inventory_read(1, 2, epoch, &snapshot) && snapshot.entries[INV_BOMBCHUS].can_refill);
     assert(apply(&snapshot, INV_BOMBCHUS, INVENTORY_REFILL, 0) == INV_OK);
     child = false;
@@ -146,6 +252,8 @@ int main(void) {
     assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.child);
     assert(!snapshot.entries[INV_DEKU_STICKS].can_set && !snapshot.entries[INV_DEKU_SEEDS].can_set);
     assert(snapshot.entries[INV_ARROWS].can_set);
+    amounts[INV_BOW] = 1;
+    assert(inventory_read(1, 2, epoch, &snapshot));
     assert(apply(&snapshot, INV_ARROWS, INVENTORY_REFILL, 0) == INV_OK);
     unsigned before = writes;
     assert(inventory_read(1, 2, epoch, &snapshot));
@@ -164,8 +272,6 @@ int main(void) {
     reset_age = true; assert(!inventory_read(1, 2, epoch, &snapshot) && !snapshot.valid);
     reset_count = true; assert(!inventory_read(1, 2, epoch, &snapshot) && !snapshot.valid);
     reset_capacity = true; assert(!inventory_read(1, 2, epoch, &snapshot) && !snapshot.valid);
-    amounts[INV_BOMBCHUS] = 0; reset_guide = true;
-    assert(!inventory_read(1, 2, epoch, &snapshot) && !snapshot.valid && writes == before);
     assert(inventory_read(1, 2, epoch, &snapshot));
     fail_write = true;
     assert(apply(&snapshot, INV_BOMBS, INVENTORY_REMOVE, 0) == INV_PENDING && writes == before + 1);
@@ -257,5 +363,5 @@ int main(void) {
     assert(!inventory_busy() && apply(&snapshot, INV_BOMBS, INVENTORY_REFILL, 0) == INV_NATIVE_FAILED);
     assert(strstr(inventory_result_text(INV_NATIVE_FAILED), "Reload a save"));
     assert(count_calls && !strcmp(inventory_result_text(INV_OK), "Inventory change verified."));
-    puts("Inventory: 20 real IDs, six owned stacks, both ages, capacity/ownership/confirmation fences, deferred native acknowledgement, timeout/uncertainty latches and save-epoch isolation passed (portable fixture).");
+    puts("Inventory: 20 IDs granted from zero/removed, shared-slot/tool/ammo dependencies, equipped removal fence, age/capacity/confirmation checks, deferred acknowledgement and save-epoch isolation passed (portable fixture).");
 }

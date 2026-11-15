@@ -57,6 +57,28 @@ static int item_count(uintptr_t pouch, const char *name) {
         pouch, &name, 0, 0);
 }
 
+static enum InventoryResult dependency(const InventorySnapshot *snapshot, unsigned index,
+    enum InventoryAction action, int target) {
+    const InventoryEntry *entry = &snapshot->entries[index];
+    if ((index == INV_HOOKSHOT || index == INV_LONGSHOT) && target > entry->count) {
+        unsigned peer = index == INV_HOOKSHOT ? INV_LONGSHOT : INV_HOOKSHOT;
+        if (!snapshot->entries[peer].valid) return INV_UNAVAILABLE;
+        if (snapshot->entries[peer].count) return INV_SLOT_CONFLICT;
+    }
+    if ((index == INV_BOW || index == INV_SLINGSHOT) && !target && entry->count) {
+        unsigned ammo = index == INV_BOW ? INV_ARROWS : INV_DEKU_SEEDS;
+        if (!snapshot->entries[ammo].valid) return INV_UNAVAILABLE;
+        if (snapshot->entries[ammo].count) return INV_REMOVE_AMMO_FIRST;
+    }
+    if ((index == INV_ARROWS || index == INV_DEKU_SEEDS) &&
+        (target > entry->count || (action == INVENTORY_REFILL && !entry->count))) {
+        unsigned tool = index == INV_ARROWS ? INV_BOW : INV_SLINGSHOT;
+        if (!snapshot->entries[tool].valid) return INV_UNAVAILABLE;
+        if (!snapshot->entries[tool].count) return INV_ADD_TOOL_FIRST;
+    }
+    return INV_OK;
+}
+
 enum InventoryResult inventory_poll(uintptr_t pouch, uintptr_t actor, unsigned epoch) {
     if (!inventory_busy()) return INV_UNCHANGED;
     if (pending.epoch != save_epoch()) {
@@ -83,8 +105,10 @@ enum InventoryResult inventory_poll(uintptr_t pouch, uintptr_t actor, unsigned e
         clear_pending();
         return INV_STALE;
     }
-    int capacity = ((int (*)(uintptr_t, const char **, unsigned, uintptr_t))
-        game(GAME_ammo_capacity))(pouch, &name, 0, 0);
+    int capacity = 1;
+    if (inventory_catalog[pending.index].quantity_editable)
+        capacity = ((int (*)(uintptr_t, const char **, unsigned, uintptr_t))
+            game(GAME_ammo_capacity))(pouch, &name, 0, 0);
     if (!inventory_busy() || epoch != save_epoch()) {
         clear_pending();
         return INV_STALE;
@@ -98,6 +122,25 @@ enum InventoryResult inventory_poll(uintptr_t pouch, uintptr_t actor, unsigned e
         return INV_STALE;
     }
     if (count == pending.target) {
+        // Native consumption also clears equipment references and schedules the
+        // engine's normal fallback. Keep Save/travel held until that is visible.
+        if (!pending.target && !inventory_catalog[pending.index].quantity_editable) {
+            bool equipped = ((unsigned (*)(uintptr_t, const char **))
+                game(GAME_inventory_equipped))(pouch, &name) & 1;
+            if (epoch != save_epoch() || !inventory_busy()) {
+                clear_pending();
+                return INV_STALE;
+            }
+            if (!current(pouch, actor, epoch)) {
+                if (epoch == save_epoch()) return uncertain(INV_NATIVE_FAILED);
+                clear_pending();
+                return INV_STALE;
+            }
+            if (equipped) {
+                if (monotonic_ms() - pending.started >= INVENTORY_ACK_MS) return uncertain(INV_TIMEOUT);
+                return INV_PENDING;
+            }
+        }
         clear_pending();
         return INV_OK;
     }
@@ -110,37 +153,13 @@ enum InventoryResult inventory_poll(uintptr_t pouch, uintptr_t actor, unsigned e
     return INV_PENDING;
 }
 
-static bool owner_tool(uintptr_t pouch, unsigned index, unsigned epoch) {
-    static const char *const tools[6][3] = {
-        {"Item_StickBag_Small", "Item_StickBag_Medium", "Item_StickBag_Large"},
-        {"Item_NutBag_Small", "Item_NutBag_Medium", "Item_NutBag_Large"},
-        {"Weapon_Range_Bow", 0, 0},
-        {"Item_BombBag_Small", "Item_BombBag_Medium", "Item_BombBag_Large"},
-        {"Weapon_Range_SlingShot", 0, 0},
-        {0, 0, 0}
-    };
-    for (unsigned i = 0; i < 3 && tools[index - INV_DEKU_STICKS][i]; ++i) {
-        int amount = item_count(pouch, tools[index - INV_DEKU_STICKS][i]);
-        if (epoch != save_epoch()) return false;
-        if (amount > 0 && amount <= 1) return true;
-    }
-    if (index == INV_BOMBCHUS && pointer(game(0x84EA42A8))) {
-        bool used = ((unsigned (*)(uintptr_t, unsigned))game(GAME_action_guide_opened))(0, 36) != 0;
-        return epoch == save_epoch() && used;
-    }
-    return false;
-}
-
 bool inventory_read(uintptr_t pouch, uintptr_t actor, unsigned epoch, InventorySnapshot *snapshot) {
     if (!snapshot) return false;
-    InventorySnapshot previous = *snapshot;
     *snapshot = (InventorySnapshot){0};
     if (!current(pouch, actor, epoch)) return false;
     InventorySnapshot next = {.epoch = epoch, .pouch = pouch, .actor = actor};
     next.child = ((unsigned (*)(uintptr_t))game(GAME_child_link))(actor) != 0;
     if (epoch != save_epoch()) return false;
-    bool retain = previous.valid && previous.epoch == epoch && previous.pouch == pouch &&
-        previous.actor == actor && previous.child == next.child;
     unsigned age = next.child ? INV_CHILD : INV_ADULT;
     for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
         const InventoryItem *item = &inventory_catalog[i];
@@ -158,12 +177,7 @@ bool inventory_read(uintptr_t pouch, uintptr_t actor, unsigned epoch, InventoryS
             entry->count <= entry->capacity;
         entry->age_allowed = (item->ages & age) != 0;
         entry->owned = entry->valid && entry->count > 0;
-        if (entry->valid && item->quantity_editable && !entry->owned) {
-            entry->owned = (retain && previous.entries[i].valid && previous.entries[i].owned) ||
-                owner_tool(pouch, i, epoch);
-            if (epoch != save_epoch()) return false;
-        }
-        entry->can_set = !is_uncertain(epoch) && item->quantity_editable && entry->valid && entry->owned &&
+        entry->can_set = !is_uncertain(epoch) && entry->valid &&
             entry->age_allowed && entry->capacity > 0;
         entry->can_refill = entry->can_set && entry->count < entry->capacity;
         entry->can_remove = entry->can_set && entry->count > 0;
@@ -183,7 +197,6 @@ enum InventoryResult inventory_apply(uintptr_t pouch, uintptr_t actor, unsigned 
         (unsigned)action > INVENTORY_REMOVE) return INV_UNAVAILABLE;
     if (snapshot->epoch != epoch || epoch != save_epoch() || snapshot->pouch != pouch ||
         snapshot->actor != actor) return INV_STALE;
-    if (!inventory_catalog[index].quantity_editable) return INV_READ_ONLY;
     if (!confirmed) return INV_CONFIRM_REQUIRED;
     if (infinite_items) return INV_INFINITE_ITEMS;
     InventorySnapshot live = *snapshot;
@@ -194,9 +207,10 @@ enum InventoryResult inventory_apply(uintptr_t pouch, uintptr_t actor, unsigned 
         entry->capacity != expected->capacity) return INV_STALE;
     if (!entry->valid) return INV_UNAVAILABLE;
     if (!entry->age_allowed) return INV_AGE_RESTRICTED;
-    if (!entry->owned) return INV_NOT_OWNED;
-    if (!entry->can_set) return INV_CAPACITY;
     int target = action == INVENTORY_REMOVE ? 0 : action == INVENTORY_REFILL ? entry->capacity : quantity;
+    enum InventoryResult required = dependency(&live, index, action, target);
+    if (required != INV_OK) return required;
+    if (!entry->can_set) return INV_CAPACITY;
     if (target < 0 || target > entry->capacity) return INV_CAPACITY;
     if (target == entry->count) return INV_UNCHANGED;
     if (!current(pouch, actor, epoch)) return epoch == save_epoch() ? INV_UNAVAILABLE : INV_STALE;
@@ -237,12 +251,15 @@ enum InventoryResult inventory_apply(uintptr_t pouch, uintptr_t actor, unsigned 
 const char *inventory_result_text(enum InventoryResult result) {
     static const char *const text[] = {
         "Inventory change verified.", "Quantity is already correct.", "Inventory is unavailable.",
-        "Inventory changed. Review and confirm again.", "This equipment is view only.",
-        "Unavailable for Link's current age.", "Acquire this item normally first.",
+        "Inventory changed. Review and confirm again.", "No verified safe operation for this item.",
+        "Unavailable for Link's current age.", "This item has no stock.",
         "Quantity exceeds the unlocked capacity.", "Confirm this inventory change first.",
         "Turn Infinite Items OFF before editing.", "Inventory uncertain. Reload a save before further edits.",
         "Applying native inventory change...", "Update timed out. Reload a save before further edits.",
-        "Wait for the pending inventory change."
+        "Wait for the pending inventory change.",
+        "Remove the other Hookshot or Longshot first; they share an inventory slot.",
+        "Remove this tool's ammunition in Item Manager first.",
+        "Add the matching Bow or Slingshot in Item Manager first."
     };
     return (unsigned)result < sizeof text / sizeof *text ? text[result] : text[INV_UNAVAILABLE];
 }

@@ -1,3 +1,45 @@
+# Test report — Item Manager ownership patch v1.1.1
+
+15 November 2026. **Native ownership/persistence and portable regressions pass on the supported target.** Final frozen-source archive/CI/publication checks are separate delivery gates; their future results are not invented in this source snapshot.
+
+## Exact tested binary and method
+
+Module SHA-256 `5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443`; all **82,728 loaded RX bytes** matched SHA-256 `09346ed8625397d0856986ac42bc37aec05e54ce2990e99254a49338eff044ef`. Windows Lichii Build 177, title `0400486024DEC000`, main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`, displayed update 2.0.0. Testing used logical controller inputs, stock game inventory/equipment/Save/Load screens and independent read-only native state inspection in a separate profile with copied saves. Physical controller hardware is not claimed.
+
+[Sanitized native evidence](docs/v1.1.1-native-results.json) preserves exact observations and source-record hashes without runtime addresses, private paths or serialized saves. Native screenshots are retained privately for review; the README's v1.1.0 captures remain historical.
+
+## Final native results
+
+| Scenario | Measured result |
+|---|---|
+| Absent Goron Tunic / cancel | Initial count 0. Cancelling addition leaves0. |
+| Add / native equipment / Adult equip | Confirmed add reaches1; stock equipment screen displays the tunic and stock equip stores `Armor_Adult_Goron`. |
+| Grant persists | Save equipped count 1; unsaved equipped removal reaches0 / `Armor_Adult_Normal`; stock Load restores1 / `Armor_Adult_Goron` (epoch 4→6). |
+| Equipped removal persists | Remove equipped count 1→0 / `Armor_Adult_Normal`, Save; unsaved add reaches1; stock Load restores0 / normal tunic (epoch 6→8). Stock slot is empty. |
+| Shields / boots / weapon | Previously absent Mirror Shield and Iron Boots0→1, stock equip, removal→0 with saved shield/boots references empty. Previously absent Megaton Hammer0→1→0. |
+| Six stacks | Adult nuts/arrows/bombs/Bombchus each0→ADD1→refill 20/30/30/30. Actual Young Link sticks/seeds each0→ADD1→refill 20/40. |
+| Age and slot restrictions | Adult seeds and Young Goron edits refused; Hookshot/Longshot conflict and Bow removal with17 arrows refused without mutation. Young travel settled to an actual child snapshot. |
+| Brief existing-feature smoke | Cross-age travel to Young Kakariko completed in 67.656 s; both tab wrap directions retained selection/viewport. Free Camera translated 11.815995 while Link displacement was exactly zero; R3+B restored native eye within 7.168e-6. |
+| Infinite Items / normal use | Edits refused while enabled. With Bow removed, Infinite Items left Bow 0/arrows 0 through 120 native frames. OFF, restored Bow/arrows 30; stock Bow selection and ordinary firing reduced arrows 30→29. |
+
+After testing, the isolated emulator was stopped. All 15 copied save hashes, two preference files, two ExeFS files and three config files match the fresh pretest baseline; the owner installation/saves were untouched. Final loaded RX bytes matched again after the scenarios.
+
+These results do not establish separate save persistence for every catalog ID, every quickslot or arbitrary progression/equipment combinations. The complete Goron Save/Load cycle is actual disk-persistence evidence, rather than a portable fixture or in-memory readback alone. Native general acquisition may perform its normal inventory bookkeeping; no direct story/quest flag writes were added.
+
+## Automated regressions and package gates
+
+The warnings-as-errors ARM64 build and the complete host runner pass:19 C fixtures (including storage's separate unavailable case), archive guards and **936 renderer cases** (39 states × 6 scales × 4 native formats). Inventory cases cover all 20 supported IDs from zero through removal, both ages, capacity bounds, live dependency changes, confirmation/held input, equipped acknowledgement, world invalidation inside its final getter, deferred native writes, timeout/uncertainty and save epochs. Infinite Items fixtures reject cached arrow/seed evidence after their tool is removed.
+
+Original movement/landing/recovery/Noclip, Free Camera, combat, travel, resource, Save guard, preferences/migration and storage fixtures remain in the full runner. Their unchanged broad native gameplay results below retain their original module identity; they are not relabelled as new v1.1.1 runs.
+
+Before this source snapshot is committed, rebuild installation/source ZIPs, run the complete runner against their maintained bytes, compare packaged NSO with this native-tested module, and reproduce both ZIPs plus both SHA sidecars byte-for-byte from clean extracted source. After commit, require successful branch CI before updating main, successful main publication, exact tag target and downloaded asset checksums. No future CI run or release URL is claimed here.
+
+## Historical v1.1.0 and earlier evidence
+
+The previous report below is preserved for its own versions/binaries and narrower read-only-gear behavior.
+
+---
+
 # Test report — Hyrule Cheat Menu v1.1.0
 
 15 November 2026. **Local release decision: GO for v1.1.0 on the supported target.** Runtime, host, package and source-reproduction acceptance have passed. CI, publication and downloaded-asset verification are separate delivery checks after commit. The owner approved the three-tab design and authorized publication after successful release tests. This report separates final-module evidence, preceding native checkpoints and portable fixtures.
@@ -194,8 +236,8 @@ The completed `travel-wall-results.json` records the cross-age arrival, walking-
 - **Unsafe Save / actual Load:** with all four core cheats, normal 3x, Fly and Noclip active, Link descended from y=150.595505 to y=144.521698 below the ranch floor. One native Save confirmation followed Cancel; all 15 copied `.sav` hashes stayed unchanged. Native Load then restored the Kakariko manual save in 9.078 seconds: all toggles OFF, effective normal speed 1x, Return cleared and preferred Flight Speed 2x/Favorites retained. The first confirmation selected the native default Cancel and was not counted as a reload; the steady dialog was observed before selecting Load explicitly. Complete running RX bytes matched again after the native run.
 - **Hardware scope:** all four XInput slots returned disconnected (1167) in the read-only current check. This does not enumerate every SDL/non-XInput device or establish physical-controller acceptance.
 
-- **Fresh-process standalone GUI:** with the private local debug server disabled (no listener on port 6551), the ordinary Build177 GUI loaded the copied Market save. Temporary private keyboard mappings to logical Player1 opened R3, showed all visible core toggles OFF/normal1x and stored Flight Speed 2x, switched tabs with RB, expanded Favorites with A and displayed both the earlier Kakariko Favorite and newly stored ranch Favorite. R3 closed the menu and resumed gameplay. Native window capture was used; no debug input client ran. Temporary keyboard latches were restored after closing. This is a logical-input acceptance check, not physical-controller testing.
-- **Built-in mods:** the current startup log records Max Resolution and FPS Unlock applied; Dynamic FPS by Dark was skipped as included in the applied built-in patch. The new native checks establish selected coexistence in that configuration. An FPS-mods-OFF control and other mod combinations were not repeated on Build177.
+- **Fresh-process standalone GUI:** with the private local debug server disabled (no listener on port 6551), the ordinary Build 177 GUI loaded the copied Market save. Temporary private keyboard mappings to logical Player1 opened R3, showed all visible core toggles OFF/normal1x and stored Flight Speed 2x, switched tabs with RB, expanded Favorites with A and displayed both the earlier Kakariko Favorite and newly stored ranch Favorite. R3 closed the menu and resumed gameplay. Native window capture was used; no debug input client ran. Temporary keyboard latches were restored after closing. This is a logical-input acceptance check, not physical-controller testing.
+- **Built-in mods:** the current startup log records Max Resolution and FPS Unlock applied; Dynamic FPS by Dark was skipped as included in the applied built-in patch. The new native checks establish selected coexistence in that configuration. An FPS-mods-OFF control and other mod combinations were not repeated on Build 177.
 
 ## Final local packaging
 

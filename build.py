@@ -15,7 +15,7 @@ from profile import BUILD_ID, make_patch
 
 
 ROOT = Path(__file__).resolve().parent
-RELEASE = "Hyrule-Cheat-Menu-v1.1.0.zip"
+RELEASE = "Hyrule-Cheat-Menu-v1.1.1.zip"
 DISTRIBUTION_FILES = (
     "README.md", "CHANGELOG.md", "RELEASE_NOTES.md", "TEST_REPORT.md", "RELEASE_READINESS.md",
     "PROGRESS.md", "third_party/Fast-Travel-LICENSE.txt", "docs/destination-coverage.csv",
@@ -35,6 +35,7 @@ DISTRIBUTION_FILES = (
     "docs/screenshots/v110-preview-travel.png", "docs/screenshots/v110-preview-items.png",
     "docs/screenshots/v110-preview-travel-confirm.png",
     "docs/v1.1.0-native-results.json",
+    "docs/v1.1.1-native-results.json",
     "docs/screenshots/v110-release-cheats.png", "docs/screenshots/v110-release-combat.png",
     "docs/screenshots/v110-release-travel.png", "docs/screenshots/v110-release-items.png",
 )

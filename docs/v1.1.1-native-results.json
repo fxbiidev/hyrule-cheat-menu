@@ -1,0 +1,1653 @@
+{
+  "schema": 1,
+  "date": "2026-11-15",
+  "release": "v1.1.1",
+  "status": "Recorded Goron Tunic ownership/equipment/Save-Load, resource-interaction and isolated cleanup assertions passed; supporting observations retain their exact recorded scope",
+  "method": {
+    "emulator": "Windows Lichii Build 177",
+    "title_id": "0400486024DEC000",
+    "main_build_id": "E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348",
+    "isolation": "Separate portable profile and fifteen copied save files; owner installation unchanged",
+    "actions": "Native logical controller and stock game menu inputs; read-only native inventory/equipment inspection",
+    "sanitization": "Explicit field, record-name, item-name, equipment-name and notice allowlists; no runtime addresses, private paths or save contents"
+  },
+  "current_module": {
+    "module_sha256": "5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443",
+    "running_text_sha256": "09346ed8625397d0856986ac42bc37aec05e54ce2990e99254a49338eff044ef",
+    "running_text_bytes": 82728,
+    "running_text_matches_retained_module": true
+  },
+  "goron_assertions": {
+    "scope": "Assertions over recorded states; stock Save/Load actions were performed by native QA",
+    "cancel_kept_unowned": true,
+    "grant_from_zero_reached_owned": true,
+    "stock_equipped_name_was_goron_tunic": true,
+    "equipped_removal_reached_unowned_and_normal_tunic": true,
+    "save_reload_restored_saved_grant_after_unsaved_removal": true,
+    "save_reload_restored_saved_removal_after_unsaved_readdition": true,
+    "normal_reload_epochs_advanced": true
+  },
+  "resource_assertions": {
+    "scope": "Assertions over the named recorded inventory and toggle states; ordinary firing was performed by native QA",
+    "infinite_items_did_not_regrant_removed_bow_or_arrows": {
+      "infinite_items_enabled": true,
+      "bow_count_before": 0,
+      "bow_count_after": 0,
+      "arrow_count_before": 0,
+      "arrow_count_after": 0,
+      "same_save_epoch": true,
+      "neutral_frames": 120
+    },
+    "editing_was_refused_while_infinite_items_enabled": true,
+    "bow_and_arrow_restoration_reached_owned": true,
+    "ordinary_arrow_use": {
+      "arrows_before": 30,
+      "arrows_after": 29,
+      "bow_owned_before_and_after": true,
+      "infinite_items_enabled": false,
+      "same_save_epoch": true
+    }
+  },
+  "brief_smoke": {
+    "module_sha256": "5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443",
+    "three_tabs_wrap_and_preserve_selection": true,
+    "free_camera_translation": 11.815994653904093,
+    "link_displacement": 0.0,
+    "free_camera_emergency_exit": true,
+    "native_eye_restore_error": 7.1681132110187675e-06,
+    "final_running_identity_matches": true
+  },
+  "observations": {
+    "final_before_goron": {
+      "description": "Adult baseline before granting the absent Goron Tunic",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 4,
+        "notice": ""
+      }
+    },
+    "final_cancel_add": {
+      "description": "Cancelled Goron Tunic addition",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 4,
+        "notice": ""
+      }
+    },
+    "final_add_goron": {
+      "description": "Confirmed Goron Tunic addition",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 4,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_goron_equipped": {
+      "description": "Goron Tunic equipped through the stock equipment menu",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Goron"
+      },
+      "menu": {
+        "open": false,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 4,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_goron_saved_equipped": {
+      "description": "Saved the owned and equipped Goron Tunic",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Goron"
+      },
+      "menu": {
+        "open": false,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 4,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_remove_equipped_unsaved": {
+      "description": "Removed equipped Goron Tunic without saving",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 4,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_goron_added_persisted": {
+      "description": "Reloaded the save containing the Goron Tunic",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Goron"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 6,
+        "notice": ""
+      }
+    },
+    "final_remove_equipped_for_save": {
+      "description": "Removed equipped Goron Tunic before saving",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 6,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_goron_removed_saved": {
+      "description": "Saved Goron Tunic removal",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": false,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 6,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_goron_unsaved_readd": {
+      "description": "Added Goron Tunic again without saving",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 6,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_goron_removal_persisted": {
+      "description": "Reloaded the save with Goron Tunic removed",
+      "age": "adult",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "armor": "Armor_Adult_Normal"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 10,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": ""
+      }
+    },
+    "final_mirror_added": {
+      "description": "Added Mirror Shield",
+      "age": "adult",
+      "inventory": {
+        "Mirror Shield": {
+          "native_id": "Weapon_Shield_Mirror",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "shield": "Weapon_Shield_Hylian"
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 11,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_mirror_equipped": {
+      "description": "Mirror Shield equipped through the stock equipment menu",
+      "age": "adult",
+      "inventory": {
+        "Mirror Shield": {
+          "native_id": "Weapon_Shield_Mirror",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "shield": "Weapon_Shield_Mirror"
+      },
+      "menu": {
+        "open": false,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 11,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_mirror_removed": {
+      "description": "Removed Mirror Shield",
+      "age": "adult",
+      "inventory": {
+        "Mirror Shield": {
+          "native_id": "Weapon_Shield_Mirror",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "shield": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 11,
+        "scroll": 3,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_iron_boots_added": {
+      "description": "Added Iron Boots",
+      "age": "adult",
+      "inventory": {
+        "Iron Boots": {
+          "native_id": "Armor_Adult_HeavyBoot",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "boots": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 15,
+        "scroll": 7,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_iron_boots_equipped": {
+      "description": "Iron Boots equipped through the stock equipment menu",
+      "age": "adult",
+      "inventory": {
+        "Iron Boots": {
+          "native_id": "Armor_Adult_HeavyBoot",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "boots": "Armor_Adult_HeavyBoot"
+      },
+      "menu": {
+        "open": false,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 15,
+        "scroll": 7,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_iron_boots_removed": {
+      "description": "Removed Iron Boots",
+      "age": "adult",
+      "inventory": {
+        "Iron Boots": {
+          "native_id": "Armor_Adult_HeavyBoot",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "boots": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 15,
+        "scroll": 7,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_hammer_added": {
+      "description": "Added Megaton Hammer",
+      "age": "adult",
+      "inventory": {
+        "Megaton Hammer": {
+          "native_id": "Item_Hammer",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 7,
+        "scroll": 7,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_hammer_removed": {
+      "description": "Removed Megaton Hammer",
+      "age": "adult",
+      "inventory": {
+        "Megaton Hammer": {
+          "native_id": "Item_Hammer",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 7,
+        "scroll": 7,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_longshot_conflict_refused": {
+      "description": "Attempted a conflicting Hookshot or Longshot grant",
+      "age": "adult",
+      "inventory": {
+        "Hookshot": {
+          "native_id": "Item_Hookshot",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        },
+        "Longshot": {
+          "native_id": "Item_Longshot",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 6,
+        "scroll": 6,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Remove the other Hookshot or Longshot first; they share an inventory slot."
+      }
+    },
+    "final_adult_age_refused": {
+      "description": "Attempted an age-incompatible edit as Adult Link",
+      "age": "adult",
+      "inventory": {
+        "Deku Seeds": {
+          "native_id": "Item_DekuSeed",
+          "count": 40,
+          "capacity": 40,
+          "valid": true,
+          "owned": true,
+          "age_allowed": false
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 13,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 40,
+        "epoch": 8,
+        "notice": "This item is restricted to the other age."
+      }
+    },
+    "final_bow_ammo_refused": {
+      "description": "Attempted Bow removal while arrows remained",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 17,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 2,
+        "scroll": 0,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Remove this tool's ammunition in Item Manager first."
+      }
+    },
+    "final_stack_15_empty": {
+      "description": "Deku Nuts: empty",
+      "age": "adult",
+      "inventory": {
+        "Deku Nuts": {
+          "native_id": "Item_DekuNut",
+          "count": 0,
+          "capacity": 20,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 19,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_15_added": {
+      "description": "Deku Nuts: added",
+      "age": "adult",
+      "inventory": {
+        "Deku Nuts": {
+          "native_id": "Item_DekuNut",
+          "count": 1,
+          "capacity": 20,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 19,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_15_refilled": {
+      "description": "Deku Nuts: refilled",
+      "age": "adult",
+      "inventory": {
+        "Deku Nuts": {
+          "native_id": "Item_DekuNut",
+          "count": 20,
+          "capacity": 20,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 19,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 20,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_16_empty": {
+      "description": "Arrows: empty",
+      "age": "adult",
+      "inventory": {
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_16_added": {
+      "description": "Arrows: added",
+      "age": "adult",
+      "inventory": {
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 1,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_16_refilled": {
+      "description": "Arrows: refilled",
+      "age": "adult",
+      "inventory": {
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 30,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_17_empty": {
+      "description": "Bombs: empty",
+      "age": "adult",
+      "inventory": {
+        "Bombs": {
+          "native_id": "Item_Bomb",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 22,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_17_added": {
+      "description": "Bombs: added",
+      "age": "adult",
+      "inventory": {
+        "Bombs": {
+          "native_id": "Item_Bomb",
+          "count": 1,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 22,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_17_refilled": {
+      "description": "Bombs: refilled",
+      "age": "adult",
+      "inventory": {
+        "Bombs": {
+          "native_id": "Item_Bomb",
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 22,
+        "scroll": 14,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 30,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_19_empty": {
+      "description": "Bombchus: empty",
+      "age": "adult",
+      "inventory": {
+        "Bombchus": {
+          "native_id": "Item_Bombchu",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 24,
+        "scroll": 16,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_19_added": {
+      "description": "Bombchus: added",
+      "age": "adult",
+      "inventory": {
+        "Bombchus": {
+          "native_id": "Item_Bombchu",
+          "count": 1,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 24,
+        "scroll": 16,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_stack_19_refilled": {
+      "description": "Bombchus: refilled",
+      "age": "adult",
+      "inventory": {
+        "Bombchus": {
+          "native_id": "Item_Bombchu",
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 24,
+        "scroll": 16,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 30,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_bow_removed": {
+      "description": "Removed Bow after emptying arrows",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 2,
+        "scroll": 0,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_infinite_no_regrant": {
+      "description": "Observed Infinite Items after Bow removal",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 2,
+        "scroll": 0,
+        "enabled": 4,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": ""
+      }
+    },
+    "final_infinite_edit_refused": {
+      "description": "Attempted an edit with Infinite Items enabled",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 2,
+        "scroll": 0,
+        "enabled": 4,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Disable Infinite Items before editing."
+      }
+    },
+    "final_bow_restored": {
+      "description": "Restored Bow through Item Manager",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 0,
+          "capacity": 30,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 2,
+        "scroll": 0,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_arrows_restored": {
+      "description": "Restored arrows after restoring Bow",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 16,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 30,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_native_bow_selected": {
+      "description": "Selected the restored Bow through the stock game menu before ordinary use",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 30,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": false,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 16,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 30,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_normal_arrow_used": {
+      "description": "Read arrow stock after an ordinary stock-game Bow shot",
+      "age": "adult",
+      "inventory": {
+        "Fairy Bow": {
+          "native_id": "Weapon_Range_Bow",
+          "count": 1,
+          "capacity": 1,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        },
+        "Arrows": {
+          "native_id": "Item_Arrow_Normal",
+          "count": 29,
+          "capacity": 30,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {
+        "bow": ""
+      },
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 21,
+        "scroll": 16,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 30,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_young_age_refused": {
+      "description": "Attempted an age-incompatible edit as Young Link",
+      "age": "young",
+      "inventory": {
+        "Goron Tunic": {
+          "native_id": "Armor_Adult_Goron",
+          "count": 0,
+          "capacity": 1,
+          "valid": true,
+          "owned": false,
+          "age_allowed": false
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 13,
+        "scroll": 13,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "This item is restricted to the other age."
+      }
+    },
+    "final_young_stack_14_empty": {
+      "description": "Young Link Deku Sticks: empty",
+      "age": "young",
+      "inventory": {
+        "Deku Sticks": {
+          "native_id": "Item_DekuStick",
+          "count": 0,
+          "capacity": 20,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 18,
+        "scroll": 13,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_young_stack_14_added": {
+      "description": "Young Link Deku Sticks: added",
+      "age": "young",
+      "inventory": {
+        "Deku Sticks": {
+          "native_id": "Item_DekuStick",
+          "count": 1,
+          "capacity": 20,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 18,
+        "scroll": 13,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_young_stack_14_refilled": {
+      "description": "Young Link Deku Sticks: refilled",
+      "age": "young",
+      "inventory": {
+        "Deku Sticks": {
+          "native_id": "Item_DekuStick",
+          "count": 20,
+          "capacity": 20,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 18,
+        "scroll": 13,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 20,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_young_stack_18_empty": {
+      "description": "Young Link Deku Seeds: empty",
+      "age": "young",
+      "inventory": {
+        "Deku Seeds": {
+          "native_id": "Item_DekuSeed",
+          "count": 0,
+          "capacity": 40,
+          "valid": true,
+          "owned": false,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 23,
+        "scroll": 15,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 0,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_young_stack_18_added": {
+      "description": "Young Link Deku Seeds: added",
+      "age": "young",
+      "inventory": {
+        "Deku Seeds": {
+          "native_id": "Item_DekuSeed",
+          "count": 1,
+          "capacity": 40,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 23,
+        "scroll": 15,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 1,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    },
+    "final_young_stack_18_refilled": {
+      "description": "Young Link Deku Seeds: refilled",
+      "age": "young",
+      "inventory": {
+        "Deku Seeds": {
+          "native_id": "Item_DekuSeed",
+          "count": 40,
+          "capacity": 40,
+          "valid": true,
+          "owned": true,
+          "age_allowed": true
+        }
+      },
+      "saved_equipment": {},
+      "menu": {
+        "open": true,
+        "item_prompt": false,
+        "inventory_valid": true,
+        "tab": 2,
+        "cursor": 23,
+        "scroll": 15,
+        "enabled": 0,
+        "speed": 0,
+        "flight_speed": 3,
+        "damage": 0,
+        "item_quantity": 40,
+        "epoch": 8,
+        "notice": "Inventory change verified."
+      }
+    }
+  },
+  "source_records": [
+    {
+      "name": "ownership-final-results.json",
+      "sha256": "b97b53c2acbfcf5791eeaab4233f5234b87a6c0ac98b1449b9d6b0321f0c0d95"
+    },
+    {
+      "name": "cleanup-final.json",
+      "sha256": "9ad54d07b5d97b1b46b0196fb66d6c3e3b9dd534ba71e81dadec786583552be8"
+    },
+    {
+      "name": "smoke-final.json",
+      "sha256": "6808802354c7fdf5894d0bca7e5d5fe575399b87305f91bb9ef489b41ff775ba"
+    }
+  ],
+  "cleanup": {
+    "isolated_emulator_stopped": true,
+    "restored_copied_save_files": 15,
+    "all_copied_save_hashes_equal_pretest": true,
+    "isolated_preferences_restored": true,
+    "isolated_baseline_module_restored": true,
+    "isolated_configs_restored": true,
+    "owner_installation_modified": false
+  },
+  "coverage_limits": [
+    "Each observation reports native state at that recorded step; a label alone is not an assertion of success.",
+    "Goron assertions validate the recorded quantities, ownership, saved equipment and reload epochs; stock UI appearance requires its separately reviewed captures.",
+    "Portable failure/timeout tests do not establish naturally occurring engine or filesystem failures.",
+    "Additional inventory/progression states, physical controllers and broad gameplay combinations are not inferred from these observations."
+  ]
+}

@@ -224,6 +224,31 @@ int main(void) {
     // A stale caller after the hook must not authenticate the new save, either.
     items_update(1, 2, observed, true, epoch - 1);
     assert(given == before && !observed[0] && !observed[1]);
+    // Removing Bow/Slingshot revokes cached arrow/seed refill evidence. Neither
+    // the old session bit nor orphan positive stock substitutes for the tool.
+    bombchu_used = false;
+    for (unsigned age = 0; age < 2; ++age) {
+        child = age != 0;
+        unsigned ammunition = child ? 2 : 0, bag = child ? 4 : 0;
+        unsigned mask = 1u << ammunition;
+        memset(quantities, 0, sizeof quantities); memset(bags, 0, sizeof bags);
+        observed[0] = observed[1] = 0; bags[bag] = 1;
+        items_update(1, 2, observed, true, epoch);
+        assert(quantities[ammunition] == capacities[ammunition] && (observed[child] & mask));
+        unsigned prior = given;
+        quantities[ammunition] = 0; bags[bag] = 0;
+        items_update(1, 2, observed, true, epoch);
+        assert(!quantities[ammunition] && given == prior && !(observed[child] & mask));
+        quantities[ammunition] = 1;
+        items_update(1, 2, observed, true, epoch);
+        assert(quantities[ammunition] == 1 && given == prior && !(observed[child] & mask));
+        bags[bag] = 2; // Reject an invalid tool count as ownership evidence.
+        items_update(1, 2, observed, true, epoch);
+        assert(quantities[ammunition] == 1 && given == prior);
+        bags[bag] = 1;
+        items_update(1, 2, observed, true, epoch);
+        assert(quantities[ammunition] == capacities[ammunition] && given == prior + 1);
+    }
     guard_tests();
     puts("Production ammo policy: age, empty owned bags, capacity upgrades, invalid counts, readiness and never-unlock checks passed (native fixture).");
 }

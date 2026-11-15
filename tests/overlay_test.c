@@ -29,7 +29,7 @@ static unsigned find_row(Menu *menu, enum RowKind kind, unsigned value) {
     return 0;
 }
 
-enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, FIXTURE_STATES = 31 };
+enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, FIXTURE_STATES = 39 };
 
 static Menu fixture_menu(unsigned state) {
     Menu menu = {.consent = true, .enabled = 175, .speed = 3, .flight_speed = 5,
@@ -44,7 +44,9 @@ static Menu fixture_menu(unsigned state) {
         entry->age_allowed = (inventory_catalog[i].ages & INV_CHILD) != 0;
         entry->count = entry->owned ? quantity ? 3 : 1 : 0;
         entry->capacity = quantity ? 30 : 1;
-        entry->can_set = entry->can_refill = entry->can_remove = quantity && entry->age_allowed;
+        entry->can_set = entry->age_allowed;
+        entry->can_refill = quantity && entry->age_allowed && entry->count < entry->capacity;
+        entry->can_remove = entry->age_allowed && entry->owned;
     }
     if (state == 0) menu.cursor = 1;
     else if (state == 1) menu.cursor = find_row(&menu, CHEAT_ROW, NOCLIP);
@@ -77,8 +79,8 @@ static Menu fixture_menu(unsigned state) {
         else if (state == 28) {
             menu.inventory.entries[INV_BOMBCHUS].owned = false;
             menu.inventory.entries[INV_BOMBCHUS].count = 0;
-            menu.inventory.entries[INV_BOMBCHUS].can_set = false;
-            menu.inventory.entries[INV_BOMBCHUS].can_refill = false;
+            menu.inventory.entries[INV_BOMBCHUS].can_set = true;
+            menu.inventory.entries[INV_BOMBCHUS].can_refill = true;
             menu.inventory.entries[INV_BOMBCHUS].can_remove = false;
         } else if (state == 29) {
             menu.inventory.entries[INV_BOMBCHUS].capacity = 999;
@@ -86,6 +88,28 @@ static Menu fixture_menu(unsigned state) {
         } else if (state == 30) {
             menu.inventory.entries[INV_BOMBCHUS].valid = false;
             menu.inventory.entries[INV_BOMBCHUS].count = -1;
+        } else if (state >= 31 && state <= 35) {
+            menu.cursor = find_row(&menu, ITEM_ROW, INV_GORON_TUNIC);
+            InventoryEntry *entry = &menu.inventory.entries[INV_GORON_TUNIC];
+            menu.inventory.child = state == 35;
+            entry->age_allowed = entry->can_set = state != 35;
+            entry->owned = state != 32 && state != 33;
+            entry->count = entry->owned ? 1 : 0;
+            entry->can_remove = entry->owned && entry->age_allowed;
+            if (state == 33 || state == 34) {
+                menu.item_prompt = true; menu.item_prompt_index = INV_GORON_TUNIC;
+                menu.item_prompt_quantity = state == 33 ? 1 : 0;
+                menu.item_action = state == 33 ? INVENTORY_SET : INVENTORY_REMOVE;
+            }
+        } else if (state == 36) {
+            InventoryEntry *entry = &menu.inventory.entries[INV_BOMBCHUS];
+            entry->count = entry->capacity = 0;
+            entry->owned = entry->can_set = entry->can_refill = entry->can_remove = false;
+        } else if (state == 37) {
+            menu.inventory.entries[INV_BOMBCHUS].can_set = false;
+            menu.notice = "Inventory uncertain. Reload a save before further edits.";
+        } else if (state == 38) {
+            menu.notice = "Applying native inventory change...";
         }
     } else if (state >= 13 && state <= 17) {
         menu.tab = MENU_TRAVEL;
@@ -152,6 +176,7 @@ static void cache_revision_checks(void) {
 
 int main(void) {
     cache_revision_checks();
+    uint32_t ownership_frames[4] = {0};
     for (unsigned scale = 1; scale <= MAX_SCALE; ++scale) {
         size_t count = WIDTH * HEIGHT * scale * scale;
         uint32_t *allocation = malloc((count + 32) * sizeof(uint32_t));
@@ -167,6 +192,11 @@ int main(void) {
                 overlay_publish(&menu, state == 20 ? 0 : ALL_AVAILABLE, state == 18 ? ALL_AVAILABLE : 0);
                 draw_panel(&canvas, 175);
                 guards(allocation, count);
+                if (scale == 1 && f == 0 && state >= 31 && state <= 34) {
+                    uint32_t hash = 2166136261u;
+                    for (size_t i = 0; i < count; ++i) hash = (hash ^ canvas.pixels[i]) * 16777619u;
+                    ownership_frames[state - 31] = hash;
+                }
                 blend_panel(&canvas, scene, 0);
                 for (size_t i = 0; i < count; i += 127)
                     require(canvas.pixels[i] == scene[i], "Fade zero did not preserve the background");
@@ -204,5 +234,7 @@ int main(void) {
         }
         free(scene); free(allocation);
     }
-    puts("Production software panel: six scales, four formats, 31 states, inventory/draft/confirmation cache invalidation, buffer guards and exact 85% blending passed (not a display test).");
+    require(ownership_frames[0] != ownership_frames[1], "Owned and unowned equipment produced identical frames");
+    require(ownership_frames[2] != ownership_frames[3], "Add and remove equipment confirmations produced identical frames");
+    puts("Production software panel: six scales, four formats, 39 states, ownership/draft/confirmation cache invalidation, buffer guards and exact 85% blending passed (not a display test).");
 }

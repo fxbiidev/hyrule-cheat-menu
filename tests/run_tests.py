@@ -133,6 +133,7 @@ if __name__ == "__main__":
                 ("GAME_give_ammo", "mock_give"), ("GAME_child_link", "mock_child"),
                 ("GAME_action_guide_opened", "mock_guide"),
                 ("GAME_consume_ammo", "mock_consume"),
+                ("GAME_inventory_equipped", "mock_equipped"),
                 ("GAME_wallet_cap", "mock_wallet_cap"), ("GAME_read_rupees", "mock_rupees"),
                 ("GAME_write_struct_int", "mock_stat_write"),
                 ("GAME_read_ui_type", "mock_ui_type"))), encoding="utf-8")

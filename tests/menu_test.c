@@ -24,15 +24,17 @@ static void input_all(Menu *menu, uint32_t buttons) {
     menu_input(menu, tick, true, buttons, true, ALL_AVAILABLE, supported);
 }
 static void press_all(Menu *menu, uint32_t buttons) { input_all(menu, 0); input_all(menu, buttons); }
-static InventorySnapshot inventory_fixture(void) {
-    InventorySnapshot snapshot = {.valid = true, .epoch = 7, .pouch = 1, .actor = 2, .child = true};
+static InventorySnapshot inventory_fixture(bool child) {
+    InventorySnapshot snapshot = {.valid = true, .epoch = 7, .pouch = 1, .actor = 2, .child = child};
     for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
         InventoryEntry *entry = &snapshot.entries[i];
         bool editable = inventory_catalog[i].quantity_editable;
-        entry->valid = entry->owned = entry->age_allowed = true;
+        entry->valid = entry->owned = true;
+        entry->age_allowed = (inventory_catalog[i].ages & (child ? INV_CHILD : INV_ADULT)) != 0;
         entry->count = editable ? 3 : 1;
         entry->capacity = editable ? 30 : 1;
-        entry->can_set = entry->can_refill = entry->can_remove = editable;
+        entry->can_set = entry->can_remove = entry->age_allowed;
+        entry->can_refill = editable && entry->age_allowed;
     }
     return snapshot;
 }
@@ -46,7 +48,57 @@ static unsigned row_index(Menu *menu, enum RowKind kind, unsigned value) {
     return 0;
 }
 
+static void ownership_requests(void) {
+    // Every supported catalog entry can request real ownership changes from
+    // either initial state. Native validation belongs to inventory_test.c.
+    for (unsigned index = 0; index < INVENTORY_COUNT; ++index) {
+        bool child = (inventory_catalog[index].ages & INV_ADULT) == 0;
+        Menu menu = {.tab = MENU_ITEMS, .open = true, .consent = true};
+        input_all(&menu, 0);
+        menu.item_sections = (1u << ITEM_CATEGORY_COUNT) - 1;
+        menu.inventory = inventory_fixture(child);
+        menu.cursor = row_index(&menu, ITEM_ROW, index);
+        InventorySnapshot original = menu.inventory;
+        press_all(&menu, CONFIRM);
+        assert(menu.item_prompt && !menu.item_request && menu.item_action == INVENTORY_REMOVE);
+        assert(menu.item_prompt_index == index && menu.item_prompt_quantity == 0);
+        input_all(&menu, CONFIRM);
+        assert(menu.item_prompt && !menu.item_request);
+        press_all(&menu, BACK);
+        assert(!menu.item_prompt && !menu.item_request && menu.open);
+        assert(!memcmp(&original, &menu.inventory, sizeof original));
+
+        InventoryEntry *entry = &menu.inventory.entries[index];
+        entry->owned = false; entry->count = 0; entry->can_remove = false;
+        menu.item_edit_index = INVENTORY_COUNT;
+        press_all(&menu, CONFIRM);
+        assert(menu.item_prompt && !menu.item_request && menu.item_action == INVENTORY_SET);
+        assert(menu.item_prompt_index == index && menu.item_prompt_quantity == 1);
+        input_all(&menu, CONFIRM);
+        assert(menu.item_prompt && !menu.item_request);
+        press_all(&menu, CONFIRM);
+        assert(!menu.item_prompt && menu.item_request);
+        assert(entry->count == 0 && !entry->owned);
+        // The guest consumes the request; holding the same A cannot resubmit it.
+        menu.item_request = false;
+        input_all(&menu, CONFIRM);
+        assert(!menu.item_prompt && !menu.item_request);
+
+        menu.enabled |= 1u << ITEMS;
+        press_all(&menu, CONFIRM);
+        assert(!menu.item_prompt && !menu.item_request && menu.notice);
+        menu.enabled &= ~(1u << ITEMS);
+        entry->age_allowed = false;
+        press_all(&menu, CONFIRM);
+        assert(!menu.item_prompt && !menu.item_request && menu.notice);
+        entry->age_allowed = true; entry->can_set = false;
+        press_all(&menu, CONFIRM);
+        assert(!menu.item_prompt && !menu.item_request && menu.notice);
+    }
+}
+
 int main(void) {
+    ownership_requests();
     Menu fade = {0};
     menu_input(&fade, 0, true, 0, true, 31, support);
     menu_input(&fade, 20, true, R3, true, 31, support);
@@ -348,7 +400,7 @@ int main(void) {
     Preferences untouched = integrated.preferences;
     unsigned old_age = integrated.age;
     unsigned old_age_cursor = integrated.age_cursor[old_age];
-    integrated.inventory = inventory_fixture();
+    integrated.inventory = inventory_fixture(true);
     InventorySnapshot unchanged_inventory = integrated.inventory;
     // LB and RB cycle in opposite directions, including both tab-strip ends.
     press_all(&integrated, TAB_LEFT);
@@ -359,9 +411,14 @@ int main(void) {
     assert(count == ITEM_CATEGORY_COUNT + 7 && rows[0].kind == ITEM_SECTION);
     integrated.cursor = row_index(&integrated, ITEM_ROW, INV_KOKIRI_SWORD);
     press_all(&integrated, CONFIRM);
-    assert(integrated.notice && !integrated.item_prompt && !integrated.item_request);
+    assert(integrated.item_prompt && !integrated.item_request && integrated.item_action == INVENTORY_REMOVE);
+    assert(integrated.item_prompt_quantity == 0 && integrated.item_prompt_index == INV_KOKIRI_SWORD);
+    press_all(&integrated, BACK);
     press_all(&integrated, AGE);
+    assert(!integrated.item_prompt);
     press_all(&integrated, FAVORITE);
+    assert(integrated.item_prompt && integrated.item_action == INVENTORY_REMOVE);
+    press_all(&integrated, BACK);
     assert(integrated.age == old_age && integrated.age_cursor[old_age] == old_age_cursor);
     assert(!integrated.travel_prompt && !integrated.travel_target && !integrated.travel_request);
     assert(!memcmp(&untouched, &integrated.preferences, sizeof untouched) && !integrated.preferences_dirty);
@@ -464,6 +521,6 @@ int main(void) {
     assert(!integrated.preferences_dirty && integrated.preferences.damage == 3);
     assert(!memcmp(&untouched, &integrated.preferences, sizeof untouched));
 
-    puts("Menu, 214 destinations, all favorites, transitions, corrupt preferences three tabs, combat settings and confirmed inventory requests passed.");
+    puts("Menu, 214 destinations, all favorites, transitions, corrupt preferences, three tabs, combat settings and confirmed add/remove ownership requests for all 20 items passed.");
     return 0;
 }
