@@ -29,6 +29,7 @@ def check_layout(archive, expected):
     assert archive.testzip() is None, "ZIP CRC failure"
     for entry in archive.infolist():
         assert entry.date_time == (1980, 1, 1, 0, 0, 0), "non-deterministic timestamp"
+        assert entry.create_system == 3, "non-deterministic ZIP creator platform"
         assert entry.compress_type == zipfile.ZIP_DEFLATED
         assert entry.external_attr >> 16 == 0o100644, "unexpected file type or permissions"
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.2 — Footer spacing and reproducible ZIP metadata
+
+- Raise the creator credit and version label three logical pixels to clear the lower inner border.
+- Pin the ZIP creator platform so Windows and Linux builds produce identical archive metadata; retain the published v1.1.1 assets.
+- Retain v1.1.1 Item Manager behavior and its separately scoped native evidence; existing host and renderer regressions validate this follow-up.
+
 ## v1.1.1 — Item Manager ownership patch
 
 - Fix gear being read only and stack edits requiring normal acquisition. Confirmed native grants/removals now edit real ownership for the supported catalog, with clear ownership/actions and bounded quantities.

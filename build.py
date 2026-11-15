@@ -15,7 +15,7 @@ from profile import BUILD_ID, make_patch
 
 
 ROOT = Path(__file__).resolve().parent
-RELEASE = "Hyrule-Cheat-Menu-v1.1.1.zip"
+RELEASE = "Hyrule-Cheat-Menu-v1.1.2.zip"
 DISTRIBUTION_FILES = (
     "README.md", "CHANGELOG.md", "RELEASE_NOTES.md", "TEST_REPORT.md", "RELEASE_READINESS.md",
     "PROGRESS.md", "third_party/Fast-Travel-LICENSE.txt", "docs/destination-coverage.csv",
@@ -36,6 +36,7 @@ DISTRIBUTION_FILES = (
     "docs/screenshots/v110-preview-travel-confirm.png",
     "docs/v1.1.0-native-results.json",
     "docs/v1.1.1-native-results.json",
+    "docs/v1.1.2-footer-results.json",
     "docs/screenshots/v110-release-cheats.png", "docs/screenshots/v110-release-combat.png",
     "docs/screenshots/v110-release-travel.png", "docs/screenshots/v110-release-items.png",
 )
@@ -73,6 +74,7 @@ def write_archive(package, entries):
     with zipfile.ZipFile(package, "w", zipfile.ZIP_DEFLATED) as archive:
         for name, data in entries:
             entry = zipfile.ZipInfo("Hyrule-Cheat-Menu/" + name, date_time=(1980, 1, 1, 0, 0, 0))
+            entry.create_system = 3
             entry.compress_type = zipfile.ZIP_DEFLATED
             entry.external_attr = 0o100644 << 16
             archive.writestr(entry, data)

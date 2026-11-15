@@ -1,4 +1,4 @@
-> **v1.1.1** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
+> **v1.1.2** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
 
 <div align="center">
 
@@ -6,7 +6,7 @@
 
 **STANDALONE CHEAT MENU FOR OOTR**
 
-`v1.1.1` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
+`v1.1.2` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
 
 **Created by fxbii.dev**
 
@@ -86,7 +86,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 1. Close the game. Back up your saves using the procedure below.
 2. In Lichii, right-click the supported game and choose **Open Mod Data Location**.
-3. Extract `Hyrule-Cheat-Menu-v1.1.1.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
+3. Extract `Hyrule-Cheat-Menu-v1.1.2.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
 
 ```text
 <game's mod data location>/
@@ -104,7 +104,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 Avoid an extra nested `Hyrule-Cheat-Menu/Hyrule-Cheat-Menu` folder. Disable a separate Fast Travel overlay during integrated-travel testing so its controls cannot interfere.
 
-The optional `Hyrule-Cheat-Menu-v1.1.1-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
+The optional `Hyrule-Cheat-Menu-v1.1.2-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
 
 ### Updates and removal
 
@@ -251,12 +251,12 @@ To include the separate source archive and validate both distributions:
 
 ```powershell
 python build.py --zig "C:\path\to\zig.exe" --source-archive
-python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.1.1-source.zip"
+python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.1.2-source.zip"
 ```
 
-The default add-on is `dist/Hyrule-Cheat-Menu-v1.1.1.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
+The default add-on is `dist/Hyrule-Cheat-Menu-v1.1.2.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
 
-An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.1.1`; it publishes the tested artifacts and refuses an existing release/tag.
+An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.1.2`; it publishes the tested artifacts and refuses an existing release/tag.
 
 ## Support & Bug Reports
 

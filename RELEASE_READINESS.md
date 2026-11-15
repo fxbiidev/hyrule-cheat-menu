@@ -1,3 +1,17 @@
+# Release readiness — Hyrule Cheat Menu v1.1.2
+
+15 November 2026. Follow-up to v1.1.1 commit `822ba40`: both creator/version labels move three logical pixels upward to clear the lower inner border. ZIP creator-platform metadata is pinned for reproducible Windows/Linux archives. The approved layout, controls, inventory logic and save-safety mechanisms otherwise remain unchanged.
+
+Local ARM64/host/renderer/archive validation passes for module `35e338333455b091d9b1208bcd9c5a1d3b301db5163ade208e15d46b9fe1c942`. The complete runner includes 19 C fixtures and 936 renderer cases; exact archive members, checksums, source/document bytes and pinned ZIP creator-platform metadata pass. Native ownership/persistence evidence remains explicitly scoped to the v1.1.1 module below; no new ownership gameplay test is claimed for this visual adjustment.
+
+Native footer acceptance also passes: the reviewed in-game capture shows the creator/version labels clear of the lower inner border. [Footer evidence](docs/v1.1.2-footer-results.json) retains its exact scope. Final documentation/evidence packaging and clean-source reproduction remain delivery gates before commit.
+
+Publication requires passing local build/regressions/package checks, successful CI and a separate `Release v1.1.2` main-branch commit. Verify the new tag and downloaded assets while preserving the existing v1.1.1 release and older history, visibility and licensing.
+
+The v1.1.1 readiness record below is retained unchanged for its own binary and scope.
+
+---
+
 # Release readiness — Hyrule Cheat Menu v1.1.1
 
 15 November 2026. **Native and host acceptance PASS. Local release GO within the scope below; frozen-source package and external delivery checks are mandatory before publication.** Published v1.1.0 is preserved at `fbfb5cb4e9ebff0987fc2d5f353abbd547bd3351`; this is a separate backward-compatible patch.

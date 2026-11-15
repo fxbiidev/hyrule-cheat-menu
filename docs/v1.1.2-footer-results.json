@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "release": "v1.1.2",
+  "date": "2026-11-15",
+  "emulator": "Windows Lichii Build 177",
+  "main_build_id": "E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348",
+  "module_sha256": "35e338333455b091d9b1208bcd9c5a1d3b301db5163ade208e15d46b9fe1c942",
+  "running_text_sha256": "1034241d558b1e834129e5e5be04a775a8d1d992b5c9e4bca7611b6ffd0a7624",
+  "running_text_bytes": 82728,
+  "title_id": "0400486024DEC000",
+  "credits_y_before": 275,
+  "credits_y_after": 272,
+  "version_y_before": 275,
+  "version_y_after": 272,
+  "credits_fully_visible": true,
+  "version_fully_visible": true,
+  "clearance_above_lower_line": true,
+  "scope": "Native footer visual smoke only; v1.1.1 inventory/gameplay evidence retains its original module identity.",
+  "runtime_source_diff_only_footer_position_and_version": true,
+  "screenshots": [
+    {
+      "name": "footer-cheats.png",
+      "sha256": "46e6f6bb35d01d697d90096489f261e213a44be0cc91b513916f7ae4355184a1",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "name": "footer-items.png",
+      "sha256": "7a67129ae840ad3b90e0832ab56501a8a8939f04b447ca514b1e5854552fed81",
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "cleanup": {
+    "isolated_emulator_stopped": true,
+    "restored_copied_save_files": 15,
+    "all_copied_save_hashes_equal_pretest": true,
+    "isolated_preferences_restored": true,
+    "isolated_baseline_module_restored": true,
+    "isolated_configs_restored": true,
+    "owner_installation_modified": false
+  },
+  "private_source_record": {
+    "name": "footer-results.json",
+    "sha256": "f428d568656eb0c1922ec01d8a3eb58116f552ed59d843870e3c38bbedf31b95"
+  }
+}

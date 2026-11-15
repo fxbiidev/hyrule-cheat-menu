@@ -498,7 +498,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     rect(c, 12, 233, WIDTH - 24, 1, trim); label(c, 16, 242, hint, gold);
     label(c, 16, 256, tag, muted); label(c, 294, 256, "R3 OPEN / CLOSE", muted);
     rect(c, 12, 268, WIDTH - 24, 1, trim);
-    label(c, 16, 275, "Created by fxbii.dev", muted); label(c, 354, 275, "V1.1.1", gold);
+    label(c, 16, 272, "Created by fxbii.dev", muted); label(c, 354, 272, "V1.1.2", gold);
 }
 
 static void blend_panel(Canvas *canvas, const uint32_t *scene, unsigned fade) {

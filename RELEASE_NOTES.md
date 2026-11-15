@@ -1,15 +1,11 @@
-# Hyrule Cheat Menu v1.1.1
+# Hyrule Cheat Menu v1.1.2
 
-Fixes Item Manager ownership editing while retaining the approved Emerald & Gold interface and existing controls.
+Moves the creator credit and version label slightly upward so both clear the bottom inner GUI line. This is a visual follow-up to the v1.1.1 Item Manager ownership fix. ZIP creator-platform metadata is also fixed for matching Windows/Linux archives.
 
-- Add supported items that have never been acquired, including Goron Tunic; remove real owned weapons, shields, tunics and boots.
-- Display OWNED / NOT OWNED and ADD ITEM / REMOVE ITEM, with a separate confirmation for every change.
-- Adjust six consumable/ammunition stacks within native capacity without prior-acquisition gating. Empty stock preserves its bag/tool.
-- Use native equipment cleanup, age checks, Hookshot/Longshot slot protection and Bow/Slingshot ammunition dependencies. Infinite Items cannot refill ammunition for a removed tool from cached ownership.
-- Retain deferred acknowledgement, Save/travel holds, save-epoch fences and reload-required handling of uncertain native updates. Quest-critical items and arbitrary save writes remain excluded.
+Install `Hyrule-Cheat-Menu-v1.1.2.zip` by replacing the complete mod folder while the game is closed. The optional `Hyrule-Cheat-Menu-v1.1.2-source.zip` is for review/building. Existing preferences remain compatible.
 
-Install `Hyrule-Cheat-Menu-v1.1.1.zip` by replacing the complete existing mod folder while the game is closed. Back up saves first. Preferences remain compatible with v1.1.0. The optional source ZIP is for review/building.
+The supported target remains Windows Lichii Build 177 and main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`. Inventory and save-safety logic are unchanged. Native ownership and persistence evidence belongs to the exact v1.1.1 binary; this footer-only build does not claim a new ownership gameplay test. See [test report](TEST_REPORT.md) and [release readiness](RELEASE_READINESS.md) for validation and delivery scope.
 
-Supported target: Windows Lichii Build 177, displayed update 2.0.0, title `0400486024DEC000`, exact main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`. Other builds are unverified. See [test report](TEST_REPORT.md), [release readiness](RELEASE_READINESS.md) and [inventory verification](docs/inventory-verification.md) for actual verification and limitations.
+The ARM64 build, complete host regressions, 936 renderer cases and installation/source archive checks pass. The new in-game footer capture confirms both labels clear the lower inner border. Final evidence packaging, CI/publication and downloaded-asset checks remain separate delivery gates.
 
-Native checks verify Goron Tunic add/equip/remove and persistence of both ownership states through stock Save/Load, representative shield/boots/weapon edits, all six stacks across both ages, and Infinite Items/normal ammunition use. Portable fixtures cover all 20 IDs and existing feature regressions; 936 renderer cases pass. Final package/CI/download verification is a separate publication gate. Existing v1.1.0 and v1.0.0 releases, Git history, repository visibility and third-party notices are preserved. No game files, keys, saves or private QA clients are distributed.
+Existing releases, Git history, public visibility and third-party notices are preserved. No game files, keys, saves or private QA clients are distributed.

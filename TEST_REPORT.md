@@ -1,3 +1,19 @@
+# Test report — Footer spacing patch v1.1.2
+
+15 November 2026. The only runtime-source change from v1.1.1 commit `822ba40` raises the creator credit and version label from Y275 to Y272 and changes the footer version to V1.1.2. Inventory, equipment cleanup, save safety and all other gameplay implementations remain source-identical. ZIP creation now pins the creator platform to Unix, with an existing package-layout assertion, to remove the observed Windows/Linux metadata difference without changing v1.1.1 assets.
+
+Module SHA-256 `35e338333455b091d9b1208bcd9c5a1d3b301db5163ade208e15d46b9fe1c942`; RX 82,728 bytes, SHA-256 `1034241d558b1e834129e5e5be04a775a8d1d992b5c9e4bca7611b6ffd0a7624`. Warnings-as-errors ARM64 compilation, the complete host runner (19 C fixtures), 936 renderer cases and exact installation/source archive validation pass for this new binary. The existing renderer covers buffer guards, all six scales/four formats and ownership/confirmation states; no new position-mirroring test was added for this visual adjustment.
+
+No native ownership/Save/Load test was repeated for the footer-only binary. The v1.1.1 native results below remain evidence for module `5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443` with their original scope. They are not relabelled as v1.1.2 results.
+
+Native footer acceptance passes on the new binary: the in-game capture was reviewed and both credit/version labels clear the lower inner border. [Footer evidence](docs/v1.1.2-footer-results.json) records the visual check separately from the retained v1.1.1 inventory gameplay evidence.
+
+The isolated emulator was stopped after the footer smoke. All 15 copied saves, two preference files, two ExeFS files and three configs match the fresh baseline; owner data was untouched.
+
+CI, publication and downloaded-asset verification remain separate delivery checks after commit.
+
+---
+
 # Test report — Item Manager ownership patch v1.1.1
 
 15 November 2026. **Native ownership/persistence and portable regressions pass on the supported target.** Final frozen-source archive/CI/publication checks are separate delivery gates; their future results are not invented in this source snapshot.

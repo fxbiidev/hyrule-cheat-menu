@@ -1,3 +1,20 @@
+# Progress — Footer spacing patch v1.1.2
+
+15 November 2026. Local branch `fix/footer-spacing`, based on v1.1.1 release commit `822ba40`. The requested footer follow-up moves both the creator credit and version label three logical pixels upward so they clear the lower inner border. The footer now reads V1.1.2.
+
+- **Scope:** only the two footer positions/version, deterministic ZIP platform metadata, release filenames/workflow and current delivery documentation change. Item ownership, save safety, controls and other runtime logic remain source-identical to v1.1.1.
+- **Packaging:** pin the ZIP creator platform to Unix so Windows and Linux builds use identical archive metadata; verify that field with the existing package checks. Published v1.1.1 assets remain untouched.
+- **Verification:** warnings-as-errors ARM64 build, complete host regressions (19 C fixtures), 936 renderer cases and installation/source ZIP validation pass. Final documentation changes are repackaged and rechecked before commit.
+- **Current binary:** module `35e338333455b091d9b1208bcd9c5a1d3b301db5163ade208e15d46b9fe1c942`; RX 82,728 bytes, SHA-256 `1034241d558b1e834129e5e5be04a775a8d1d992b5c9e4bca7611b6ffd0a7624`.
+- **Native footer acceptance:** PASS. The new binary's in-game footer capture was reviewed; both creator credit and version now clear the lower inner border. [Footer evidence](docs/v1.1.2-footer-results.json) retains this visual check's exact scope.
+- **Cleanup:** isolated emulator stopped; all 15 copied saves, two preferences, two ExeFS files and three configs restored to the fresh baseline. Owner data untouched.
+- **Native evidence:** v1.1.1 ownership/Save/Load results retain module `5a88f46f2ad013c2881085d81c063a483fd51e00c37b44410c37233aac425443` and their original scope. No new native ownership test is claimed for the footer-only binary.
+- **Delivery:** prepare a separate v1.1.2 release; preserve v1.1.1 commit/history, tag and assets. CI/publication/download verification follows the new release commit.
+
+The v1.1.1 and earlier progress records below are retained unchanged.
+
+---
+
 # Progress — Item Manager ownership patch v1.1.1
 
 15 November 2026. **Native ownership/persistence and host acceptance PASS. Local release GO within the documented scope; final archive and external delivery gates are enforced before publication.**
