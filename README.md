@@ -1,4 +1,4 @@
-> **v1.1.2** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
+> **v1.1.3** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
 
 <div align="center">
 
@@ -6,7 +6,7 @@
 
 **STANDALONE CHEAT MENU FOR OOTR**
 
-`v1.1.2` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
+`v1.1.3` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
 
 **Created by fxbii.dev**
 
@@ -33,7 +33,7 @@ The approved design uses deep emerald backgrounds, gold accents, a contextual de
 | One Hit Kill | Conservative ordinary-enemy allowlist and checked player-originated damage. Verified Master Sword and Fairy Bow path; see the combat scope below. |
 | Damage Multiplier | 1× / 1.5× / 2× / 3× outgoing damage on the supported combat path. One Hit Kill takes priority while the selected multiplier stays stored. |
 | Free Camera | Detach the gameplay view, translate/rotate with both sticks and ascend/descend with the triggers. Includes direct emergency exit and native restoration. |
-| Item Manager | Confirmed add/remove ownership for 20 native item IDs, including unowned gear; quantity controls for six consumable/ammunition stacks. Age, capacity and shared-slot safeguards apply. |
+| Item Manager | Confirmed add/remove ownership for 21 native item IDs, including unowned gear; quantity controls for seven consumable/ammunition stacks. Age, capacity and shared-slot safeguards apply. |
 | Fast Travel | All 214 reference destinations in 37 collapsible groups, including dungeon subgroups, age selection, confirmation, Favorites and Return. |
 
 Unavailable controls remain readable with contextual explanations. Each toggle is independent; normal and flight speeds remain separate. Native gameplay results, host fixtures and older-version evidence retain their exact binary scope in [TEST_REPORT.md](TEST_REPORT.md).
@@ -86,7 +86,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 1. Close the game. Back up your saves using the procedure below.
 2. In Lichii, right-click the supported game and choose **Open Mod Data Location**.
-3. Extract `Hyrule-Cheat-Menu-v1.1.2.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
+3. Extract `Hyrule-Cheat-Menu-v1.1.3.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
 
 ```text
 <game's mod data location>/
@@ -104,7 +104,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 Avoid an extra nested `Hyrule-Cheat-Menu/Hyrule-Cheat-Menu` folder. Disable a separate Fast Travel overlay during integrated-travel testing so its controls cannot interfere.
 
-The optional `Hyrule-Cheat-Menu-v1.1.2-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
+The optional `Hyrule-Cheat-Menu-v1.1.3-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
 
 ### Updates and removal
 
@@ -155,23 +155,25 @@ Unsafe world/scene changes, Fast Travel, normal save loading, incompatible cutsc
 
 ## Item Manager
 
-Open **ITEM MANAGER** with LB/RB. The closed catalog uses **20 real native item IDs**, with OWNED / NOT OWNED status and **ADD ITEM / REMOVE ITEM** actions. Grants change ordinary game inventory; prior gameplay acquisition is not required.
+Open **ITEM MANAGER** with LB/RB. The closed catalog uses **21 real native item IDs**, with OWNED / NOT OWNED status and **ADD ITEM / REMOVE ITEM** actions. Grants change ordinary game inventory; prior gameplay acquisition is not required.
 
 | Category | Items | Operations |
 |---|---|---|
 | Weapons | Kokiri Sword, Fairy Bow, Fairy Slingshot, Boomerang, Hookshot, Longshot, Megaton Hammer | Add / remove ownership |
 | Shields | Deku Shield, Hylian Shield, Mirror Shield | Add / remove ownership |
 | Equipment | Goron Tunic, Zora Tunic, Iron Boots, Hover Boots | Add / remove ownership |
-| Consumables | Deku Sticks, Deku Nuts | Add / remove stock; adjust quantity |
+| Consumables | Deku Sticks, Deku Nuts, Magic Beans | Add / remove stock; adjust quantity |
 | Ammunition | Arrows, Bombs, Deku Seeds, Bombchus | Add / remove stock; adjust quantity |
 
 **A** prepares ADD ITEM for an absent item or REMOVE ITEM for an owned item. A separate **A** confirms; **B** cancels. For stacks, Left/Right drafts a quantity, **A** prepares that quantity, **X** prepares refill and **Y** prepares zero stock. Drafting/cancelling never writes inventory. A normal game save persists confirmed changes.
 
-Edits respect Link's current age and the game's real capacity. Use Adult Link for adult equipment/arrows and Young Link for child equipment/seeds/sticks. Hookshot and Longshot share a slot: remove the other variant first. Add the Bow/Slingshot before adding their ammunition; empty arrows/seeds before removing that tool. Equipment removal uses native equipment/quickslot cleanup. Removing ammunition empties stock while preserving its tool and bag; the stock game may still show the owned tool with zero ammunition. No quest/trade items, bottles, beans, dungeon keys, progression flags or arbitrary save addresses are editable.
+Edits respect Link's current age and the game's real capacity. Use Adult Link for adult equipment/arrows and Young Link for child equipment/seeds/sticks/beans. Hookshot and Longshot share a slot: remove the other variant first. Add the Bow/Slingshot before adding their ammunition; empty arrows/seeds before removing that tool. Equipment removal uses native equipment/quickslot cleanup. Removing ammunition empties stock while preserving its tool and bag; the stock game may still show the owned tool with zero ammunition. Magic Beans use the game's native inventory item and capacity of 10; prior purchase is not required. Bean purchase progression and planted locations are not editable. No quest/trade items, bottles, dungeon keys, progression flags or arbitrary save addresses are editable.
 
-**Turn Infinite Items OFF before editing.** Every confirmed operation dispatches once and waits for actual native readback. Pending acknowledgement holds further edits, Infinite Items refills, Fast Travel and autosave; manual Save confirmation follows Cancel. Normal Load remains available. Infinite Items may refill an emptied eligible owned tool/bag when deliberately re-enabled; removed Bow/Slingshot ownership cannot be recreated by its refill cache.
+Deku Seeds can be added from zero stock with an owned Fairy Slingshot. If its seed bag has never been initialized, the confirmation explains that the first grant adds the related native 30-seed bag, then sets the requested quantity. Existing 40/50-seed capacities are preserved. Adding seeds does not grant the Slingshot or unrelated equipment. Magic Beans appear under Consumables and are editable as Young Link. Use normal gameplay to fire the Slingshot or plant and consume beans. Confirmed changes are saved through the normal game Save flow. [v1.1.3 verification](docs/v1.1.3-native-results.json) records the exact completed coverage.
 
-A two-second timeout or ambiguous result ends the temporary hold and makes editing read only until a **normal save reload**. Follow the displayed instruction; the mod never retries or guesses a rollback. Missing/invalid native capacity is refused explicitly rather than inventing an upgrade. See [inventory verification](docs/inventory-verification.md) and [TEST_REPORT.md](TEST_REPORT.md) for measured native scope and binary identity.
+**Turn Infinite Items OFF before editing.** Each native mutation phase dispatches once and waits for actual readback. Pending acknowledgement holds further edits, Infinite Items refills, Fast Travel and autosave; manual Save confirmation follows Cancel. Normal Load remains available. Infinite Items may refill an emptied eligible owned tool/bag when deliberately re-enabled; removed Bow/Slingshot ownership cannot be recreated by its refill cache.
+
+A two-second timeout or ambiguous result ends the temporary hold and makes editing read only until a **normal save reload**. Follow the displayed instruction; the mod never retries or guesses a rollback. Unexpected native capacity is refused. Only the verified first-seed path can initialize a missing base bag after confirmation. See [v1.1.3 inventory verification](docs/v1.1.3-inventory-verification.md) and [TEST_REPORT.md](TEST_REPORT.md) for measured native scope and binary identity.
 
 ## Fly Mode
 
@@ -251,12 +253,12 @@ To include the separate source archive and validate both distributions:
 
 ```powershell
 python build.py --zig "C:\path\to\zig.exe" --source-archive
-python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.1.2-source.zip"
+python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.1.3-source.zip"
 ```
 
-The default add-on is `dist/Hyrule-Cheat-Menu-v1.1.2.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
+The default add-on is `dist/Hyrule-Cheat-Menu-v1.1.3.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
 
-An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.1.2`; it publishes the tested artifacts and refuses an existing release/tag.
+An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.1.3`; it publishes the tested artifacts and refuses an existing release/tag.
 
 ## Support & Bug Reports
 

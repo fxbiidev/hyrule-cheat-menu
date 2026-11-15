@@ -20,5 +20,6 @@ const InventoryItem inventory_catalog[INVENTORY_COUNT] = {
     {"Arrows", "Item_Arrow_Normal", INV_AMMUNITION, INV_ADULT, true},
     {"Bombs", "Item_Bomb", INV_AMMUNITION, INV_BOTH_AGES, true},
     {"Deku Seeds", "Item_DekuSeed", INV_AMMUNITION, INV_CHILD, true},
-    {"Bombchus", "Item_Bombchu", INV_AMMUNITION, INV_BOTH_AGES, true}
+    {"Bombchus", "Item_Bombchu", INV_AMMUNITION, INV_BOTH_AGES, true},
+    {"Magic Beans", "Item_MagicBean", INV_CONSUMABLES, INV_CHILD, true}
 };

@@ -99,7 +99,8 @@ void overlay_publish(const Menu *menu, unsigned available, unsigned experimental
         revision = (revision ^ (unsigned)entry->count) * 16777619u;
         revision = (revision ^ (unsigned)entry->capacity) * 16777619u;
         revision = (revision ^ (entry->valid | entry->owned << 1 | entry->age_allowed << 2 |
-                    entry->can_set << 3 | entry->can_refill << 4 | entry->can_remove << 5)) * 16777619u;
+                    entry->can_set << 3 | entry->can_refill << 4 | entry->can_remove << 5 |
+                    entry->needs_seed_bag << 6)) * 16777619u;
     }
     unsigned packed = menu->alpha | revision << 8;
     __atomic_store_n(&panel_lock, 0, __ATOMIC_RELEASE);
@@ -432,7 +433,9 @@ static void draw_panel(Canvas *c, uint32_t flags) {
         char number[12];
         number_text(number, (unsigned)menu.item_prompt_quantity);
         used = append_text(item_detail, used, sizeof item_detail, number);
-        append_text(item_detail, used, sizeof item_detail, ". This changes the current inventory.");
+        append_text(item_detail, used, sizeof item_detail,
+            menu.inventory.entries[menu.item_prompt_index].needs_seed_bag ?
+            ". Initializes the native 30-seed bag." : ". This changes the current inventory.");
         second = item_detail;
         tag = "CONFIRM ITEM CHANGE";
         hint = "A Confirm Change / B Cancel / R3 Close";
@@ -465,6 +468,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
         else if (!entry->age_allowed) second = "This item is restricted to the other age.";
         else if (!entry->can_set) second = "No verified safe operation. Check capacity or reload after an uncertain update.";
         else if (menu.enabled & (1u << ITEMS)) second = "Disable Infinite Items before editing quantities.";
+        else if (entry->needs_seed_bag) second = "First grant initializes the native 30-seed bag. Left-Right drafts quantity.";
         else second = item->quantity_editable ?
             "Add or remove stock within native capacity. Left-Right drafts quantity; X refills." :
             "Edit real equipment ownership. Removal restores valid native equipment.";
@@ -498,7 +502,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     rect(c, 12, 233, WIDTH - 24, 1, trim); label(c, 16, 242, hint, gold);
     label(c, 16, 256, tag, muted); label(c, 294, 256, "R3 OPEN / CLOSE", muted);
     rect(c, 12, 268, WIDTH - 24, 1, trim);
-    label(c, 16, 272, "Created by fxbii.dev", muted); label(c, 354, 272, "V1.1.2", gold);
+    label(c, 16, 272, "Created by fxbii.dev", muted); label(c, 354, 272, "V1.1.3", gold);
 }
 
 static void blend_panel(Canvas *canvas, const uint32_t *scene, unsigned fade) {

@@ -32,7 +32,7 @@ static InventorySnapshot inventory_fixture(bool child) {
         entry->valid = entry->owned = true;
         entry->age_allowed = (inventory_catalog[i].ages & (child ? INV_CHILD : INV_ADULT)) != 0;
         entry->count = editable ? 3 : 1;
-        entry->capacity = editable ? 30 : 1;
+        entry->capacity = i == INV_MAGIC_BEANS ? 10 : editable ? 30 : 1;
         entry->can_set = entry->can_remove = entry->age_allowed;
         entry->can_refill = editable && entry->age_allowed;
     }
@@ -97,8 +97,57 @@ static void ownership_requests(void) {
     }
 }
 
+static void seed_and_bean_requests(void) {
+    const unsigned stacks[] = {INV_DEKU_SEEDS, INV_MAGIC_BEANS};
+    for (unsigned s = 0; s < sizeof stacks / sizeof *stacks; ++s) {
+        unsigned index = stacks[s];
+        unsigned category = index == INV_DEKU_SEEDS ? INV_AMMUNITION : INV_CONSUMABLES;
+        assert(inventory_catalog[index].category == category);
+        assert(inventory_catalog[index].quantity_editable);
+        Menu menu = {.tab = MENU_ITEMS, .open = true, .consent = true};
+        input_all(&menu, 0);
+        menu.item_sections = 1u << category;
+        menu.inventory = inventory_fixture(true);
+        InventoryEntry *entry = &menu.inventory.entries[index];
+        entry->count = 0; entry->owned = entry->can_remove = false;
+        menu.cursor = row_index(&menu, ITEM_ROW, index);
+        input_all(&menu, 0);
+        InventorySnapshot original = menu.inventory;
+        press_all(&menu, LEFT);
+        assert(menu.item_quantity == 0 && !menu.item_prompt);
+        press_all(&menu, RIGHT);
+        assert(menu.item_quantity == 1 && !menu.item_prompt && !menu.item_request);
+        press_all(&menu, CONFIRM);
+        assert(menu.item_prompt && menu.item_action == INVENTORY_SET && menu.item_prompt_quantity == 1);
+        press_all(&menu, BACK);
+        assert(!menu.item_prompt && !memcmp(&original, &menu.inventory, sizeof original));
+        menu.item_quantity = entry->capacity;
+        press_all(&menu, RIGHT);
+        assert(menu.item_quantity == entry->capacity);
+        press_all(&menu, LEFT);
+        assert(menu.item_quantity == entry->capacity - 1);
+        press_all(&menu, AGE);
+        assert(menu.item_prompt && menu.item_action == INVENTORY_REFILL);
+        assert(menu.item_prompt_index == index && menu.item_prompt_quantity == entry->capacity);
+        press_all(&menu, BACK);
+        entry->count = entry->capacity; entry->owned = entry->can_remove = true;
+        entry->can_refill = false;
+        press_all(&menu, FAVORITE);
+        assert(menu.item_prompt && menu.item_action == INVENTORY_REMOVE && !menu.item_prompt_quantity);
+        assert(menu.item_prompt_index == index && !menu.item_request);
+        press_all(&menu, BACK);
+        assert(entry->count == entry->capacity && entry->owned);
+        press_all(&menu, BACK);
+        MenuRow rows[MENU_ROWS];
+        menu_rows(&menu, rows);
+        assert(rows[menu.cursor].kind == ITEM_SECTION && rows[menu.cursor].value == category);
+        assert(!(menu.item_sections & (1u << category)) && menu.open);
+    }
+}
+
 int main(void) {
     ownership_requests();
+    seed_and_bean_requests();
     Menu fade = {0};
     menu_input(&fade, 0, true, 0, true, 31, support);
     menu_input(&fade, 20, true, R3, true, 31, support);
@@ -521,6 +570,6 @@ int main(void) {
     assert(!integrated.preferences_dirty && integrated.preferences.damage == 3);
     assert(!memcmp(&untouched, &integrated.preferences, sizeof untouched));
 
-    puts("Menu, 214 destinations, all favorites, transitions, corrupt preferences, three tabs, combat settings and confirmed add/remove ownership requests for all 20 items passed.");
+    puts("Menu, 214 destinations, all favorites, transitions, corrupt preferences, three tabs, combat settings, all catalog ownership requests and seed/bean category/quantity controls passed.");
     return 0;
 }

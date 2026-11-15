@@ -1,3 +1,17 @@
+# Release readiness — Hyrule Cheat Menu v1.1.3
+
+15 November 2026. **Local release GO: native functionality, host regressions and cleanup PASS within the documented scope.** Deku Seeds support confirmed first acquisition through the required native base bag and preserve existing 40/50 capacities. Magic Beans use native capacity 10 and need no previous purchase. Young Link edits, confirmations, deferred acknowledgement, Save/travel holds and uncertainty fences remain. The approved UI, navigation, unrelated inventory and existing features are preserved. [Inventory contract](docs/v1.1.3-inventory-verification.md) records the mechanisms.
+
+Final module `b247a9ac86c52b3ae033c9367e55bff0d67d68a94437ca5d170cbe22b46f81ba`; loaded RX 83,672 bytes, SHA-256 `61ac1ef8cca49a2984eb2d1babcf8c27dcde891a57e980088eb0ddfbef1d705e`. RX/RW match gameplay-tested `70aef1a94c5f9fc996acf638531ce541261919cc1b2ced3e802c9505467a70a1`; only two read-only footer version characters differ. Final loaded identity and V1.1.3 visual footer smoke pass. Individual native records keep their actual binary scope.
+
+All 48 native observations validate. Corrected-logic tests establish never-purchased beans, exact first seed grant with the related base bag, normal Slingshot consumption and bean planting with Infinite Items ON, native Save/Load quantity and removal persistence, and measured progression preservation. Final-binary tests establish Adult/tool/Infinite Items refusals, zero-stock grant/cancel/remove/increase/decrease/maxima for both stacks, retained acquired 40-seed capacity and preservation of purchase counter 4/two existing plants. [Test report](TEST_REPORT.md) and [native evidence](docs/v1.1.3-native-results.json) retain exact measurements and limits, including no separate native 50-capacity run.
+
+The final ARM64 build and complete host runner pass: 19 C fixtures, 1,176 renderer cases and installation/source ZIP checksum/layout/profile checks. The frozen module matches the release binary. Isolated emulator cleanup passes: all 15 copied saves, two preferences, two ExeFS files and three configs match their pretest baseline; owner data is untouched. No critical crash, softlock, save corruption or major regression was observed in the completed scope.
+
+Publication is authorized to existing `fxbiidev/hyrule-cheat-menu`. Repackage the finalized evidence/documentation and verify exact archive bytes before the release commit. CI must then pass; the workflow publishes only exact `Release v1.1.3` on main, refuses existing tags/releases and attaches the tested artifacts. Verify the published tag, release URL and downloaded bytes afterward. These external delivery steps are not claimed complete here. Preserve previous history/releases, visibility and licensing.
+
+---
+
 # Release readiness — Hyrule Cheat Menu v1.1.2
 
 15 November 2026. Follow-up to v1.1.1 commit `822ba40`: both creator/version labels move three logical pixels upward to clear the lower inner border. ZIP creator-platform metadata is pinned for reproducible Windows/Linux archives. The approved layout, controls, inventory logic and save-safety mechanisms otherwise remain unchanged.

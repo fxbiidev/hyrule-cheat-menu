@@ -1,3 +1,18 @@
+# Progress — Deku Seeds and Magic Beans v1.1.3
+
+15 November 2026. **Local release GO: native, host and cleanup acceptance PASS within the documented scope.** Recovered published v1.1.2 `76a9316c165872692bc0199f6cbd9fae3129c94a` and inspected its source and latest release before changes.
+
+- **Behavior:** Magic Beans use `Item_MagicBean`, maximum 10 and Young Link use without purchase prerequisites. First Deku Seed acquisition confirms the related native 30-seed bag, then applies the exact requested quantity. The Slingshot must be granted separately; existing 40/50 capacities remain. [Inventory contract](docs/v1.1.3-inventory-verification.md) records the mechanisms.
+- **Safety:** Save/travel stays held through native bag/stock acknowledgement and any consumption down to the target under the original two-second deadline. Each phase dispatches once; uncertainty requires normal reload. Infinite Items excludes beans and blocks manual edits. No raw save, purchase or planted-location writes.
+- **Final binary:** `b247a9ac86c52b3ae033c9367e55bff0d67d68a94437ca5d170cbe22b46f81ba`; loaded RX 83,672 bytes, SHA-256 `61ac1ef8cca49a2984eb2d1babcf8c27dcde891a57e980088eb0ddfbef1d705e`. RX/RW equal gameplay-tested `70aef1a94c5f9fc996acf638531ce541261919cc1b2ced3e802c9505467a70a1`; only two read-only version characters differ. Final V1.1.3 footer and loaded identity pass separate native smoke.
+- **Native acceptance:** all 48 public observations validate. Fresh beans 0 → 1 → 10 with purchase 0/all flags initially 0; confirmed first seed exactly 1 / 30, refill 30, actual Slingshot 30 → 29. Save 30 / 10 → unsaved 0 / 0 → Load 30 / 10. Infinite Items ON bean planting 10 → 9 sets only Kokiri flag 8. Saved removal 0 / 0 survives unsaved re-add 1 / 1 and Load with plant/purchase preserved. Final binary covers both Adult refusals, tool/Infinite Items safeguards, zero-stock/cancel/remove/quantity/max controls and acquired seed capacity 40 without downgrade. Other catalog counts and recorded prior progression remain unchanged by manual edits.
+- **Host/package acceptance:** final warnings-as-errors ARM64 build, all 19 C fixtures, 1,176 renderer cases and install/source ZIP checksum/layout/profile checks pass. Frozen release module matches exactly. The finalized evidence/documentation refresh is repackaged and byte-checked before commit.
+- **Cleanup PASS:** isolated emulator stopped; all 15 original copied saves, two preferences, two ExeFS files and three configs restored exactly to baseline. Owner installation/saves untouched.
+- **Scope:** native 30/40 capacities; 50 verified by parameters/host policy. Kokiri planting and listed progression checks do not establish every soil/platform/quest combination. Exact checkpoint attribution is retained in the [test report](TEST_REPORT.md) and [native evidence](docs/v1.1.3-native-results.json).
+- **Delivery:** after final document repackaging, commit/push and require CI before publication of v1.1.3. Verify tag, release URL and downloaded asset bytes afterward. These external steps are not yet claimed complete. Previous history/releases, visibility and licensing remain preserved.
+
+---
+
 # Progress — Footer spacing patch v1.1.2
 
 15 November 2026. Local branch `fix/footer-spacing`, based on v1.1.1 release commit `822ba40`. The requested footer follow-up moves both the creator credit and version label three logical pixels upward so they clear the lower inner border. The footer now reads V1.1.2.

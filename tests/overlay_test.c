@@ -29,7 +29,7 @@ static unsigned find_row(Menu *menu, enum RowKind kind, unsigned value) {
     return 0;
 }
 
-enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, FIXTURE_STATES = 39 };
+enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, FIXTURE_STATES = 49 };
 
 static Menu fixture_menu(unsigned state) {
     Menu menu = {.consent = true, .enabled = 175, .speed = 3, .flight_speed = 5,
@@ -43,7 +43,7 @@ static Menu fixture_menu(unsigned state) {
         entry->valid = true; entry->owned = i != INV_MIRROR_SHIELD;
         entry->age_allowed = (inventory_catalog[i].ages & INV_CHILD) != 0;
         entry->count = entry->owned ? quantity ? 3 : 1 : 0;
-        entry->capacity = quantity ? 30 : 1;
+        entry->capacity = i == INV_MAGIC_BEANS ? 10 : quantity ? 30 : 1;
         entry->can_set = entry->age_allowed;
         entry->can_refill = quantity && entry->age_allowed && entry->count < entry->capacity;
         entry->can_remove = entry->age_allowed && entry->owned;
@@ -110,6 +110,31 @@ static Menu fixture_menu(unsigned state) {
             menu.notice = "Inventory uncertain. Reload a save before further edits.";
         } else if (state == 38) {
             menu.notice = "Applying native inventory change...";
+        } else if (state >= 39 && state <= 46) {
+            unsigned index = state < 43 ? INV_MAGIC_BEANS : INV_DEKU_SEEDS;
+            unsigned variant = (state - 39) % 4;
+            menu.cursor = find_row(&menu, ITEM_ROW, index);
+            InventoryEntry *entry = &menu.inventory.entries[index];
+            entry->count = variant == 0 ? 0 : entry->capacity;
+            entry->owned = entry->can_remove = entry->count > 0;
+            entry->can_refill = entry->count < entry->capacity;
+            if (variant == 2) {
+                menu.item_prompt = true; menu.item_prompt_index = index;
+                menu.item_prompt_quantity = 0; menu.item_action = INVENTORY_REMOVE;
+            } else if (variant == 3) {
+                menu.inventory.child = false;
+                entry->age_allowed = entry->can_set = entry->can_remove = entry->can_refill = false;
+            }
+        } else if (state == 47 || state == 48) {
+            menu.cursor = find_row(&menu, ITEM_ROW, INV_DEKU_SEEDS);
+            InventoryEntry *entry = &menu.inventory.entries[INV_DEKU_SEEDS];
+            entry->count = 0; entry->capacity = 30;
+            entry->owned = entry->can_remove = false;
+            entry->can_set = entry->can_refill = entry->needs_seed_bag = true;
+            if (state == 48) {
+                menu.item_prompt = true; menu.item_prompt_index = INV_DEKU_SEEDS;
+                menu.item_prompt_quantity = 1; menu.item_action = INVENTORY_SET;
+            }
         }
     } else if (state >= 13 && state <= 17) {
         menu.tab = MENU_TRAVEL;
@@ -170,6 +195,7 @@ static void cache_revision_checks(void) {
         CHECK_CHANGE(inventory.entries[i].can_set, !menu.inventory.entries[i].can_set);
         CHECK_CHANGE(inventory.entries[i].can_refill, !menu.inventory.entries[i].can_refill);
         CHECK_CHANGE(inventory.entries[i].can_remove, !menu.inventory.entries[i].can_remove);
+        CHECK_CHANGE(inventory.entries[i].needs_seed_bag, !menu.inventory.entries[i].needs_seed_bag);
     }
     #undef CHECK_CHANGE
 }
@@ -236,5 +262,5 @@ int main(void) {
     }
     require(ownership_frames[0] != ownership_frames[1], "Owned and unowned equipment produced identical frames");
     require(ownership_frames[2] != ownership_frames[3], "Add and remove equipment confirmations produced identical frames");
-    puts("Production software panel: six scales, four formats, 39 states, ownership/draft/confirmation cache invalidation, buffer guards and exact 85% blending passed (not a display test).");
+    puts("Production software panel: six scales, four formats, 49 states including first-seed-bag context/confirmation, ownership/draft/confirmation cache invalidation, buffer guards and exact 85% blending passed (not a display test).");
 }

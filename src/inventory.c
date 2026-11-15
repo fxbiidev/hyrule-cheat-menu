@@ -7,7 +7,7 @@ static struct {
     uintptr_t pouch, actor;
     unsigned epoch, index;
     int before, capacity, target;
-    bool child;
+    bool child, seed_bootstrap, seed_bag;
     uint64_t started;
 } pending;
 static unsigned pending_active;
@@ -57,6 +57,29 @@ static int item_count(uintptr_t pouch, const char *name) {
         pouch, &name, 0, 0);
 }
 
+static int item_capacity(uintptr_t pouch, unsigned index, const char **name) {
+    if (!inventory_catalog[index].quantity_editable) return 1;
+    int capacity = ((int (*)(uintptr_t, const char **, unsigned, uintptr_t))
+        game(GAME_ammo_capacity))(pouch, name, 0, 0);
+    // Verified native PouchContent/ExpandPouch parameters. Refuse unexpected
+    // layouts or upgrade values instead of permitting an unsupported stack.
+    if (index == INV_MAGIC_BEANS && capacity != 10) return -1;
+    if (index == INV_DEKU_SEEDS && capacity != 0 && capacity != 30 &&
+        capacity != 40 && capacity != 50) return -1;
+    return capacity;
+}
+
+static void give_item(uintptr_t pouch, const char *name, int quantity) {
+    typedef unsigned (*Give)(uintptr_t, const char **, unsigned, int, unsigned,
+                              unsigned, unsigned, unsigned, unsigned);
+    ((Give)game(GAME_give_ammo))(pouch, &name, 0, quantity, 0, 0, 0, 0, 0);
+}
+
+static void consume_item(uintptr_t pouch, const char *name, unsigned quantity) {
+    ((void (*)(uintptr_t, const char **, unsigned, unsigned, unsigned, unsigned))
+        game(GAME_consume_ammo))(pouch, &name, quantity, 0, 0, 0);
+}
+
 static enum InventoryResult dependency(const InventorySnapshot *snapshot, unsigned index,
     enum InventoryAction action, int target) {
     const InventoryEntry *entry = &snapshot->entries[index];
@@ -99,27 +122,58 @@ enum InventoryResult inventory_poll(uintptr_t pouch, uintptr_t actor, unsigned e
         return INV_STALE;
     }
     if (child != pending.child) return uncertain(INV_NATIVE_FAILED);
+    if (pending.seed_bootstrap) {
+        int tool = item_count(pouch, inventory_catalog[INV_SLINGSHOT].native_id);
+        if (!inventory_busy() || epoch != save_epoch()) {
+            clear_pending();
+            return INV_STALE;
+        }
+        if (tool != 1) return uncertain(INV_NATIVE_FAILED);
+    }
     const char *name = inventory_catalog[pending.index].native_id;
     int count = item_count(pouch, name);
     if (!inventory_busy() || epoch != save_epoch()) {
         clear_pending();
         return INV_STALE;
     }
-    int capacity = 1;
-    if (inventory_catalog[pending.index].quantity_editable)
-        capacity = ((int (*)(uintptr_t, const char **, unsigned, uintptr_t))
-            game(GAME_ammo_capacity))(pouch, &name, 0, 0);
+    int capacity = item_capacity(pouch, pending.index, &name);
     if (!inventory_busy() || epoch != save_epoch()) {
         clear_pending();
         return INV_STALE;
-    }
-    if (capacity != pending.capacity || count < 0 || count > capacity) {
-        return uncertain(INV_NATIVE_FAILED);
     }
     if (!current(pouch, actor, epoch) || !inventory_busy()) {
         if (epoch == save_epoch()) return uncertain(INV_NATIVE_FAILED);
         clear_pending();
         return INV_STALE;
+    }
+    if (pending.seed_bag) {
+        // Native Small Bullet Bag acquisition sets DekuSeed capacity to 30 and
+        // queues its IsItemStockMaxIfGet refill. A visible capacity alone does
+        // not acknowledge that transaction or authorize a second writer.
+        if ((capacity != 0 && capacity != 30) || (count != 0 && count != 30) ||
+            (capacity == 0 && count != 0)) return uncertain(INV_NATIVE_FAILED);
+        if (capacity == 30 && count == 30) {
+            pending.seed_bag = false;
+            pending.before = 30;
+            if (pending.target == 30) {
+                clear_pending();
+                return INV_OK;
+            }
+            if (monotonic_ms() - pending.started >= INVENTORY_ACK_MS) return uncertain(INV_TIMEOUT);
+            // Publish the phase change before dispatch. No poll or reset may
+            // replay this consumption if its native acknowledgement is delayed.
+            consume_item(pouch, name, (unsigned)(30 - pending.target));
+            if (epoch != save_epoch() || !inventory_busy()) {
+                clear_pending();
+                return INV_STALE;
+            }
+            return INV_PENDING;
+        }
+        if (monotonic_ms() - pending.started >= INVENTORY_ACK_MS) return uncertain(INV_TIMEOUT);
+        return INV_PENDING;
+    }
+    if (capacity != pending.capacity || count < 0 || count > capacity) {
+        return uncertain(INV_NATIVE_FAILED);
     }
     if (count == pending.target) {
         // Native consumption also clears equipment references and schedules the
@@ -166,13 +220,9 @@ bool inventory_read(uintptr_t pouch, uintptr_t actor, unsigned epoch, InventoryS
         InventoryEntry *entry = &next.entries[i];
         entry->count = item_count(pouch, item->native_id);
         if (epoch != save_epoch()) return false;
-        entry->capacity = 1;
-        if (item->quantity_editable) {
-            const char *name = item->native_id;
-            entry->capacity = ((int (*)(uintptr_t, const char **, unsigned, uintptr_t))
-                game(GAME_ammo_capacity))(pouch, &name, 0, 0);
-            if (epoch != save_epoch()) return false;
-        }
+        const char *name = item->native_id;
+        entry->capacity = item_capacity(pouch, i, &name);
+        if (epoch != save_epoch()) return false;
         entry->valid = entry->count >= 0 && entry->capacity >= 0 && entry->capacity <= 999 &&
             entry->count <= entry->capacity;
         entry->age_allowed = (item->ages & age) != 0;
@@ -181,6 +231,16 @@ bool inventory_read(uintptr_t pouch, uintptr_t actor, unsigned epoch, InventoryS
             entry->age_allowed && entry->capacity > 0;
         entry->can_refill = entry->can_set && entry->count < entry->capacity;
         entry->can_remove = entry->can_set && entry->count > 0;
+    }
+    InventoryEntry *seeds = &next.entries[INV_DEKU_SEEDS];
+    const InventoryEntry *slingshot = &next.entries[INV_SLINGSHOT];
+    if (next.child && seeds->valid && !seeds->count && !seeds->capacity &&
+        slingshot->valid && slingshot->count == 1) {
+        // Native tool grants need not establish the seed pouch. Offer only the
+        // verified base capacity, acquired after confirmation; no tool is given.
+        seeds->capacity = 30;
+        seeds->needs_seed_bag = true;
+        seeds->can_set = seeds->can_refill = !is_uncertain(epoch);
     }
     if (!current(pouch, actor, epoch)) return false;
     next.valid = true;
@@ -204,7 +264,8 @@ enum InventoryResult inventory_apply(uintptr_t pouch, uintptr_t actor, unsigned 
         return epoch == save_epoch() ? INV_UNAVAILABLE : INV_STALE;
     const InventoryEntry *entry = &live.entries[index], *expected = &snapshot->entries[index];
     if (live.child != snapshot->child || !expected->valid || entry->count != expected->count ||
-        entry->capacity != expected->capacity) return INV_STALE;
+        entry->capacity != expected->capacity || entry->needs_seed_bag != expected->needs_seed_bag)
+        return INV_STALE;
     if (!entry->valid) return INV_UNAVAILABLE;
     if (!entry->age_allowed) return INV_AGE_RESTRICTED;
     int target = action == INVENTORY_REMOVE ? 0 : action == INVENTORY_REFILL ? entry->capacity : quantity;
@@ -222,6 +283,7 @@ enum InventoryResult inventory_apply(uintptr_t pouch, uintptr_t actor, unsigned 
     pending.capacity = entry->capacity;
     pending.target = target;
     pending.child = live.child;
+    pending.seed_bootstrap = pending.seed_bag = entry->needs_seed_bag;
     pending.started = monotonic_ms();
     __atomic_store_n(&pending_active, 1, __ATOMIC_RELEASE);
     // Publish the save/travel hold before entering the native writer. A reset
@@ -231,14 +293,9 @@ enum InventoryResult inventory_apply(uintptr_t pouch, uintptr_t actor, unsigned 
         return epoch == save_epoch() ? INV_UNAVAILABLE : INV_STALE;
     }
     const char *name = inventory_catalog[index].native_id;
-    if (target > entry->count) {
-        typedef unsigned (*Give)(uintptr_t, const char **, unsigned, int, unsigned,
-                                  unsigned, unsigned, unsigned, unsigned);
-        ((Give)game(GAME_give_ammo))(pouch, &name, 0, target - entry->count, 0, 0, 0, 0, 0);
-    } else {
-        ((void (*)(uintptr_t, const char **, unsigned, unsigned, unsigned, unsigned))
-            game(GAME_consume_ammo))(pouch, &name, (unsigned)(entry->count - target), 0, 0, 0);
-    }
+    if (pending.seed_bag) give_item(pouch, "Item_BulletBag_Small", 1);
+    else if (target > entry->count) give_item(pouch, name, target - entry->count);
+    else consume_item(pouch, name, (unsigned)(entry->count - target));
     if (epoch != save_epoch() || !inventory_busy()) {
         clear_pending();
         return INV_STALE;

@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.3 — Deku Seeds and Magic Beans
+
+- Add Magic Beans (`Item_MagicBean`) to Consumables with confirmed ADD ITEM / REMOVE ITEM and quantity controls, including grants before any normal purchase. Use the native capacity getter and the verified game maximum of 10.
+- Support first Deku Seed grants in Ammunition by initializing the related native 30-seed bag only after confirmation, then applying the requested quantity. Require the separately owned Fairy Slingshot; preserve existing 40/50-seed capacities, removal and quantity controls. Do not auto-grant the Slingshot or unrelated equipment.
+- Preserve age restrictions, confirmation, native give/consume, deferred readback, Save/travel holds and Infinite Items safeguards. Beans remain excluded from Infinite Items.
+- Preserve the approved layout, navigation, other inventory entries, cheats, Fast Travel, Free Camera, preferences and prior release history. Targeted native validation and final package/publication gates are tracked in the current test report.
+
 ## v1.1.2 — Footer spacing and reproducible ZIP metadata
 
 - Raise the creator credit and version label three logical pixels to clear the lower inner border.

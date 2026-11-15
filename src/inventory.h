@@ -9,6 +9,7 @@ enum InventoryId {
     INV_DEKU_SHIELD, INV_HYLIAN_SHIELD, INV_MIRROR_SHIELD,
     INV_GORON_TUNIC, INV_ZORA_TUNIC, INV_IRON_BOOTS, INV_HOVER_BOOTS,
     INV_DEKU_STICKS, INV_DEKU_NUTS, INV_ARROWS, INV_BOMBS, INV_DEKU_SEEDS, INV_BOMBCHUS,
+    INV_MAGIC_BEANS,
     INVENTORY_COUNT
 };
 enum InventoryAge { INV_ADULT = 1, INV_CHILD = 2, INV_BOTH_AGES = 3 };
@@ -22,6 +23,9 @@ extern const InventoryItem inventory_catalog[INVENTORY_COUNT];
 typedef struct {
     int count, capacity;
     bool valid, owned, age_allowed, can_set, can_refill, can_remove;
+    // A first seed grant initializes the verified base pouch through native
+    // acquisition. The displayed capacity is prospective until acknowledged.
+    bool needs_seed_bag;
 } InventoryEntry;
 typedef struct {
     unsigned epoch;

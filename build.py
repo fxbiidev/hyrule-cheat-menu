@@ -15,7 +15,7 @@ from profile import BUILD_ID, make_patch
 
 
 ROOT = Path(__file__).resolve().parent
-RELEASE = "Hyrule-Cheat-Menu-v1.1.2.zip"
+RELEASE = "Hyrule-Cheat-Menu-v1.1.3.zip"
 DISTRIBUTION_FILES = (
     "README.md", "CHANGELOG.md", "RELEASE_NOTES.md", "TEST_REPORT.md", "RELEASE_READINESS.md",
     "PROGRESS.md", "third_party/Fast-Travel-LICENSE.txt", "docs/destination-coverage.csv",
@@ -30,6 +30,7 @@ DISTRIBUTION_FILES = (
     "docs/screenshots/release-cheats.png", "docs/screenshots/release-travel.png",
     "docs/screenshots/release-landing.png",
     "docs/combat-verification.md", "docs/free-camera-verification.md", "docs/inventory-verification.md",
+    "docs/v1.1.3-inventory-verification.md",
     "docs/v1.1.0-design-review.md", "docs/v110-preview-verification.json",
     "docs/screenshots/v110-preview-cheats.png", "docs/screenshots/v110-preview-combat.png",
     "docs/screenshots/v110-preview-travel.png", "docs/screenshots/v110-preview-items.png",
@@ -37,6 +38,7 @@ DISTRIBUTION_FILES = (
     "docs/v1.1.0-native-results.json",
     "docs/v1.1.1-native-results.json",
     "docs/v1.1.2-footer-results.json",
+    "docs/v1.1.3-native-results.json",
     "docs/screenshots/v110-release-cheats.png", "docs/screenshots/v110-release-combat.png",
     "docs/screenshots/v110-release-travel.png", "docs/screenshots/v110-release-items.png",
 )

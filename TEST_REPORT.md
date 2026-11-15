@@ -1,3 +1,47 @@
+# Test report — Deku Seeds and Magic Beans v1.1.3
+
+15 November 2026. **Local native, host and cleanup acceptance PASS.** Magic Beans now appear in Consumables, and Deku Seeds support first acquisition through the game's required base-bag mechanism. Both retain confirmed ADD ITEM / REMOVE ITEM, ownership indicators and bounded quantity controls. The catalog has 21 item IDs and seven editable stacks. [Inventory contract](docs/v1.1.3-inventory-verification.md) records verified IDs/mechanisms; [native evidence](docs/v1.1.3-native-results.json) contains 48 validated observations with exact binary scope.
+
+## Corrected behavior and binary identity
+
+A first seed grant requires Young Link, zero seeds, raw capacity 0 and a separately owned Fairy Slingshot. Confirmation explains initialization of the related native 30-seed bag. Native Give must reach actual capacity 30 / stock 30 before a lower requested quantity is consumed down to its exact target. Save/travel remains held across both phases under the original two-second deadline. Existing 40/50 capacities remain on the ordinary quantity path; no Slingshot or unrelated equipment is granted automatically. Beans use native `Item_MagicBean`, maximum 10, without purchase prerequisites. Infinite Items excludes beans and must be OFF for manual edits.
+
+Final module SHA-256 `b247a9ac86c52b3ae033c9367e55bff0d67d68a94437ca5d170cbe22b46f81ba`; loaded RX **83,672 bytes**, SHA-256 `61ac1ef8cca49a2984eb2d1babcf8c27dcde891a57e980088eb0ddfbef1d705e`. Corrected gameplay checkpoint `70aef1a94c5f9fc996acf638531ce541261919cc1b2ced3e802c9505467a70a1` has byte-identical RX and RW. Its read-only segment differs only in two footer characters, from V1.3.0 to the requested V1.1.3. Gameplay observations retain their actual module identity; this comparison is not presented as an implicit repeated gameplay run. The final module's loaded RX identity and visible V1.1.3 footer were separately verified.
+
+## Completed native results
+
+Tests used isolated Windows Lichii Build 177 with copied data and a fresh-game profile, pinned main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`, logical controller inputs, stock game flows and independent read-only state inspection.
+
+| Scenario | Measured result and scope |
+|---|---|
+| Never-purchased beans | On `70aef1…`, purchase counter 0/all measured planted flags 0: beans ADD 0 → 1 → refill 10; progression unchanged. |
+| First seed prerequisites | On `70aef1…`, no tool/no bag: addition refused. Separately adding the Slingshot grants ownership 1 without silently adding seeds. |
+| Exact first seed grant | On `70aef1…`, confirmed native bag initialization gives exactly 1 seed / capacity 30, clears the pending-bag indicator, then ordinary refill reaches 30. |
+| Native quantity persistence | On `70aef1…`, Save 30 seeds / 10 beans → unsaved 0 / 0 → normal Load 30 / 10 (epoch 4 → 6). The acquired base bag persists. |
+| Normal Slingshot use | On `70aef1…`, stock-selected firing consumes seeds 30 → 29. |
+| Virgin bean planting / Infinite Items | On `70aef1…`, Infinite Items ON: planting consumes beans 10 → 9; purchase counter stays 0 and only new Kokiri planted flag 8 becomes 1. Beans stay finite. |
+| Saved removal persists | On `70aef1…`, Infinite Items OFF: remove beans 9 → 0 and seeds 30 → 0; Save 0 / 0 with the plant → unsaved re-add 1 / 1 → Load 0 / 0 (epoch 6 → 8). Plant and purchase counter 0 persist. |
+| Existing 40-seed bag and both stack controls | On final `b247a9…`, both stacks support removal, cancelled addition, zero-stock ADD, native maximum, decrement and increment. Existing seed capacity 40 is retained without downgrade; bean maximum is 10. Purchase counter 4 and two previous planted locations stay unchanged through edits. |
+| Adult, tool and Infinite Items safeguards | On final `b247a9…`, both Adult edits refused; seeds without the Slingshot refused; explicit separate tool grant permits seeds. Both edits refused with Infinite Items ON; eligible seeds refill and beans remain empty. |
+| Edit isolation | The measured manual edits preserve every other catalog count and the recorded bean progression values. No raw save, purchase-counter or planted-location writes were introduced. |
+| Final footer / runtime identity | Final `b247a9…` loaded RX matches the hash above; V1.1.3 footer is visible and was visually reviewed. |
+
+## Automated checks and cleanup
+
+Final v1.1.3 warnings-as-errors ARM64 compilation and the complete runner pass: **19 C fixtures**, **1,176 renderer cases**, installation/source ZIP checksum and layout checks, exact source/document bytes, NSO hashes and supported-profile validation. The frozen module matches `b247a9…` exactly. Finalized documentation/evidence is repackaged and checked before commit.
+
+The isolated emulator is stopped. All **15 original copied save files**, **two preference files**, **two ExeFS files** and **three config files** match their pretest baseline after restoration. The owner's installation and saves were untouched.
+
+**Local release GO within the documented scope.** CI, publication, exact tag and downloaded-asset byte verification are separate delivery steps after commit; they are not claimed complete in this source record.
+
+## Coverage limits and earlier finding
+
+Native seed capacities 30 and 40 were observed. Capacity 50 has verified native-parameter and host-policy coverage, without a separate native 50-capacity run. Progression measurements cover the listed purchase/dialogue/soil/planted values, not every progression flag. Kokiri planting does not establish every soil location or Adult bean-platform ride. Logical inputs were tested; physical controller hardware is not claimed. Existing cheats, travel and camera retain their historical native scope plus current host regressions; every encounter was not replayed.
+
+Intermediate module `63f50870fa2626eb671afed695e3e9e0e8c61ac40ee8e5491dcd00099d57c030` exposed seed capacity 0 after a fresh native Slingshot grant. That finding led to the explicit base-bag path tested above. Its earlier observations remain separate checkpoint evidence and are not promoted to the final binary. Earlier release reports below retain their original identities and scope.
+
+---
+
 # Test report — Footer spacing patch v1.1.2
 
 15 November 2026. The only runtime-source change from v1.1.1 commit `822ba40` raises the creator credit and version label from Y275 to Y272 and changes the footer version to V1.1.2. Inventory, equipment cleanup, save safety and all other gameplay implementations remain source-identical. ZIP creation now pins the creator platform to Unix, with an existing package-layout assertion, to remove the observed Windows/Linux metadata difference without changing v1.1.1 assets.

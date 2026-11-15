@@ -11,6 +11,8 @@ static bool reset_count, reset_capacity, reset_age, reset_write, fail_write, par
 static bool reset_equipped, unsafe_equipped, defer_unequip;
 static bool equipped[INVENTORY_COUNT];
 static bool defer_write;
+static bool defer_bag, bag_queued;
+static unsigned bag_gives;
 static int queued_index = -1, queued_quantity;
 static uint64_t now;
 static int amounts[INVENTORY_COUNT], capacities[INVENTORY_COUNT];
@@ -53,6 +55,18 @@ static unsigned mock_equipped(uintptr_t pouch, const char **name) {
 static unsigned mock_give(uintptr_t pouch, const char **name, unsigned alt, int delta,
     unsigned a, unsigned b, unsigned c, unsigned d, unsigned e) {
     assert(pouch == 1 && !alt && !a && !b && !c && !d && !e);
+    if (!strcmp(*name, "Item_BulletBag_Small")) {
+        assert(inventory_busy() && delta == 1 && amounts[INV_SLINGSHOT] == 1);
+        assert(!amounts[INV_DEKU_SEEDS] && !capacities[INV_DEKU_SEEDS]);
+        ++writes; ++bag_gives;
+        if (defer_bag) bag_queued = true;
+        else if (!fail_write) {
+            capacities[INV_DEKU_SEEDS] = 30;
+            amounts[INV_DEKU_SEEDS] = partial_write ? 29 : 30;
+        }
+        if (reset_write) { ++epoch; reset_write = false; }
+        return !fail_write;
+    }
     int i = index_of(*name);
     assert(inventory_busy()); // Save/travel hold is published before native dispatch.
     assert(delta > 0 && amounts[i] + delta <= capacities[i]);
@@ -92,9 +106,192 @@ static enum InventoryResult apply(InventorySnapshot *snapshot, unsigned index,
     return inventory_apply(1, 2, epoch, snapshot, index, action, quantity, true, false);
 }
 
+static void stack_edit_tests(void) {
+    // These fixtures supply capacities to exercise the production policy. They
+    // do not establish native item parameters, planting or save persistence.
+    const struct { unsigned index; int capacity; } stacks[] = {
+        {INV_DEKU_SEEDS, 30}, {INV_DEKU_SEEDS, 40}, {INV_DEKU_SEEDS, 50},
+        {INV_MAGIC_BEANS, 10}
+    };
+    InventorySnapshot snapshot;
+    child = true;
+    for (unsigned s = 0; s < sizeof stacks / sizeof *stacks; ++s) {
+        unsigned index = stacks[s].index;
+        capacities[index] = stacks[s].capacity;
+        amounts[INV_SLINGSHOT] = index == INV_DEKU_SEEDS;
+        int original[INVENTORY_COUNT];
+        memcpy(original, amounts, sizeof original);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(!snapshot.entries[index].owned && snapshot.entries[index].can_set);
+        unsigned before = writes;
+        assert(inventory_apply(1, 2, epoch, &snapshot, index, INVENTORY_SET, 1, false, false) ==
+            INV_CONFIRM_REQUIRED);
+        assert(inventory_apply(1, 2, epoch, &snapshot, index, INVENTORY_SET, 1, true, true) ==
+            INV_INFINITE_ITEMS);
+        assert(apply(&snapshot, index, INVENTORY_SET, -1) == INV_CAPACITY);
+        assert(apply(&snapshot, index, INVENTORY_SET, capacities[index] + 1) == INV_CAPACITY);
+        assert(writes == before && !memcmp(original, amounts, sizeof original));
+        assert(apply(&snapshot, index, INVENTORY_SET, 1) == INV_OK);
+        assert(writes == ++before && amounts[index] == 1);
+        assert(inventory_read(1, 2, epoch, &snapshot) && snapshot.entries[index].owned);
+        assert(apply(&snapshot, index, INVENTORY_REFILL, 0) == INV_OK);
+        assert(writes == ++before && amounts[index] == capacities[index]);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, index, INVENTORY_REFILL, 0) == INV_UNCHANGED && writes == before);
+        assert(apply(&snapshot, index, INVENTORY_SET, capacities[index] - 1) == INV_OK);
+        assert(writes == ++before && amounts[index] == capacities[index] - 1);
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, index, INVENTORY_REMOVE, 0) == INV_OK);
+        assert(writes == ++before && !amounts[index]);
+        assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[index].owned);
+        assert(apply(&snapshot, index, INVENTORY_SET, 0) == INV_UNCHANGED && writes == before);
+        assert(!memcmp(original, amounts, sizeof original)); // Only the selected stack changed.
+        child = false;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        assert(apply(&snapshot, index, INVENTORY_SET, 1) == INV_AGE_RESTRICTED);
+        assert(writes == before && !memcmp(original, amounts, sizeof original));
+        child = true;
+    }
+    amounts[INV_SLINGSHOT] = 0;
+    capacities[INV_DEKU_SEEDS] = 30;
+}
+
+static void invalid_stack_capacity_tests(void) {
+    const struct { unsigned index; int capacity; } invalid[] = {
+        {INV_MAGIC_BEANS, 999}, {INV_MAGIC_BEANS, 0},
+        {INV_DEKU_SEEDS, 31}, {INV_DEKU_SEEDS, 999}
+    };
+    InventorySnapshot snapshot;
+    child = true;
+    amounts[INV_SLINGSHOT] = 1;
+    for (unsigned i = 0; i < sizeof invalid / sizeof *invalid; ++i) {
+        unsigned index = invalid[i].index;
+        int valid_capacity = capacities[index];
+        unsigned before = writes;
+        capacities[index] = invalid[i].capacity;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        const InventoryEntry *entry = &snapshot.entries[index];
+        assert(!entry->valid && !entry->can_set && !entry->can_refill && !entry->can_remove);
+        assert(apply(&snapshot, index, INVENTORY_SET, 1) == INV_STALE);
+        assert(apply(&snapshot, index, INVENTORY_REFILL, 0) == INV_STALE);
+        assert(apply(&snapshot, index, INVENTORY_REMOVE, 0) == INV_STALE);
+        assert(writes == before && !inventory_busy() && !amounts[index]);
+
+        // The same validation must also refuse a changed native layout during
+        // acknowledgement, without retrying the queued grant or allowing edits.
+        capacities[index] = valid_capacity;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        defer_write = true;
+        assert(apply(&snapshot, index, INVENTORY_SET, 1) == INV_PENDING);
+        capacities[index] = invalid[i].capacity;
+        assert(inventory_poll(1, 2, epoch) == INV_NATIVE_FAILED && !inventory_busy());
+        assert(writes == before + 1 && !amounts[index]);
+        capacities[index] = valid_capacity;
+        assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[index].can_set);
+        assert(apply(&snapshot, index, INVENTORY_SET, 1) == INV_NATIVE_FAILED);
+        assert(writes == before + 1);
+        defer_write = false; queued_index = -1;
+        ++epoch; inventory_reset();
+    }
+    amounts[INV_SLINGSHOT] = 0;
+}
+
+static void first_seed_tests(void) {
+    InventorySnapshot snapshot;
+    child = true;
+    amounts[INV_SLINGSHOT] = 1;
+    capacities[INV_DEKU_SEEDS] = 0;
+    unsigned before = writes, prior_bags = bag_gives;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(snapshot.entries[INV_DEKU_SEEDS].needs_seed_bag);
+    assert(snapshot.entries[INV_DEKU_SEEDS].capacity == 30 && !capacities[INV_DEKU_SEEDS]);
+    assert(inventory_apply(1, 2, epoch, &snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1, false, false) ==
+        INV_CONFIRM_REQUIRED);
+    assert(inventory_apply(1, 2, epoch, &snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1, true, true) ==
+        INV_INFINITE_ITEMS);
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 31) == INV_CAPACITY);
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_REMOVE, 0) == INV_UNCHANGED);
+    assert(writes == before && bag_gives == prior_bags && !capacities[INV_DEKU_SEEDS]);
+    // The same displayed 30 can refer to an acquired or prospective pouch.
+    // Confirmation must not silently change meaning between those states.
+    capacities[INV_DEKU_SEEDS] = 30;
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1) == INV_STALE);
+    capacities[INV_DEKU_SEEDS] = 0;
+    assert(writes == before);
+
+    // Native bag acquisition fills to 30; a target of one must consume 29 once,
+    // without releasing the save/travel hold between its two native operations.
+    defer_bag = defer_write = true;
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1) == INV_PENDING);
+    assert(bag_queued && inventory_busy() && writes == before + 1 && bag_gives == prior_bags + 1);
+    for (unsigned i = 0; i < 5; ++i) {
+        assert(inventory_poll(1, 2, epoch) == INV_PENDING && writes == before + 1);
+    }
+    capacities[INV_DEKU_SEEDS] = 30;
+    assert(inventory_poll(1, 2, epoch) == INV_PENDING && writes == before + 1);
+    amounts[INV_DEKU_SEEDS] = 30; bag_queued = false;
+    assert(inventory_poll(1, 2, epoch) == INV_PENDING && writes == before + 2);
+    assert(queued_index == INV_DEKU_SEEDS && queued_quantity == 1 && inventory_busy());
+    for (unsigned i = 0; i < 5; ++i) {
+        assert(inventory_poll(1, 2, epoch) == INV_PENDING && writes == before + 2);
+    }
+    amounts[INV_DEKU_SEEDS] = queued_quantity; queued_index = -1;
+    assert(inventory_poll(1, 2, epoch) == INV_OK && !inventory_busy());
+    assert(amounts[INV_SLINGSHOT] == 1 && amounts[INV_DEKU_SEEDS] == 1);
+    assert(inventory_read(1, 2, epoch, &snapshot) && !snapshot.entries[INV_DEKU_SEEDS].needs_seed_bag);
+    defer_bag = defer_write = false;
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_REMOVE, 0) == INV_OK);
+
+    // A confirmed refill only acquires the native base bag; its real 30/30
+    // acknowledgement needs no compensating seed write.
+    capacities[INV_DEKU_SEEDS] = 0;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    before = writes;
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_REFILL, 0) == INV_OK);
+    assert(writes == before + 1 && amounts[INV_DEKU_SEEDS] == 30 && capacities[INV_DEKU_SEEDS] == 30);
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_REMOVE, 0) == INV_OK);
+
+    // Unexpected bag results never dispatch the second writer, and a reset in
+    // the same save cannot authorize another native bag acquisition.
+    for (unsigned fault = 0; fault < 5; ++fault) {
+        capacities[INV_DEKU_SEEDS] = 0; amounts[INV_DEKU_SEEDS] = 0;
+        assert(inventory_read(1, 2, epoch, &snapshot));
+        defer_bag = true;
+        before = writes;
+        assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1) == INV_PENDING);
+        if (fault == 0) { capacities[INV_DEKU_SEEDS] = 30; amounts[INV_DEKU_SEEDS] = 29; }
+        if (fault == 1) capacities[INV_DEKU_SEEDS] = 40;
+        if (fault == 2) amounts[INV_SLINGSHOT] = 0;
+        if (fault == 3) safe = false;
+        if (fault == 4) now += 2000;
+        enum InventoryResult expected = fault == 4 ? INV_TIMEOUT : INV_NATIVE_FAILED;
+        assert(inventory_poll(1, 2, epoch) == expected && !inventory_busy());
+        assert(writes == before + 1);
+        safe = true; amounts[INV_SLINGSHOT] = 1;
+        inventory_reset();
+        assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1) == expected && writes == before + 1);
+        ++epoch; inventory_reset(); bag_queued = false; defer_bag = false;
+    }
+    // A save epoch change revokes the bag stage before its second writer.
+    capacities[INV_DEKU_SEEDS] = 0; amounts[INV_DEKU_SEEDS] = 0;
+    assert(inventory_read(1, 2, epoch, &snapshot));
+    defer_bag = true; before = writes;
+    assert(apply(&snapshot, INV_DEKU_SEEDS, INVENTORY_SET, 1) == INV_PENDING);
+    ++epoch; inventory_reset();
+    capacities[INV_DEKU_SEEDS] = 30; amounts[INV_DEKU_SEEDS] = 30;
+    assert(inventory_poll(1, 2, epoch) == INV_UNCHANGED && writes == before + 1);
+    defer_bag = bag_queued = false;
+    amounts[INV_SLINGSHOT] = amounts[INV_DEKU_SEEDS] = 0;
+}
+
 int main(void) {
     InventorySnapshot snapshot = {0};
     for (unsigned i = 0; i < INVENTORY_COUNT; ++i) capacities[i] = i < INV_DEKU_STICKS ? 1 : 30;
+    capacities[INV_MAGIC_BEANS] = 10;
+    stack_edit_tests();
+    invalid_stack_capacity_tests();
+    first_seed_tests();
     assert(inventory_read(1, 2, epoch, &snapshot) && snapshot.valid && snapshot.child);
     for (unsigned i = 0; i < INVENTORY_COUNT; ++i) {
         assert(!snapshot.entries[i].owned);
@@ -363,5 +560,5 @@ int main(void) {
     assert(!inventory_busy() && apply(&snapshot, INV_BOMBS, INVENTORY_REFILL, 0) == INV_NATIVE_FAILED);
     assert(strstr(inventory_result_text(INV_NATIVE_FAILED), "Reload a save"));
     assert(count_calls && !strcmp(inventory_result_text(INV_OK), "Inventory change verified."));
-    puts("Inventory: 20 IDs granted from zero/removed, shared-slot/tool/ammo dependencies, equipped removal fence, age/capacity/confirmation checks, deferred acknowledgement and save-epoch isolation passed (portable fixture).");
+    puts("Inventory: all catalog IDs granted from zero/removed, seed/bean stack limits and write isolation, shared-slot/tool/ammo dependencies, equipped removal fence, age/capacity/confirmation checks, deferred acknowledgement and save-epoch isolation passed (portable fixture).");
 }

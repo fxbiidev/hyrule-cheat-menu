@@ -1,11 +1,11 @@
-# Hyrule Cheat Menu v1.1.2
+# Hyrule Cheat Menu v1.1.3
 
-Moves the creator credit and version label slightly upward so both clear the bottom inner GUI line. This is a visual follow-up to the v1.1.1 Item Manager ownership fix. ZIP creator-platform metadata is also fixed for matching Windows/Linux archives.
+Fixes **first Deku Seed grants** and adds **Magic Beans** to Item Manager.
 
-Install `Hyrule-Cheat-Menu-v1.1.2.zip` by replacing the complete mod folder while the game is closed. The optional `Hyrule-Cheat-Menu-v1.1.2-source.zip` is for review/building. Existing preferences remain compatible.
+Seeds require the separately owned Fairy Slingshot. If its seed bag is missing, confirmation initializes the related native 30-seed bag, then applies the exact requested quantity. Existing 40/50 capacities are preserved; no Slingshot or unrelated equipment is granted automatically. Magic Beans appear in Consumables with native maximum **10**, including before any purchase. Both items retain ADD ITEM / REMOVE ITEM, ownership indicators and quantity controls. Edit as Young Link with Infinite Items OFF; beans remain excluded from Infinite Items.
 
-The supported target remains Windows Lichii Build 177 and main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`. Inventory and save-safety logic are unchanged. Native ownership and persistence evidence belongs to the exact v1.1.1 binary; this footer-only build does not claim a new ownership gameplay test. See [test report](TEST_REPORT.md) and [release readiness](RELEASE_READINESS.md) for validation and delivery scope.
+Native checks pass for first grants, normal Slingshot use and bean planting/consumption, Save/Load quantity and removal persistence, and measured progression preservation. The final build passes 19 host C fixtures, 1,176 renderer cases and installation/source archive checks. Isolated test data is restored; owner saves are untouched. [TEST_REPORT.md](https://github.com/fxbiidev/hyrule-cheat-menu/blob/v1.1.3/TEST_REPORT.md), [inventory contract](https://github.com/fxbiidev/hyrule-cheat-menu/blob/v1.1.3/docs/v1.1.3-inventory-verification.md) and [native evidence](https://github.com/fxbiidev/hyrule-cheat-menu/blob/v1.1.3/docs/v1.1.3-native-results.json) retain exact binary scope and coverage limits.
 
-The ARM64 build, complete host regressions, 936 renderer cases and installation/source archive checks pass. The new in-game footer capture confirms both labels clear the lower inner border. Final evidence packaging, CI/publication and downloaded-asset checks remain separate delivery gates.
+Install **`Hyrule-Cheat-Menu-v1.1.3.zip`** by replacing the complete mod folder while the game is closed. The optional source ZIP is for review/building. Existing preferences remain compatible. Target: Windows Lichii Build 177, main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`.
 
-Existing releases, Git history, public visibility and third-party notices are preserved. No game files, keys, saves or private QA clients are distributed.
+The approved design, controls, other cheats, Fast Travel and Free Camera are preserved. Previous releases/history, repository visibility and licensing remain unchanged. No game files, keys, saves or private QA clients are distributed.
