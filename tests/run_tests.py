@@ -34,9 +34,26 @@ def check_layout(archive, expected):
         assert entry.external_attr >> 16 == 0o100644, "unexpected file type or permissions"
 
 
+def check_fritchii_patch_ranges(ips):
+    # The v6.1 loader rejects an entire built-in if any of its records overlaps.
+    # Ctrl+U also requires the full water-ripple routine to match a known layout.
+    reserved = (
+        (0x3C463A0, 0x3C469AC, "High refresh fixes"),
+        (0x3C46F20, 0x3C46FB4, "Water ripples"),
+    )
+    cursor = len(b"IPS32")
+    while cursor < len(ips) - len(b"EEOF"):
+        offset, size = struct.unpack_from(">IH", ips, cursor)
+        start = offset - 0x100
+        for lower, upper, name in reserved:
+            assert start + size <= lower or start >= upper, f"IPS overlaps Fritchii {name} at main+{start:#x}"
+        cursor += 6 + size
+
+
 def check_package(path):
     check_checksum(path)
     expected_patch, header = make_patch()
+    check_fritchii_patch_ranges(expected_patch)
     assert "HCM_PROFILE_CHECKS" in header
     with zipfile.ZipFile(path) as archive:
         base = "Hyrule-Cheat-Menu/"

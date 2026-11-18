@@ -1,3 +1,36 @@
+# Test report — Fritchii High Refresh v1.2.1
+
+Target: Windows Fritchii v6.1 (`e0f673a4ea`), displayed game update 2.0.0, main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`.
+
+## Root cause
+
+The v1.2.0 autosave bridge writes the last instruction of Fritchii's shared water-ripple routine at `main+0x3C46FB0`. At startup Fritchii gives the add-on IPS priority and skips both the High Refresh and Water Ripples built-ins. The Ctrl+U handler runs, but the overwritten word matches neither supported live layout, so the patch switch fails. Separate v1.2.0 bridge writes starting at `main+0x3C463A0` also cause Fritchii to skip its High Refresh timing fixes. The owner's Fritchii v6.1 logs and a separate v1.2.0 boot show both conflicts. [Built-in patch records](https://github.com/Frizti/Fritchii/blob/e0f673a4ea01067b9e92ee05c6c708b7adac17c9/src/core/file_sys/patch_manager.cpp#L202-L246) · [Loader precedence](https://github.com/Frizti/Fritchii/blob/e0f673a4ea01067b9e92ee05c6c708b7adac17c9/src/core/file_sys/patch_manager.cpp#L1722-L1764) · [Live switch validation](https://github.com/Frizti/Fritchii/blob/e0f673a4ea01067b9e92ee05c6c708b7adac17c9/src/core/file_sys/patch_manager.cpp#L2537-L2564)
+
+v1.2.1 relocates the Hyrule Cheat Menu bridges to unused padding. The generated branches keep their original dispatch slots, branch types, displaced instructions and native fallback targets. Input, rendering, world pause and timing still use their existing game paths. The menu footer displays V1.2.1.
+
+## Automated verification
+
+The ARM64 build validated the text hash, new zero-filled ranges and all hook and function signatures against the pinned game executable. A separate comparison against Fritchii v6.1's built-in patch records found no intersections with the new IPS, runtime signature windows or dispatch table. The host suite adds a regression check for both reported collision ranges. It rejects the v1.2.0 IPS and accepts v1.2.1.
+
+## Native emulator verification
+
+Tests used Fritchii v6.1 with a 144 Hz cap, the bundled high-refresh patches, copied test saves, keyboard Ctrl+U input and logical player-one controller input. Fritchii applied 76 High Refresh records and all 397 timing-fix records. A read of all 85,624 loaded executable bytes matched the packaged RX segment SHA-256 `5e9712712ef29a3f73261d8a2e61a1d9d6070b4affb2d0297b9e3b2e7ae45f84`. The module and paired IPS file hashes are recorded in the release workflow.
+
+| Check | Observed result |
+|---|---|
+| Ctrl+U and actual frame cadence | Ctrl+U switched High Refresh OFF and ON, including both directions during gameplay. The emulator logged success and the live guest instruction matched each mode. At the title the overlay reached 144 FPS with High Refresh ON. In Kakariko, same-position three-second samples measured 60.2 presents/s OFF and 70.4 ON. After returning to Kakariko, a second pair measured 56.8 OFF and 61.4 ON. |
+| Normal gameplay speed | Consecutive downhill 1× walks in Kakariko, at matching stick input and similar wall-clock durations, measured 3.903 units/s OFF and 3.896 ON. |
+| Movement Speed | In Hyrule Field with High Refresh ON, comparable 32-present movement inputs covered 1.12 units at 1× and 3.59 at 3×. |
+| Fly Mode | With High Refresh ON in Hyrule Field, Link rose 3.34 units on ZR, held an identical position while hovering, descended on ZL and landed after disabling Fly Mode. |
+| Noclip | Fly alone stopped at the terrain. With Noclip ON, Link descended 2.89 units below that floor, rose back above it, disabled Noclip and returned to normal grounded collision. |
+| Free Camera | The camera translated 6.04 units while Link stood still, rotated on right-stick input, and restored the native view on the emergency exit chord. |
+| Menu pause | With High Refresh OFF and ON, the native pause masks were active and Link's position stayed identical during 180 presents of held movement in each mode. Closing the menu released the pause. |
+| Scene transitions | Walking out of Kakariko loaded Hyrule Field in the same save epoch. The menu reopened after arrival. Fast Travel back to Kakariko cleared Fly and Free Camera while retaining the 3× movement selection, High Refresh and the current save epoch. |
+
+The FPS figures are emulator presents and depend on the scene and hardware. The walking test covers the matching route segment and input. Earlier feature reports retain their own binary and test scope.
+
+---
+
 # Test report — Increased Luck v1.2.0
 
 Targeted coverage uses Lichii Build 177 on Windows, displayed game update 2.0.0 and main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`. The ARM64 build verifies the original text hash and the hook, dispatch and layout signatures against the private executable. Historical results below retain their original binary scope.

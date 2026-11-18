@@ -7,10 +7,11 @@ BASE = 0x80020000
 TITLE_ID = 0x0400486024DEC000
 BUILD_ID = "E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348"
 TEXT_HASH = "f71eb7b75b11dcc8d955f3f6e987a098573288d9ce41aa22a96272541e858c5f"
-CAVE = BASE + 0x3C46280
-CAVE_END = BASE + 0x3C46400
-EXTRA_CAVES = [(BASE + 0x3C46FB0, BASE + 0x3C47000), (BASE + 0x3C461D0, BASE + 0x3C46200),
-               (BASE + 0x3C46400, BASE + 0x3C46500)]
+# Leave Fritchii's built-in timing stubs and water-ripple routine intact.
+CAVE = BASE + 0x3C469B0
+CAVE_END = BASE + 0x3C46B00
+EXTRA_CAVES = [(BASE + 0x3C46280, BASE + 0x3C463A0), (BASE + 0x3C461D0, BASE + 0x3C46200),
+               (BASE + 0x3C46FB4, BASE + 0x3C47000)]
 TABLE = BASE + 0x4E9F800
 FOLIAGE_MODULE = 0x84E42540
 
@@ -56,7 +57,8 @@ HOOKS = [
     # Resolve the drop list used by the native item-spawn job.
     (0x81217A60, "e0f27394e80240b9f31f01f9685b0235", "grass_drop", 0x82F145E0),
 ]
-EXTRA_HANDLERS = {"autosave_gate", "flight_step", "flight_job", "noclip_move", "ammo_use", "ammo_nut_use",
+EXTRA_HANDLERS = {"swim_motion", "climb_motion", "autosave_gate", "flight_step", "flight_job", "noclip_move",
+                  "ammo_use", "ammo_nut_use",
                   "flight_fall_damage", "combat_hook", "free_camera_hook", "grass_drop"}
 
 FUNCTIONS = {

@@ -1,4 +1,4 @@
-> **v1.2.0** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
+> **v1.2.1** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
 
 <div align="center">
 
@@ -6,7 +6,7 @@
 
 **STANDALONE CHEAT MENU FOR OOTR**
 
-`v1.2.0` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
+`v1.2.1` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
 
 **Created by fxbii.dev**
 
@@ -74,6 +74,7 @@ These captures retain their original v1.0.0/RC binary provenance. They are not n
 | Component | Target |
 |---|---|
 | Current emulator target | Lichii Build 177 on Windows |
+| High Refresh compatibility | Fritchii v6.1 on Windows |
 | Current library update label | 2.0.0 |
 | Title ID | `0400486024DEC000` |
 | Main Build ID | `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348` |
@@ -83,11 +84,13 @@ The owner's current game container displays update **2.0.0**, but its title1 mai
 
 The IPS filename gates loading by Build ID. Runtime title/layout and function signatures guard activation, with feature-specific failures. Other executables, regions, forks, and arbitrary hook mods are unverified. An existing mod using `subsdk8` conflicts with this installation. Historical built-in FPS Unlock and Dynamic FPS checks do not establish universal mod compatibility.
 
+Fritchii v6.1's **Ctrl+U** High Refresh toggle works with this release on the pinned game executable. When upgrading from v1.2.0, replace both ExeFS files and check that the game has only one enabled copy of Hyrule Cheat Menu. A leftover v1.2.0 IPS can still block Fritchii's timing patches. See [the test report](TEST_REPORT.md) for the verification scope.
+
 ## Installation
 
 1. Close the game. Back up your saves using the procedure below.
-2. In Lichii, right-click the supported game and choose **Open Mod Data Location**.
-3. Extract `Hyrule-Cheat-Menu-v1.2.0.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
+2. In Lichii or Fritchii, right-click the supported game and choose **Open Mod Data Location**.
+3. Extract `Hyrule-Cheat-Menu-v1.2.1.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
 
 ```text
 <game's mod data location>/
@@ -105,7 +108,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 Avoid an extra nested `Hyrule-Cheat-Menu/Hyrule-Cheat-Menu` folder. Disable a separate Fast Travel overlay during integrated-travel testing so its controls cannot interfere.
 
-The optional `Hyrule-Cheat-Menu-v1.2.0-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
+The optional `Hyrule-Cheat-Menu-v1.2.1-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
 
 ### Updates and removal
 
@@ -254,12 +257,12 @@ To include the separate source archive and validate both distributions:
 
 ```powershell
 python build.py --zig "C:\path\to\zig.exe" --source-archive
-python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.2.0-source.zip"
+python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.2.1-source.zip"
 ```
 
-The default add-on is `dist/Hyrule-Cheat-Menu-v1.2.0.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
+The default add-on is `dist/Hyrule-Cheat-Menu-v1.2.1.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
 
-An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.2.0`; it publishes the tested artifacts and refuses an existing release/tag.
+An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.2.1`; it publishes the tested artifacts and refuses an existing release/tag.
 
 ## Support & Bug Reports
 

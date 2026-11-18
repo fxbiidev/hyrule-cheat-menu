@@ -1,3 +1,11 @@
+# Release readiness — Hyrule Cheat Menu v1.2.1
+
+The targeted Fritchii v6.1 gameplay checks passed for Ctrl+U, measured frame cadence, normal movement rate, Movement Speed, Fly Mode, Noclip, Free Camera, world pause and scene changes. The pinned executable verified the relocated bridge ranges. The [test report](TEST_REPORT.md) records the measurements and coverage.
+
+The publication workflow runs the automated build and tests, then checks that both packaged ExeFS files match the native-tested files by SHA-256 before creating the v1.2.1 tag and release.
+
+---
+
 # Release readiness — Hyrule Cheat Menu v1.2.0
 
 The pinned ARM64 build and host regressions passed. The isolated Build 177 run verified normal placed and procedural cuts, stock special drops, the same-scene OFF control, Infinite Rupees, a scene transition and a stock save reload. The report records the module used for each result. [Test report](TEST_REPORT.md)

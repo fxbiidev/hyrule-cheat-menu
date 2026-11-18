@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.1 — Fritchii High Refresh compatibility
+
+- Relocate the ExeFS hook bridges so Fritchii v6.1 can apply its High Refresh, water-ripple and timing patches and toggle High Refresh with Ctrl+U.
+
 ## v1.2.0 — Increased Luck
 
 - Add **Increased Luck** under the collapsible **World Cheats** category. Each eligible ordinary grass cut yields one green Rupee (85%) or one blue Rupee (15%) through the game's pickup system.
