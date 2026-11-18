@@ -29,7 +29,7 @@ static unsigned find_row(Menu *menu, enum RowKind kind, unsigned value) {
     return 0;
 }
 
-enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, FIXTURE_STATES = 49 };
+enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1, LUCK_OFF = 49, LUCK_ON, FIXTURE_STATES };
 
 static Menu fixture_menu(unsigned state) {
     Menu menu = {.consent = true, .enabled = 175, .speed = 3, .flight_speed = 5,
@@ -58,6 +58,9 @@ static Menu fixture_menu(unsigned state) {
     } else if (state == 8) {
         menu.enabled |= 1u << FREE_CAMERA;
         menu.cursor = find_row(&menu, CHEAT_ROW, FREE_CAMERA);
+    } else if (state == LUCK_OFF || state == LUCK_ON) {
+        menu.cursor = find_row(&menu, CHEAT_ROW, INCREASED_LUCK);
+        if (state == LUCK_ON) menu.enabled |= 1u << INCREASED_LUCK;
     } else if ((state >= 9 && state <= 12) || state >= 22) {
         menu.tab = MENU_ITEMS;
         menu.enabled = 0;
@@ -178,6 +181,7 @@ static void cache_revision_checks(void) {
     } while (0)
     CHECK_CHANGE(damage, 1);
     CHECK_CHANGE(enabled, menu.enabled ^ (1u << ONE_HIT));
+    CHECK_CHANGE(enabled, menu.enabled ^ (1u << INCREASED_LUCK));
     CHECK_CHANGE(tab, MENU_ITEMS);
     CHECK_CHANGE(item_sections, menu.item_sections ^ 1);
     CHECK_CHANGE(inventory.valid, false);
@@ -223,6 +227,15 @@ int main(void) {
                     for (size_t i = 0; i < count; ++i) hash = (hash ^ canvas.pixels[i]) * 16777619u;
                     ownership_frames[state - 31] = hash;
                 }
+                if (scale == 1 && f == 0 && (state == LUCK_OFF || state == LUCK_ON)) {
+                    uint32_t bright = pixel(&canvas, 0xf0ebd8, 255);
+                    // Both percentages must be visible in the four-line context box.
+                    require(canvas.pixels[134 * WIDTH + 344] == bright &&
+                            canvas.pixels[145 * WIDTH + 302] == bright, "Luck description lost a percent glyph");
+                    int y = 86 + (int)(menu.cursor - menu.scroll) * 16;
+                    uint32_t badge = pixel(&canvas, state == LUCK_ON ? 0x2a5a3d : 0x122f26, 250);
+                    require(canvas.pixels[(y - 2) * WIDTH + 219] == badge, "Luck toggle rendered the wrong badge");
+                }
                 blend_panel(&canvas, scene, 0);
                 for (size_t i = 0; i < count; i += 127)
                     require(canvas.pixels[i] == scene[i], "Fade zero did not preserve the background");
@@ -262,5 +275,5 @@ int main(void) {
     }
     require(ownership_frames[0] != ownership_frames[1], "Owned and unowned equipment produced identical frames");
     require(ownership_frames[2] != ownership_frames[3], "Add and remove equipment confirmations produced identical frames");
-    puts("Production software panel: six scales, four formats, 49 states including first-seed-bag context/confirmation, ownership/draft/confirmation cache invalidation, buffer guards and exact 85% blending passed (not a display test).");
+    printf("Production software panel: six scales, four formats, %u states including Increased Luck, first-seed-bag context/confirmation, ownership/draft/confirmation cache invalidation, buffer guards and exact 85%% blending passed (not a display test).\n", FIXTURE_STATES);
 }

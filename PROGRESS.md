@@ -1,3 +1,9 @@
+# Progress — Increased Luck v1.2.0
+
+18 November 2026. Added the World Cheats toggle and a checked hook at the native item-spawn resolver. Verified placed and procedural grass on isolated Build 177. Host regressions cover the 85/15 split, stock fallbacks and the 1,224 renderer cases. [Test report](TEST_REPORT.md)
+
+---
+
 # Progress — Deku Seeds and Magic Beans v1.1.3
 
 15 November 2026. **Local release GO: native, host and cleanup acceptance PASS within the documented scope.** Recovered published v1.1.2 `76a9316c165872692bc0199f6cbd9fae3129c94a` and inspected its source and latest release before changes.

@@ -11,6 +11,7 @@
 #include "combat.h"
 #include "free_camera.h"
 #include "inventory.h"
+#include "grass_drop.h"
 
 struct Signature { uintptr_t address; unsigned count, features; uint32_t words[11]; };
 #define HCM_PROFILE_CHECKS
@@ -25,7 +26,8 @@ static Menu menu;
 static const enum Support support[CHEAT_COUNT] = {
     VERIFIED, VERIFIED, VERIFIED, VERIFIED,
     VERIFIED, VERIFIED, VERIFIED, VERIFIED,
-    VERIFIED, VERIFIED, VERIFIED, VERIFIED
+    VERIFIED, VERIFIED, VERIFIED, VERIFIED,
+    [INCREASED_LUCK] = VERIFIED
 };
 uintptr_t combat_hook_resume;
 static unsigned experimental = (1u << (TRAVEL + 1)) - 1;
@@ -408,6 +410,7 @@ static int pad_read(uintptr_t original, Pad *states, int count, const uint32_t *
         if (!overlay_ready()) debug_log("[hyrule] R3 blocked: UI target unavailable\n");
     }
     menu_input(&menu, now, connected, buttons, can_open || held_pause, available, support);
+    grass_luck_publish(generation, (available & menu.enabled & (1u << INCREASED_LUCK)) != 0);
     if (menu.item_request) {
         menu.item_request = false;
         enum InventoryResult changed = inventory_apply(pouch, actor, generation, &menu.inventory,
@@ -600,6 +603,7 @@ void hyrule_init(void) {
         free_camera_init();
         INSTALL(free_camera_hook);
     }
+    if (experimental & (1u << INCREASED_LUCK)) INSTALL(grass_drop);
     if (experimental & ((1u << TRAVEL) | (1u << INVENTORY))) INSTALL(autosave_gate);
     if (experimental & (1u << FLY)) {
         INSTALL(flight_step); INSTALL(flight_job); INSTALL(flight_fall_damage);

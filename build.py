@@ -15,7 +15,7 @@ from profile import BUILD_ID, make_patch
 
 
 ROOT = Path(__file__).resolve().parent
-RELEASE = "Hyrule-Cheat-Menu-v1.1.3.zip"
+RELEASE = "Hyrule-Cheat-Menu-v1.2.0.zip"
 DISTRIBUTION_FILES = (
     "README.md", "CHANGELOG.md", "RELEASE_NOTES.md", "TEST_REPORT.md", "RELEASE_READINESS.md",
     "PROGRESS.md", "third_party/Fast-Travel-LICENSE.txt", "docs/destination-coverage.csv",
@@ -121,7 +121,7 @@ def build_module(zig, output, header):
         objects = []
         for source in ("start.S", "geometry_call.S", "combat_hook.S", "free_camera_hook.S", "guest.c", "menu.c", "overlay.c", "travel.c", "travel_runtime.c",
                        "preferences.c", "storage.c", "memory.c", "flight.c", "landing.c", "noclip.c", "items.c", "ammo_guard.c", "wallet.c", "geometry.c", "recovery.c", "movement_safety.c", "travel_access.c", "save_guard.c",
-                       "combat.c", "free_camera.c", "inventory.c", "inventory_catalog.c"):
+                       "combat.c", "free_camera.c", "grass_drop.c", "inventory.c", "inventory_catalog.c"):
             obj = Path(temporary) / (source + ".o")
             subprocess.run([
                 zig, "cc", "-target", "aarch64-linux-none", "-O2", "-fPIC", "-fvisibility=hidden",

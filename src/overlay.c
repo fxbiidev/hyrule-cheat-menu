@@ -161,6 +161,8 @@ static const uint8_t footer_lowercase[26][7] = {
     ['w' - 'a'] = {0,0,17,17,21,21,10}, ['z' - 'a'] = {0,0,31,2,4,8,31},
 };
 static const uint8_t dot[7] = {0,0,0,0,0,6,6};
+static const uint8_t comma[7] = {0,0,0,0,6,4,8};
+static const uint8_t percent[7] = {25,26,2,4,8,11,19};
 static const uint8_t hyphen[7] = {0,0,0,14,0,0,0};
 static const uint8_t slash[7] = {1,1,2,4,8,16,16};
 static const uint8_t apostrophe[7] = {4,4,8,0,0,0,0};
@@ -202,6 +204,8 @@ static void label(Canvas *c, int x, int y, const char *text, uint32_t color) {
         else if (ch >= 'a' && ch <= 'z') glyph = footer_lowercase[ch - 'a'];
         else if (ch >= '0' && ch <= '9') glyph = numerals[ch - '0'];
         else if (ch == '.') glyph = dot;
+        else if (ch == ',') glyph = comma;
+        else if (ch == '%') glyph = percent;
         else if (ch == '-') glyph = hyphen;
         else if (ch == '/') glyph = slash;
         else if (ch == '\'') glyph = apostrophe;
@@ -293,7 +297,8 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     __atomic_store_n(&panel_lock, 0, __ATOMIC_RELEASE);
     static const char *const names[CHEAT_COUNT] = {
         "God Mode", "Infinite Rupees", "Infinite Items", "Infinite Magic", "Movement Speed",
-        "Fly Mode", "Flight Speed", "Noclip", "One Hit Kill", "Damage Multiplier", "Free Camera", "Item Manager"
+        "Fly Mode", "Flight Speed", "Noclip", "One Hit Kill", "Damage Multiplier", "Free Camera", "Item Manager",
+        "Increased Luck"
     };
     static const char *const speeds[] = {"1x", "1.5x", "2x", "3x", "5x", "10x"};
     static const char *const detail[CHEAT_COUNT][2] = {
@@ -308,7 +313,8 @@ static void draw_panel(Canvas *c, uint32_t flags) {
         {"One valid hit defeats supported ordinary enemies.", "Bosses and scripted actors stay protected."},
         {"Scales supported attacks from Link.", "One Hit Kill overrides; your multiplier stays selected."},
         {"Left stick moves, right stick rotates. RT up, LT down.", "R3 and B together exit at any time."},
-        {"Safe inventory tools.", "Confirmed ownership and quantity changes."}
+        {"Safe inventory tools.", "Confirmed ownership and quantity changes."},
+        {"Guaranteed Rupees from ordinary grass: 85% Green, 15% Blue.", ""}
     };
     uint32_t gold = pixel(c, 0xd8ba78, 255), bright = pixel(c, 0xf0ebd8, 255);
     uint32_t muted = pixel(c, 0x97b3a5, 255), green = pixel(c, 0x91dfb2, 255);
@@ -502,7 +508,7 @@ static void draw_panel(Canvas *c, uint32_t flags) {
     rect(c, 12, 233, WIDTH - 24, 1, trim); label(c, 16, 242, hint, gold);
     label(c, 16, 256, tag, muted); label(c, 294, 256, "R3 OPEN / CLOSE", muted);
     rect(c, 12, 268, WIDTH - 24, 1, trim);
-    label(c, 16, 272, "Created by fxbii.dev", muted); label(c, 354, 272, "V1.1.3", gold);
+    label(c, 16, 272, "Created by fxbii.dev", muted); label(c, 354, 272, "V1.2.0", gold);
 }
 
 static void blend_panel(Canvas *canvas, const uint32_t *scene, unsigned fade) {

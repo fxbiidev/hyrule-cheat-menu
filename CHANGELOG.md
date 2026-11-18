@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0 — Increased Luck
+
+- Add **Increased Luck** under the collapsible **World Cheats** category. Each eligible ordinary grass cut yields one green Rupee (85%) or one blue Rupee (15%) through the game's pickup system.
+- Preserve special grass drops and the wallet's normal capacity. The toggle works with Infinite Rupees, takes effect on the next cut and resets OFF when a save loads.
+
 ## v1.1.3 — Deku Seeds and Magic Beans
 
 - Add Magic Beans (`Item_MagicBean`) to Consumables with confirmed ADD ITEM / REMOVE ITEM and quantity controls, including grants before any normal purchase. Use the native capacity getter and the verified game maximum of 10.

@@ -10,7 +10,7 @@ static const enum Support support[CHEAT_COUNT] = {
 };
 static const enum Support supported[CHEAT_COUNT] = {
     VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED,
-    VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED
+    VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED, VERIFIED
 };
 enum { ALL_AVAILABLE = (1u << (TRAVEL + 1)) - 1 };
 static unsigned tick;
@@ -46,6 +46,40 @@ static unsigned row_index(Menu *menu, enum RowKind kind, unsigned value) {
     fprintf(stderr, "Required row absent: kind=%u value=%u age=%u\n", kind, value, menu->age);
     exit(1);
     return 0;
+}
+
+static void increased_luck_menu(void) {
+    const unsigned luck = 1u << INCREASED_LUCK;
+    Menu menu = {.open = true, .enabled = 1u << RUPEES};
+    input_all(&menu, 0);
+    assert(!(menu.cheat_sections & (1u << WORLD_CHEATS)));
+
+    press_all(&menu, UP);
+    press_all(&menu, UP);
+    unsigned world = row_index(&menu, CHEAT_SECTION, WORLD_CHEATS);
+    assert(menu.cursor == world);
+    press_all(&menu, CONFIRM);
+    press_all(&menu, DOWN);
+    assert(menu.cursor == row_index(&menu, CHEAT_ROW, INCREASED_LUCK));
+    assert(menu.cursor - menu.scroll == VISIBLE_ROWS - 1);
+
+    press(&menu, CONFIRM);
+    assert(!(menu.enabled & luck));
+    press_all(&menu, CONFIRM);
+    assert(menu.enabled == ((1u << RUPEES) | luck) && !menu.preferences_dirty);
+    input_all(&menu, CONFIRM);
+    assert(menu.enabled & luck);
+    press_all(&menu, CONFIRM);
+    assert(menu.enabled == (1u << RUPEES));
+
+    press_all(&menu, LEFT);
+    assert(menu.cursor == world && !(menu.cheat_sections & (1u << WORLD_CHEATS)));
+    press_all(&menu, RIGHT);
+    press_all(&menu, DOWN);
+    press_all(&menu, CONFIRM);
+    assert(menu.enabled & luck);
+    menu_reset(&menu);
+    assert(!menu.enabled && !menu.open && !menu.preferences_dirty);
 }
 
 static void ownership_requests(void) {
@@ -146,6 +180,7 @@ static void seed_and_bean_requests(void) {
 }
 
 int main(void) {
+    increased_luck_menu();
     ownership_requests();
     seed_and_bean_requests();
     Menu fade = {0};

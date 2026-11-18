@@ -12,7 +12,7 @@ import zipfile
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from profile import BUILD_ID, make_patch
+from profile import BUILD_ID, FOLIAGE_MODULE, make_patch
 from build import RELEASE, DISTRIBUTION_FILES, distribution_bytes, source_files
 
 
@@ -179,6 +179,18 @@ if __name__ == "__main__":
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         "-I", temporary, str(ROOT / "tests/wallet_test.c"), "-o", str(wallet)], check=True)
         subprocess.run([str(wallet)], check=True, timeout=15)
+        grass_dir = Path(temporary) / "grass"
+        grass_dir.mkdir()
+        (grass_dir / "profile.h").write_text(
+            f"#define FOLIAGE_MODULE 0x{FOLIAGE_MODULE:X}ull\n"
+            "#define GAME_drop_list_resolve ((uintptr_t)mock_drop_resolve + GAME_BASE - main_base)\n"
+            "#define GAME_drop_actor_hash ((uintptr_t)mock_drop_hash + GAME_BASE - main_base)\n",
+            encoding="utf-8")
+        grass = grass_dir / ("grass_drop_test.exe" if sys.platform == "win32" else "grass_drop_test")
+        subprocess.run([args.zig, "cc", "-O2", "-UNDEBUG", "-Wall", "-Wextra", "-Werror",
+                        "-I", str(ROOT / "src"), "-I", str(grass_dir),
+                        str(ROOT / "tests/grass_drop_test.c"), "-o", str(grass)], check=True)
+        subprocess.run([str(grass)], check=True, timeout=15)
         landing = Path(temporary) / ("landing_test.exe" if sys.platform == "win32" else "landing_test")
         subprocess.run([args.zig, "cc", "-Wall", "-Wextra", "-Werror", "-I", str(ROOT / "src"),
                         "-I", temporary, str(ROOT / "tests/landing_test.c"), "-o", str(landing)], check=True)

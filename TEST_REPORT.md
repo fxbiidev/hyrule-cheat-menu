@@ -1,3 +1,26 @@
+# Test report — Increased Luck v1.2.0
+
+Targeted coverage uses Lichii Build 177 on Windows, displayed game update 2.0.0 and main Build ID `E0F3CCFAF50065AE4EA01EB5AEB13B1A45DA3348`. The ARM64 build verifies the original text hash and the hook, dispatch and layout signatures against the private executable. Historical results below retain their original binary scope.
+
+The hook uses the native item-spawn job's local result list. Placed grass must use its ordinary table, have empty actor and table overrides, and arrive on the normal damage path observed for sword cuts. Procedural terrain must arrive through the native cut queue with the verified default foliage table. The game creates, collects and accounts for each Rupee pickup.
+
+The focused fixture checks all 100 roll values, a deterministic 100,000-draw sample, and one replacement for each accepted native result list, including empty lists. It covers explicit and named drop overrides, unrelated actors, non-normal destruction causes, terrain resource identity, immediate OFF, save epochs and stock fallback if eligibility changes during resolution. The Windows host suite exercises 20 C fixtures, including 1,224 renderer cases across six scales and four formats, and verifies both ZIPs.
+
+## Native gameplay
+
+The isolated emulator verified the final module SHA-256 `21e90393179a00a1cedfa8b787d5e953757bbd34046856439aab1080e5812d24` against all 85,624 loaded executable bytes (SHA-256 `a30c131bfee11658b9a872094afeff4fc7684dca7c3181f11cfd628ed4073892`). From the default OFF state, enabling Increased Luck and cutting one ordinary Kokiri grass actor yielded one physical green Rupee. Normal pickup increased the wallet from 470 to 471. Fast Travel from Adult Kokiri Forest to Adult Hyrule Field kept Increased Luck ON in the same save epoch and retained the wallet balance. Both scenes had the verified nine-table foliage context and the exact default terrain resource name.
+
+A charged sword sweep in Adult Hyrule Field generated five procedural terrain cut requests. Five physical Rupees appeared at separate positions, four green and one blue. The placed-grass count stayed fixed and the wallet stayed at 471 before pickup. Collecting the five items increased the wallet by exactly nine to 480, with no additional drop requests. The deterministic host fixture establishes the distribution across the full roll range.
+
+Stock Load restored the saved 470 Rupees, advanced the save epoch from 4 to 6 and reset Increased Luck and the other session toggles to OFF. The isolated emulator was stopped. All 15 copied saves, two preferences, two ExeFS files and three configurations matched their pretest hashes after restoration. Native gameplay coverage used logical controller inputs in the listed areas. Other scenes and physical controller hardware were outside the emulator test.
+
+Earlier checkpoints cover the following cases with their own binary identities:
+
+- Module `b77db104923c6239a69dc6ef21c155ef317b2278fffb6d688129c447e9a81900` produced two physical green Rupees for two removed plants. Two normal pickups moved the wallet from 470 to 472. Another swing at the cleared spot produced no additional request or pickup. A swing across one normal plant and one special plant yielded a green Rupee and the stock insect. With Infinite Rupees active, a green Rupee still spawned and pickup respected the 500-Rupee cap. A stock Load restored the saved 470 Rupees and reset Increased Luck OFF, with the save epoch advancing from 4 to 6.
+- Module `d8a62de44e4febf2175015818668f605bcf24030d328310bc4553f3e94c9d188` verified the stricter normal-damage guard. An ON cut produced one green Rupee and a normal pickup. After toggling OFF in the same loaded scene, a neighboring plant was destroyed with stock behavior, no nearby Rupee and no wallet change.
+
+---
+
 # Test report — Deku Seeds and Magic Beans v1.1.3
 
 15 November 2026. **Local native, host and cleanup acceptance PASS.** Magic Beans now appear in Consumables, and Deku Seeds support first acquisition through the game's required base-bag mechanism. Both retain confirmed ADD ITEM / REMOVE ITEM, ownership indicators and bounded quantity controls. The catalog has 21 item IDs and seven editable stacks. [Inventory contract](docs/v1.1.3-inventory-verification.md) records verified IDs/mechanisms; [native evidence](docs/v1.1.3-native-results.json) contains 48 validated observations with exact binary scope.

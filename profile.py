@@ -12,6 +12,7 @@ CAVE_END = BASE + 0x3C46400
 EXTRA_CAVES = [(BASE + 0x3C46FB0, BASE + 0x3C47000), (BASE + 0x3C461D0, BASE + 0x3C46200),
                (BASE + 0x3C46400, BASE + 0x3C46500)]
 TABLE = BASE + 0x4E9F800
+FOLIAGE_MODULE = 0x84E42540
 
 # Site, four original words, handler, and original function (None for function entry).
 HOOKS = [
@@ -52,11 +53,29 @@ HOOKS = [
     (0x804A99FC, "280128b888265c291f01096b0a090054", "combat_hook", None),
     # Gameplay camera view matrix has just been built; source camera remains stock.
     (0x804E5068, "681240f9685800b415a940f9550300b4", "free_camera_hook", None),
+    # Resolve the drop list used by the native item-spawn job.
+    (0x81217A60, "e0f27394e80240b9f31f01f9685b0235", "grass_drop", 0x82F145E0),
 ]
 EXTRA_HANDLERS = {"autosave_gate", "flight_step", "flight_job", "noclip_move", "ammo_use", "ammo_nut_use",
-                  "flight_fall_damage", "combat_hook", "free_camera_hook"}
+                  "flight_fall_damage", "combat_hook", "free_camera_hook", "grass_drop"}
 
 FUNCTIONS = {
+    "drop_list_resolve": (0x82F145E0, "7f2303d5eb2bb86de923016dfd7b02a9"),
+    "drop_request_owner": (0x807A3704, "080c40f9282000f9083941f9081941f9"),
+    "drop_override_resolve": (0x82F14888, "de747397080340f9ec0316aaf69f00f9"),
+    "drop_default_table": (0x82F155E8, "68a20a916a5601f957ec00b0e88f00f9"),
+    "drop_list_allocate": (0x82F14A34, "740a40f9740000b4880240f9680a00f9"),
+    "drop_list_name": (0x82F14A8C, "082740f9880200f9095380b90801098b"),
+    "drop_list_consume": (0x81217FC0, "390140f9280b40b9882c0234280340f9"),
+    "drop_actor_death_dispatch": (0x81217834, "6202088b22000094686a763808011e32"),
+    "drop_actor_death_cause": (0x812177F4, "686a763875ca1ab974ce1ab948021837"),
+    "drop_actor_hash": (0x801939E0, "0c0040396c0800342aaa855268b28652"),
+    "foliage_scene": (0x80ED03D0, "140140f988c2403928010037957a40f9"),
+    "foliage_queue": (0x80224CAC, "009841f9210040f927010094689e41f9"),
+    "foliage_drop_source": (0x80225398, "62e20291ffc302f8ff4303f8ff9b0079"),
+    "foliage_request_flags": (0x802253D0, "e89b0079e85302d0083142f9000140f9"),
+    "foliage_chance_gate": (0x82F14790, "c8364139fa0300aae10316aa1f050071"),
+    "foliage_table_path": (0x82F1493C, "281f40f9294380b9f6031aaa0801098b"),
     "combat_contact_channel": (0x804A77A8, "a94311b885100094d54000b4a80240f9"),
     "combat_contact_source": (0x804AA8D0, "898201914201899a8102088b8dfeff97"),
     "combat_source_generation": (0x804A8B08, "693240b93f050031e0110054681640f9"),
@@ -152,6 +171,15 @@ FUNCTIONS = {
 CAS_SITE = 0x804BDCF8
 CAS_SIGNATURE = "ac7dab887f010a6ba1720054680a4ef9"
 CHEAT_SIGNATURES = {
+    "grass_drop": "INCREASED_LUCK", "drop_list_resolve": "INCREASED_LUCK",
+    "drop_request_owner": "INCREASED_LUCK", "drop_override_resolve": "INCREASED_LUCK",
+    "drop_default_table": "INCREASED_LUCK", "drop_list_allocate": "INCREASED_LUCK",
+    "drop_list_name": "INCREASED_LUCK", "drop_list_consume": "INCREASED_LUCK",
+    "drop_actor_death_dispatch": "INCREASED_LUCK", "drop_actor_hash": "INCREASED_LUCK",
+    "drop_actor_death_cause": "INCREASED_LUCK",
+    "foliage_scene": "INCREASED_LUCK", "foliage_queue": "INCREASED_LUCK",
+    "foliage_drop_source": "INCREASED_LUCK", "foliage_request_flags": "INCREASED_LUCK",
+    "foliage_chance_gate": "INCREASED_LUCK", "foliage_table_path": "INCREASED_LUCK",
     "combat_contact_channel": "ONE_HIT DAMAGE",
     "combat_contact_source": "ONE_HIT DAMAGE",
     "combat_source_generation": "ONE_HIT DAMAGE",
@@ -318,6 +346,7 @@ def make_patch(image=None):
         raise ValueError("hook bridges exceed the reserved text padding")
     declarations.append(f"#define LIFE_SLOT 0x{life_slot:X}ull")
     declarations.append(f"#define TABLE 0x{TABLE:X}ull")
+    declarations.append(f"#define FOLIAGE_MODULE 0x{FOLIAGE_MODULE:X}ull")
 
     checks = []
     for site, sig, handler, _ in HOOKS:

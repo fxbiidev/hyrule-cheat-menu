@@ -3,7 +3,7 @@
 enum { FADE_MS = 175, REPEAT_DELAY_MS = 285, REPEAT_MS = 90 };
 
 const char *const cheat_section_names[CHEAT_SECTION_COUNT] = {
-    "Player Cheats", "Movement Cheats", "Combat Cheats", "Camera & World"
+    "Player Cheats", "Movement Cheats", "Combat Cheats", "Camera & World", "WORLD CHEATS"
 };
 const char *const item_category_names[ITEM_CATEGORY_COUNT] = {
     "Weapons", "Shields", "Equipment", "Consumables", "Ammunition"
@@ -79,8 +79,10 @@ unsigned menu_rows(const Menu *menu, MenuRow *rows) {
             } else if (section == COMBAT_CHEATS) {
                 rows[count++] = (MenuRow){CHEAT_ROW, ONE_HIT, section};
                 rows[count++] = (MenuRow){CHEAT_ROW, DAMAGE, section};
-            } else {
+            } else if (section == CAMERA_WORLD) {
                 rows[count++] = (MenuRow){CHEAT_ROW, FREE_CAMERA, section};
+            } else {
+                rows[count++] = (MenuRow){CHEAT_ROW, INCREASED_LUCK, section};
             }
         }
         return count;

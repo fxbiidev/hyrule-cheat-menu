@@ -1,4 +1,4 @@
-> **v1.1.3** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
+> **v1.2.0** · [Releases](https://github.com/fxbiidev/hyrule-cheat-menu/releases) · [Test report](TEST_REPORT.md) · [Release readiness](RELEASE_READINESS.md)
 
 <div align="center">
 
@@ -6,7 +6,7 @@
 
 **STANDALONE CHEAT MENU FOR OOTR**
 
-`v1.1.3` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
+`v1.2.0` · `Lichii Build 177` · `Displayed update 2.0.0` · `Windows`
 
 **Created by fxbii.dev**
 
@@ -16,7 +16,7 @@
 
 Hyrule Cheat Menu runs inside the supported Ocarina of Time remake as an ExeFS add-on. Press **R3** during gameplay to open the menu. Its Emerald & Gold interface has three main tabs: **CHEATS | FAST TRAVEL | ITEM MANAGER**. The game uses its native gameplay pause while the menu is open. The mod adds no persistent HUD, telemetry, updater or external trainer.
 
-The approved design uses deep emerald backgrounds, gold accents, a contextual description card, clear selection and status indicators, comfortable scrolling and adaptive scaling. LB/RB cycles through the tabs in either direction, and each tab remembers its selection and viewport during the session. Cheats are grouped into **Player Cheats**, **Movement Cheats**, **Combat Cheats**, and **Camera & World**. Damage Multiplier sits directly below One Hit Kill. Item Manager has its own tab and five inventory categories.
+The approved design uses deep emerald backgrounds, gold accents, a contextual description card, clear selection and status indicators, comfortable scrolling and adaptive scaling. LB/RB cycles through the tabs in either direction, and each tab remembers its selection and viewport during the session. Cheats are grouped into **Player Cheats**, **Movement Cheats**, **Combat Cheats**, **Camera & World**, and **World Cheats**. Damage Multiplier sits directly below One Hit Kill. Item Manager has its own tab and five inventory categories.
 
 ## Features
 
@@ -33,6 +33,7 @@ The approved design uses deep emerald backgrounds, gold accents, a contextual de
 | One Hit Kill | Conservative ordinary-enemy allowlist and checked player-originated damage. Verified Master Sword and Fairy Bow path; see the combat scope below. |
 | Damage Multiplier | 1× / 1.5× / 2× / 3× outgoing damage on the supported combat path. One Hit Kill takes priority while the selected multiplier stays stored. |
 | Free Camera | Detach the gameplay view, translate/rotate with both sticks and ascend/descend with the triggers. Includes direct emergency exit and native restoration. |
+| Increased Luck | Guarantees one Rupee pickup when cutting eligible ordinary grass. Green (1 Rupee) drops 85% of the time and blue (5 Rupees) drops 15% of the time. Special drops and normal wallet limits still apply. |
 | Item Manager | Confirmed add/remove ownership for 21 native item IDs, including unowned gear; quantity controls for seven consumable/ammunition stacks. Age, capacity and shared-slot safeguards apply. |
 | Fast Travel | All 214 reference destinations in 37 collapsible groups, including dungeon subgroups, age selection, confirmation, Favorites and Return. |
 
@@ -86,7 +87,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 1. Close the game. Back up your saves using the procedure below.
 2. In Lichii, right-click the supported game and choose **Open Mod Data Location**.
-3. Extract `Hyrule-Cheat-Menu-v1.1.3.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
+3. Extract `Hyrule-Cheat-Menu-v1.2.0.zip` there. Replace the complete mod folder when updating, including both ExeFS files. The result must be:
 
 ```text
 <game's mod data location>/
@@ -104,7 +105,7 @@ The IPS filename gates loading by Build ID. Runtime title/layout and function si
 
 Avoid an extra nested `Hyrule-Cheat-Menu/Hyrule-Cheat-Menu` folder. Disable a separate Fast Travel overlay during integrated-travel testing so its controls cannot interfere.
 
-The optional `Hyrule-Cheat-Menu-v1.1.3-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
+The optional `Hyrule-Cheat-Menu-v1.2.0-source.zip` is the review/build source archive. Install the add-on ZIP above. Its sibling `.sha256` file records the exact archive checksum.
 
 ### Updates and removal
 
@@ -213,7 +214,7 @@ The Young and Adult Gerudo Valley river exits (`887aed4f`, `834153be`) immediate
 
 **Castle door (enters castle)** and **Fortress gate (exits wasteland)** keep their original coordinates and recognize their verified native follow-on scenes. Their labels explicitly describe the resulting transition. Unexpected stable scene changes end the mod's pending transaction with an explanation, allowing the menu to reopen instead of waiting for the full loading timeout.
 
-The four resource/health toggles and selected normal speed survive ordinary travel, with unsafe writes suspended during loading. Fly, Noclip and Free Camera deactivate. Pending Item Manager operations temporarily block new travel. Actual save loads take precedence and reset active cheats OFF, effective Movement Speed and Damage Multiplier to 1×, and Return unavailable.
+The four resource/health toggles, Increased Luck and selected normal speed survive ordinary travel, with unsafe writes suspended during loading. Fly, Noclip and Free Camera deactivate. Pending Item Manager operations temporarily block new travel. Actual save loads take precedence and reset active cheats OFF, effective Movement Speed and Damage Multiplier to 1×, and Return unavailable.
 
 ## Preferences and saves
 
@@ -253,12 +254,12 @@ To include the separate source archive and validate both distributions:
 
 ```powershell
 python build.py --zig "C:\path\to\zig.exe" --source-archive
-python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.1.3-source.zip"
+python tests/run_tests.py --zig "C:\path\to\zig.exe" --source-package "dist/Hyrule-Cheat-Menu-v1.2.0-source.zip"
 ```
 
-The default add-on is `dist/Hyrule-Cheat-Menu-v1.1.3.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
+The default add-on is `dist/Hyrule-Cheat-Menu-v1.2.0.zip`, with a SHA-256 sidecar. `--release-name Hyrule-Cheat-Menu-local.zip` selects a different local ZIP basename; pass its path through the test runner's `--package` option. Source ZIPs include maintained source, tests, documentation and CI; private inputs, saves, preferences, Git internals and compiled build products are excluded. Package checks reject duplicate or unexpected paths, stale install-folder files, checksum errors and mismatched source/document bytes.
 
-An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.1.3`; it publishes the tested artifacts and refuses an existing release/tag.
+An optional `--main "C:\private\main-dump.nso"` additionally checks the owner's uncompressed executable against the pinned profile. No game dump, ROM, key, or extracted asset is needed for the default build or CI. Ordinary CI compiles/tests code and archives without running gameplay. A separate publication job runs only after a successful build from a push to `main` with the exact commit message `Release v1.2.0`; it publishes the tested artifacts and refuses an existing release/tag.
 
 ## Support & Bug Reports
 

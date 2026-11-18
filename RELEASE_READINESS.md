@@ -1,3 +1,11 @@
+# Release readiness — Hyrule Cheat Menu v1.2.0
+
+The pinned ARM64 build and host regressions passed. The isolated Build 177 run verified normal placed and procedural cuts, stock special drops, the same-scene OFF control, Infinite Rupees, a scene transition and a stock save reload. The report records the module used for each result. [Test report](TEST_REPORT.md)
+
+Isolated QA cleanup passed. The publication job builds and tests the release commit, checks the tag is available and attaches the verified archives. Verify the published release and download afterward.
+
+---
+
 # Release readiness — Hyrule Cheat Menu v1.1.3
 
 15 November 2026. **Local release GO: native functionality, host regressions and cleanup PASS within the documented scope.** Deku Seeds support confirmed first acquisition through the required native base bag and preserve existing 40/50 capacities. Magic Beans use native capacity 10 and need no previous purchase. Young Link edits, confirmations, deferred acknowledgement, Save/travel holds and uncertainty fences remain. The approved UI, navigation, unrelated inventory and existing features are preserved. [Inventory contract](docs/v1.1.3-inventory-verification.md) records the mechanisms.
